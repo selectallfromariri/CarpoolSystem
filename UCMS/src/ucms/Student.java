@@ -40,7 +40,7 @@ public class Student {
     }
 
     public String getStudent_name() {
-        return student_name;
+        return student_name; 
     }
 
     public void setStudent_name(String student_name) {
