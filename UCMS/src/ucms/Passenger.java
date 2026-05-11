@@ -16,12 +16,12 @@ public class Passenger extends Student {
     private Carpool date;
     private Carpool carpoolID;
 
-    public Passenger(String passengerID, String bookingStatus, Carpool date, Carpool carpoolID, String student_id, String student_name, String phone_num, String password) {
+    public Passenger(String passengerID, String student_id, String student_name, String phone_num, String password) {
         super(student_id, student_name, phone_num, password);
-        this.passengerID = passengerID;
-        this.bookingStatus = bookingStatus;
-        this.date = date;
-        this.carpoolID = carpoolID;
+        this.passengerID = "PS" + passengerID;
+        this.bookingStatus = "pending";
+//        this.date = date;
+//        this.carpoolID = carpoolID;
     }         
 
     public String getPassengerID() {
@@ -212,6 +212,14 @@ public class Passenger extends Student {
                 break;                            
         }                
     }
+    
+    @Override
+    public String toString() {
+    return "Passenger ID: " + passengerID+
+           "\nStudent ID: " + student_id +
+           "\nName: " + student_name +
+           "\nPhone: " + phone_num;
+}
         
     
     // give feedback         
