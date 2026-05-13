@@ -5,6 +5,7 @@
 package ucms;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,9 +21,9 @@ public class Passenger extends Student {
         super(student_id, student_name, phone_num, password);
         this.passengerID = "PS" + passengerID;
         this.bookingStatus = "pending";
-//        this.date = date;
-//        this.carpoolID = carpoolID;
-    }         
+        // this.date = date;
+        // this.carpoolID = carpoolID;
+    }
 
     public String getPassengerID() {
         return passengerID;
@@ -89,18 +90,16 @@ public class Passenger extends Student {
     }
 
     // search carpool
-    public void searchCarpool(Carpool[] carpool) {
+    public void searchCarpool(ArrayList<Carpool> carpool) {
         Scanner input = new Scanner(System.in);
         System.out.println("----- SEARCH -----");
         System.out.println("Enter pickup location to search: ");
         String pickupLocation = input.nextLine();
         boolean pickup = false;
-        int pickupIndex = -1;
 
-        for (int i = 0; i < carpool.length; i++) {
-            if (carpool[i] != null && carpool[i].getPickupLocation().equalsIgnoreCase(pickupLocation)) {
+        for (int i = 0; i < carpool.size(); i++) {
+            if (carpool.get(i) != null && carpool.get(i).getPickupLocation().equalsIgnoreCase(pickupLocation)) {
                 pickup = true;
-                pickupIndex = i;
                 break;
             }
         }
@@ -111,18 +110,18 @@ public class Passenger extends Student {
         }
         System.out.println("Enter carpool destination to search: ");
         String searchDestination = input.nextLine();
-        boolean destination = false;
+        boolean foundDestination = false;
 
         System.out.println("----- SEARCH RESULT -----");
-        for (int i = 0; i < carpool.length; i++) {
-            if (carpool[i] != null && carpool[i].getDestination().equalsIgnoreCase(searchDestination)
-                    && carpool[i].getPickupLocation().equalsIgnoreCase(pickupLocation)) {
-                displaySearchCarpool(carpool[i]);
-                destination = true;
+        for (int i = 0; i < carpool.size(); i++) {
+            if (carpool.get(i) != null && carpool.get(i).getDestination().equalsIgnoreCase(searchDestination)
+                    && carpool.get(i).getPickupLocation().equalsIgnoreCase(pickupLocation)) {
+                displaySearchCarpool(carpool.get(i));
+                foundDestination = true;
             }
         }
-        if (!destination) {
-            System.out.println("No available from " + pickupLocation + " to " + destination);
+        if (!foundDestination) {
+            System.out.println("No carpool available from " + pickupLocation + " to " + searchDestination);
         }
     }
 
@@ -212,17 +211,16 @@ public class Passenger extends Student {
                 break;
         }
     }
-    
+
     @Override
     public String toString() {
-    return "Passenger ID: " + passengerID+
-           "\nStudent ID: " + student_id +
-           "\nName: " + student_name +
-           "\nPhone: " + phone_num;
-}
-        
-    
-    // give feedback         
-    
-    // report driver arrival    
+        return "Passenger ID: " + passengerID +
+                "\nStudent ID: " + student_id +
+                "\nName: " + student_name +
+                "\nPhone: " + phone_num;
+    }
+
+    // give feedback
+
+    // report driver arrival
 }

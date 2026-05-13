@@ -19,6 +19,7 @@ public class UCMS {
     public UCMS() {
         sc = new Scanner(System.in);
     }
+
     ArrayList<Passenger> penumpang = new ArrayList<>();
     ArrayList<Driver> Pemandu = new ArrayList<>();
     ArrayList<Admin> Ketua = new ArrayList<>();
@@ -30,7 +31,7 @@ public class UCMS {
      * @param args the command line arguments
      */
 
-    public static void main(String[] args) {                
+    public static void main(String[] args) {
 
         System.out.println("================================================================================");
         System.out.println("   /$$          /$$   /$$ /$$      /$$ /$$$$$$$                              \n"
@@ -44,28 +45,32 @@ public class UCMS {
                 + "                                                                    /$$  \\ $$\n"
                 + "                                                                   |  $$$$$$/\n"
                 + "                                                                    \\______/ ");
-         System.out.println("================================================================================");
+        System.out.println("================================================================================");
         UCMS app = new UCMS();
         while (true) {
             app.menu();
         }
-//
-//        Carpool[] carpools = new Carpool[5];
-//
-//        carpools[0] = new Carpool("C001", d1, "KLCC", "2026-05-07", 2, 3, "Gombak");
-//        carpools[1] = new Carpool("C002", d2, "Mid Valley", "2026-05-08", 3, 2, "Batu Caves");
-//        carpools[2] = new Carpool("C003", d3, "Sunway Pyramid", "2026-05-09", 1, 4, "Shah Alam");
-//        carpools[3] = new Carpool("C004", d4, "IOI City Mall", "2026-05-10", 2, 2, "Cheras");
-//        carpools[4] = null;        
-    }   
-    public void menu(){
+        //
+        // Carpool[] carpools = new Carpool[5];
+        //
+        // carpools[0] = new Carpool("C001", d1, "KLCC", "2026-05-07", 2, 3, "Gombak");
+        // carpools[1] = new Carpool("C002", d2, "Mid Valley", "2026-05-08", 3, 2, "Batu
+        // Caves");
+        // carpools[2] = new Carpool("C003", d3, "Sunway Pyramid", "2026-05-09", 1, 4,
+        // "Shah Alam");
+        // carpools[3] = new Carpool("C004", d4, "IOI City Mall", "2026-05-10", 2, 2,
+        // "Cheras");
+        // carpools[4] = null;
+    }
+
+    public void menu() {
         System.out.println("================================================================================");
         System.out.println("|                               1)Register                                     |");
         System.out.println("|                           2)Login as Student                                 |");
         System.out.println("|                            3)Login as Admin                                  |");
         System.out.println("|                                  4)Exit                                      |");
         System.out.println("================================================================================");
-        
+
         System.out.print("Choice: ");
         int choice = sc.nextInt();
         sc.skip("\\R?");
@@ -110,6 +115,7 @@ public class UCMS {
                 System.out.println("Login Successfull");
                 System.out.println("Welcome: " + d.getStudent_name());
                 System.out.println("Role: Driver");
+                DashboardDriver(d);
                 return;
             }
         }
@@ -132,9 +138,9 @@ public class UCMS {
         System.out.println("\n-----Register Driver-----");
         System.out.print("Enter your Student ID: ");
         String id = sc.nextLine();
-        
-        for (Driver d: Pemandu){
-            if(d.getStudent_id().equalsIgnoreCase(id)){
+
+        for (Driver d : Pemandu) {
+            if (d.getStudent_id().equalsIgnoreCase(id)) {
                 System.out.println("[WARNING] Student ID already registered. Please login instead.");
                 return;
             }
@@ -162,25 +168,24 @@ public class UCMS {
         String model = sc.nextLine();
         System.out.print("Car Color     : ");
         String color = sc.nextLine();
-        
+
         String driverID = String.format("%02d", Pemandu.size() + 1);
-        Driver pemandubaru = new Driver(driverID,lic,id,name,notel,pass,plate,model,color);
+        Driver pemandubaru = new Driver(driverID, lic, id, name, notel, pass, plate, model, color);
         Pemandu.add(pemandubaru);
-        
+
         System.out.println("\nDriver Registered Successfully!");
-        
+
         pemandubaru.displayDriverInfo();
         pemandubaru.getKereta().displayCarInfo();
-        
-        
+
     }
 
     public void registerPassenger() {
         System.out.println("\n-----Register Passenger-----");
         System.out.print("Enter your Student ID: ");
         String id = sc.nextLine();
-         for (Passenger p: penumpang){
-            if(p.getStudent_id().equalsIgnoreCase(id)){
+        for (Passenger p : penumpang) {
+            if (p.getStudent_id().equalsIgnoreCase(id)) {
                 System.out.println("[WARNING] Student ID already registered. Please login instead.");
                 return;
             }
@@ -200,6 +205,53 @@ public class UCMS {
 
     }
 
+    public void approveBookings(Driver driver) {
+        System.out.println("\n--- Pending Bookings for Your Carpools ---");
+        ArrayList<booking> pending = new ArrayList<>();
+
+        for (booking b : bookings) {
+            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
+                    && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
+                pending.add(b);
+            }
+        }
+
+        if (pending.isEmpty()) {
+            System.out.println("No pending bookings found.");
+            return;
+        }
+
+        for (int i = 0; i < pending.size(); i++) {
+            booking b = pending.get(i);
+            System.out.println((i + 1) + ") Booking ID: " + b.getBookingID());
+            System.out.println("   Passenger: " + b.getPassenger().getStudent_name());
+            System.out.println("   Destination: " + b.getCarpool().getDestination());
+            System.out.println("   Date: " + b.getBookingDate());
+            System.out.println("-------------------------");
+        }
+
+        System.out.print("Select booking to manage (0 to cancel): ");
+        int choice = sc.nextInt();
+        sc.skip("\\R?");
+
+        if (choice > 0 && choice <= pending.size()) {
+            booking selected = pending.get(choice - 1);
+            System.out.print("Approve or Reject? (1: Approve, 2: Reject): ");
+            int action = sc.nextInt();
+            sc.skip("\\R?");
+
+            if (action == 1) {
+                selected.Approvebooking("CONFIRMED");
+                System.out.println("Booking approved!");
+            } else if (action == 2) {
+                selected.Approvebooking("REJECTED");
+                System.out.println("Booking rejected!");
+            } else {
+                System.out.println("Invalid action.");
+            }
+        }
+    }
+
     public void DashboardDriver(Driver driver) {
 
         System.out.println("");
@@ -208,7 +260,8 @@ public class UCMS {
         System.out.println("=========================================");
         System.out.println("|          1)Carpool List               |");
         System.out.println("|          2)Add Carpools               |");
-        System.out.println("|               3)Exit                  |");
+        System.out.println("|          3)Approve Booking            |");
+        System.out.println("|               4)Exit                  |");
         System.out.println("=========================================");
         System.out.print("Choice: ");
 
@@ -218,10 +271,17 @@ public class UCMS {
         if (choice == 1) {
 
             Carpool.displayCarpool(carpools);
+            DashboardDriver(driver);
 
         } else if (choice == 2) {
 
             Carpool.createCarpool(driver, carpools);
+            DashboardDriver(driver);
+
+        } else if (choice == 3) {
+
+            approveBookings(driver);
+            DashboardDriver(driver);
 
         }
 
@@ -236,7 +296,8 @@ public class UCMS {
         System.out.println("|          1)Add Booking                 |");
         System.out.println("|          2)Show Booking                |");
         System.out.println("|          3)Delete Booking              |");
-        System.out.println("|               3)Exit                   |");
+        System.out.println("|          4)Search Carpool              |");
+        System.out.println("|               5)Exit                   |");
         System.out.println("=========================================");
         System.out.print("Choice: ");
 
@@ -256,7 +317,7 @@ public class UCMS {
                 bookings.add(b);
                 System.out.println("Booking successful!");
             }
-
+            DashboardPass(pass);
         } else if (choice == 2) {
             System.out.println("\n--- Your Bookings ---");
             boolean found = false;
@@ -274,6 +335,7 @@ public class UCMS {
             if (!found) {
                 System.out.println("No booking found.");
             }
+            DashboardPass(pass);
         } else if (choice == 3) {
             System.out.print("Enter Booking ID: ");
             String bid = sc.nextLine();
@@ -293,6 +355,10 @@ public class UCMS {
             } else {
                 System.out.println("Invalid booking.");
             }
+            DashboardPass(pass);
+        } else if (choice == 4) {
+            pass.searchCarpool(carpools);
+            DashboardPass(pass);
         }
     }
 }

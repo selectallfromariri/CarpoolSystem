@@ -61,8 +61,7 @@ public class booking {
                             pass,
                             c,
                             "2026-05-13",
-                            "CONFIRMED"
-                    );
+                            "PENDING");
 
                 } else {
                     System.out.println("No seats available.");
@@ -79,11 +78,18 @@ public class booking {
 
         if (b != null) {
             b.getCarpool().setAvailableSeat(
-                    b.getCarpool().getAvailableSeat() + 1
-            );
+                    b.getCarpool().getAvailableSeat() + 1);
             return true;
         }
 
         return false;
+    }
+
+    public void Approvebooking(String status) {
+        this.bookingStatus = status;
+        // If rejected, return the seat to the carpool
+        if (status.equalsIgnoreCase("REJECTED")) {
+            this.carpool.setAvailableSeat(this.carpool.getAvailableSeat() + 1);
+        }
     }
 }

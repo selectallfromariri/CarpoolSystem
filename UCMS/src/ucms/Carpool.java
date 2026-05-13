@@ -158,6 +158,10 @@ public class Carpool {
     }
 
     public static void displayCarpool(ArrayList<Carpool> pool) {
+        if (pool.isEmpty()) {
+            System.out.println("No carpool available");
+            return;
+        }
 
         for (int i = 0; i < pool.size(); i++) {
 
