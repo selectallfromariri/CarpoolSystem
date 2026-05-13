@@ -5,6 +5,7 @@
 package ucms;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,7 +24,13 @@ public class Carpool {
 
     public Carpool(String carpoolID, Driver drive, String destination, String date, int luggageCapacity,
             int availableSeat, String pickupLocation) {
-
+        this.carpoolID = carpoolID;
+        this.drive = drive;
+        this.destination = destination;
+        this.date = date;
+        this.luggageCapacity = luggageCapacity;
+        this.availableSeat = availableSeat;
+        this.pickupLocation = pickupLocation;
     }
 
     public String getCarpoolID() {
@@ -92,29 +99,54 @@ public class Carpool {
         return totpassenger;
     }
 
-//    public boolean insertCarpool(Carpool[] pool, Carpool newCarpool) {
-//        for (int i = 0; i < pool.length; i++) {
-//            if (pool[i] == null) {
-//                pool[i] = newCarpool;
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    // public boolean insertCarpool(Carpool[] pool, Carpool newCarpool) {
+    // for (int i = 0; i < pool.length; i++) {
+    // if (pool[i] == null) {
+    // pool[i] = newCarpool;
+    // return true;
+    // }
+    // }
+    // return false;
+    // }
 
-    public void createCarpool() {
+   public static void createCarpool(Driver driver, ArrayList<Carpool> carpools) {
+
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter Destination : ");
-        String des = sc.next();
-        System.out.println("Enter Date : ");
-        String date = sc.next();
-        System.out.println("Enter available Seat");
-        int avSeat = sc.nextInt();
-        System.out.println("Enter luggage capacity");
-        int lugCap = sc.nextInt();
-        System.out.println("pickup location : ");
-        String loc = sc.next();
 
+        System.out.println("Enter Carpool ID : ");
+        String id = sc.nextLine();
+
+        System.out.println("Enter Destination : ");
+        String des = sc.nextLine();
+
+        System.out.println("Enter Date : ");
+        String date = sc.nextLine();
+
+        System.out.println("Enter available Seat : ");
+        int avSeat = sc.nextInt();
+
+        System.out.println("Enter luggage capacity : ");
+        int lugCap = sc.nextInt();
+        sc.nextLine(); // buang enter
+
+        System.out.println("Pickup location : ");
+        String loc = sc.nextLine();
+
+        // create object baru
+        Carpool newCarpool = new Carpool(
+                id,
+                driver,
+                des,
+                date,
+                lugCap,
+                avSeat,
+                loc
+        );
+
+        // append masuk ArrayList
+        carpools.add(newCarpool);
+
+        System.out.println("Carpool added successfully!");
     }
 
     public void update(String des, String date, int avSeat, int lugCap, String loc) {
@@ -125,23 +157,21 @@ public class Carpool {
         setPickupLocation(loc);
     }
 
-    public void displayCarpool(Carpool[] pool) {
+    public static void displayCarpool(ArrayList<Carpool> pool) {
 
-        for (int i = 0; i < pool.length; i++) {
+        for (int i = 0; i < pool.size(); i++) {
 
-            if (pool[i] != null) {
-                System.out.println("Carpool ID: " + pool[i].getCarpoolID());
-                System.out.println("Driver: " + pool[i].getDrive().getStudent_name());
-                System.out.println("Destination: " + pool[i].getDestination());
-                System.out.println("Date: " + pool[i].getDate());
-                System.out.println("Available Seat: " + pool[i].getAvailableSeat());
-                System.out.println("Luggage Capacity: " + pool[i].getLuggageCapacity());
-                System.out.println("Pickup Location: " + pool[i].getPickupLocation());
+            if (pool.get(i) != null) {
+                System.out.println("\n---Display Carpool---");
+                System.out.println("Carpool ID: " + pool.get(i).getCarpoolID());
+                System.out.println("Driver: " + pool.get(i).getDrive().getStudent_name());
+                System.out.println("Destination: " + pool.get(i).getDestination());
+                System.out.println("Date: " + pool.get(i).getDate());
+                System.out.println("Available Seat: " + pool.get(i).getAvailableSeat());
+                System.out.println("Luggage Capacity: " + pool.get(i).getLuggageCapacity());
+                System.out.println("Pickup Location: " + pool.get(i).getPickupLocation());
                 System.out.println("-----------------------------------");
             }
         }
     }
-    
-    
-
 }
