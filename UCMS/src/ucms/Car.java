@@ -12,13 +12,13 @@ public class Car {
     private String numplate;
     private String model;
     private String color;
-    private Driver driver;
+   
 
-    public Car(String numplate, String model, String color, Driver driver) {
+    public Car(String numplate, String model, String color) {
         this.numplate = numplate;
         this.model = model;
         this.color = color;
-        this.driver = driver;
+        
     }
 
     public String getNumplate() {
@@ -44,19 +44,10 @@ public class Car {
     public void setColor(String color) {
         this.color = color;
     }
-
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(Driver driver) {
-        this.driver = driver;
-    }
-
+    
     public void displayCarInfo() {
         System.out.println("Car Plate Number: " + numplate);
         System.out.println("Car Model: " + model);
         System.out.println("Car Color: " + color);
-        System.out.println("Driver Name: " + driver.getStudent_name());
     }
 }

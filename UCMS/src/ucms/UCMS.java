@@ -29,21 +29,26 @@ public class UCMS {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        //pakai array data ni untuk visualize je , nnti kita buat database
 
+    public static void main(String[] args) {                
+
+        System.out.println("================================================================================");
+        System.out.println("   /$$          /$$   /$$ /$$      /$$ /$$$$$$$                              \n"
+                + "  | $$         | $$  | $$| $$$    /$$$| $$__  $$                             \n"
+                + " /$$$$$$       | $$  | $$| $$$$  /$$$$| $$  \\ $$ /$$$$$$  /$$$$$$$   /$$$$$$ \n"
+                + "|_  $$_//$$$$$$| $$  | $$| $$ $$/$$ $$| $$$$$$$/|____  $$| $$__  $$ /$$__  $$\n"
+                + "  | $$ |______/| $$  | $$| $$  $$$| $$| $$____/  /$$$$$$$| $$  \\ $$| $$  \\ $$\n"
+                + "  | $$ /$$     | $$  | $$| $$\\  $ | $$| $$      /$$__  $$| $$  | $$| $$  | $$\n"
+                + "  |  $$$$/     |  $$$$$$/| $$ \\/  | $$| $$     |  $$$$$$$| $$  | $$|  $$$$$$$\n"
+                + "   \\___/        \\______/ |__/     |__/|__/      \\_______/|__/  |__/ \\____  $$\n"
+                + "                                                                    /$$  \\ $$\n"
+                + "                                                                   |  $$$$$$/\n"
+                + "                                                                    \\______/ ");
+         System.out.println("================================================================================");
         UCMS app = new UCMS();
         while (true) {
             app.menu();
         }
-
-//        Student [] account = new Student[5];
-//        
-//        account[0] = new Student("RC23266", "Danish Danial", "011-29234038", "Danish@077");
-//        account[1] = new Student("RC23266", "Danish Danial", "011-29234038", "Danish@077");
-//        account[2] = new Student("RC23266", "Danish Danial", "011-29234038", "Danish@077");
-//        account[3] = new Student("RC23266", "Danish Danial", "011-29234038", "Danish@077");
-//        account[4] = new Student("RC23266", "Danish Danial", "011-29234038", "Danish@077");
 //
 //        Carpool[] carpools = new Carpool[5];
 //
@@ -52,19 +57,15 @@ public class UCMS {
 //        carpools[2] = new Carpool("C003", d3, "Sunway Pyramid", "2026-05-09", 1, 4, "Shah Alam");
 //        carpools[3] = new Carpool("C004", d4, "IOI City Mall", "2026-05-10", 2, 2, "Cheras");
 //        carpools[4] = null;        
-    }
-
-    public void menu() {
-
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|             1)Register                |");
-        System.out.println("|          2)Login as Student           |");
-        System.out.println("|          3)Login as Admin             |");
-        System.out.println("|               4)Exit                  |");
-        System.out.println("=========================================");
-
+    }   
+    public void menu(){
+        System.out.println("================================================================================");
+        System.out.println("|                               1)Register                                     |");
+        System.out.println("|                           2)Login as Student                                 |");
+        System.out.println("|                            3)Login as Admin                                  |");
+        System.out.println("|                                  4)Exit                                      |");
+        System.out.println("================================================================================");
+        
         System.out.print("Choice: ");
         int choice = sc.nextInt();
         sc.skip("\\R?");
@@ -109,7 +110,6 @@ public class UCMS {
                 System.out.println("Login Successfull");
                 System.out.println("Welcome: " + d.getStudent_name());
                 System.out.println("Role: Driver");
-                DashboardDriver(d);
                 return;
             }
         }
@@ -132,9 +132,9 @@ public class UCMS {
         System.out.println("\n-----Register Driver-----");
         System.out.print("Enter your Student ID: ");
         String id = sc.nextLine();
-
-        for (Driver d : Pemandu) {
-            if (d.getStudent_name().equalsIgnoreCase(id)) {
+        
+        for (Driver d: Pemandu){
+            if(d.getStudent_id().equalsIgnoreCase(id)){
                 System.out.println("[WARNING] Student ID already registered. Please login instead.");
                 return;
             }
@@ -162,14 +162,25 @@ public class UCMS {
         String model = sc.nextLine();
         System.out.print("Car Color     : ");
         String color = sc.nextLine();
+        
+        String driverID = String.format("%02d", Pemandu.size() + 1);
+        Driver pemandubaru = new Driver(driverID,lic,id,name,notel,pass,plate,model,color);
+        Pemandu.add(pemandubaru);
+        
+        System.out.println("\nDriver Registered Successfully!");
+        
+        pemandubaru.displayDriverInfo();
+        pemandubaru.getKereta().displayCarInfo();
+        
+        
     }
 
     public void registerPassenger() {
         System.out.println("\n-----Register Passenger-----");
         System.out.print("Enter your Student ID: ");
         String id = sc.nextLine();
-        for (Passenger p : penumpang) {
-            if (p.getStudent_name().equalsIgnoreCase(id)) {
+         for (Passenger p: penumpang){
+            if(p.getStudent_id().equalsIgnoreCase(id)){
                 System.out.println("[WARNING] Student ID already registered. Please login instead.");
                 return;
             }
