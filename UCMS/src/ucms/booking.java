@@ -4,6 +4,8 @@
  */
 package ucms;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author harir
@@ -11,25 +13,25 @@ package ucms;
 public class booking {
 
     private String bookingID;
+    private Passenger passenger;
+    private Carpool carpool;
     private String bookingDate;
     private String bookingStatus;
 
-    public booking(String bookingID, String bookingDate, String bookingStatus) {
-        this.bookingDate = bookingDate;
+    public booking(String bookingID, Passenger passenger, Carpool carpool, String bookingDate, String bookingStatus) {
         this.bookingID = bookingID;
+        this.passenger = passenger;
+        this.carpool = carpool;
+        this.bookingDate = bookingDate;
         this.bookingStatus = bookingStatus;
     }
 
-    public void setBookingID(String bookingID) {
-        this.bookingID = bookingID;
+    public Passenger getPassenger() {
+        return passenger;
     }
 
-    public void setBookingDate(String bookingDate) {
-        this.bookingDate = bookingDate;
-    }
-
-    public void setBookingStatus(String bookingStatus) {
-        this.bookingStatus = bookingStatus;
+    public Carpool getCarpool() {
+        return carpool;
     }
 
     public String getBookingID() {
@@ -44,37 +46,44 @@ public class booking {
         return bookingStatus;
     }
 
-    public String createBooking(Carpool[] pool, String carpoolID) {
-        for (int i = 0; i < pool.length; i++) {
+    public booking createBooking(Passenger pass, ArrayList<Carpool> pool, String carpoolID) {
 
-            if (pool[i] != null && pool[i].getCarpoolID().equals(carpoolID)) {
+        for (Carpool c : pool) {
 
-                if (pool[i].getAvailableSeat() > 0) {
+            if (c.getCarpoolID().equalsIgnoreCase(carpoolID)) {
 
-                    pool[i].setAvailableSeat(pool[i].getAvailableSeat() - 1);
+                if (c.getAvailableSeat() > 0) {
 
-                    return "Booking successful for Carpool ID: " + carpoolID;
+                    c.setAvailableSeat(c.getAvailableSeat() - 1);
+
+                    return new booking(
+                            "B" + System.currentTimeMillis(),
+                            pass,
+                            c,
+                            "2026-05-13",
+                            "CONFIRMED"
+                    );
+
                 } else {
-                    return "No seats available for this carpool.";
+                    System.out.println("No seats available.");
+                    return null;
                 }
             }
         }
-        return "Carpool not found.";
+
+        System.out.println("Carpool not found.");
+        return null;
     }
 
-    public String cancelBooking(Carpool[] pool, String carpoolID) {
+    public boolean cancelBooking(booking b) {
 
-        for (int i = 0; i < pool.length; i++) {
-
-            if (pool[i] != null && pool[i].getCarpoolID().equals(carpoolID)) {
-
-                // restore seat (cancel booking)
-                pool[i].setAvailableSeat(pool[i].getAvailableSeat() + 1);
-
-                return "Booking cancelled for Carpool ID: " + carpoolID;
-            }
+        if (b != null) {
+            b.getCarpool().setAvailableSeat(
+                    b.getCarpool().getAvailableSeat() + 1
+            );
+            return true;
         }
 
-        return "Carpool not found.";
+        return false;
     }
 }
