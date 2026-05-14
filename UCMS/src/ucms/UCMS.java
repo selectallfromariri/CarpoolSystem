@@ -26,6 +26,8 @@ public class UCMS {
     ArrayList<Student> Pelajar = new ArrayList<>();
     ArrayList<Carpool> carpools = new ArrayList<>();
     ArrayList<booking> bookings = new ArrayList<>();
+    ArrayList<String> reports = new ArrayList<>();
+    ArrayList<Feedback> feeds = new ArrayList<>();
 
     /**
      * @param args the command line arguments
@@ -47,6 +49,8 @@ public class UCMS {
                 + "                                                                    \\______/ ");
         System.out.println("================================================================================");
         UCMS app = new UCMS();
+        Admin admin1 = new Admin("admin1", "Kiwi","admin123");
+        app.Ketua.add(admin1);
         while (true) {
             app.menu();
         }
@@ -63,6 +67,7 @@ public class UCMS {
         // carpools[4] = null;
     }
 
+    // first menu
     public void menu() {
         System.out.println("================================================================================");
         System.out.println("|                               1)Register                                     |");
@@ -80,9 +85,13 @@ public class UCMS {
         } else if (choice == 2) {
             studentlogin();
         }
+        else if (choice == 3){
+            adminLogin();
+        }
 
     }
 
+    // register menu
     public void registerMenu() {
         System.out.println("");
         System.out.println("=========================================");
@@ -103,6 +112,7 @@ public class UCMS {
 
     }
 
+    // student login
     public void studentlogin() {
         System.out.println("\n--- Student Login ---");
         System.out.print("Student ID : ");
@@ -132,8 +142,29 @@ public class UCMS {
         }
         System.out.println("[Warning] Incorrect Student ID or password.");
 
+    }    
+    
+    // admin login
+    public void adminLogin() {
+
+        System.out.println("\n--- ADMIN LOGIN ---");
+        System.out.print("Admin ID: ");
+        String id = sc.nextLine();
+        System.out.print("Password: ");
+        String pass = sc.nextLine();
+
+        for (Admin a : Ketua) {
+            if (a.getAdminID().equalsIgnoreCase(id)&& a.getAdminPassword().equals(pass)) {
+            System.out.println("Login Successful!");
+            System.out.println("Welcome Admin");
+            dashboardAdmin(a);
+            return;
+            }
+        }
+        System.out.println("[Warning] Invalid Admin ID or password.");
     }
 
+    // driver register
     public void registerDriver() {
         System.out.println("\n-----Register Driver-----");
         System.out.print("Enter your Student ID: ");
@@ -180,6 +211,7 @@ public class UCMS {
 
     }
 
+    // passenger register
     public void registerPassenger() {
         System.out.println("\n-----Register Passenger-----");
         System.out.print("Enter your Student ID: ");
@@ -205,6 +237,7 @@ public class UCMS {
 
     }
 
+    // driver approve booking passenger
     public void approveBookings(Driver driver) {
         System.out.println("\n--- Pending Bookings for Your Carpools ---");
         ArrayList<booking> pending = new ArrayList<>();
@@ -251,7 +284,71 @@ public class UCMS {
             }
         }
     }
+    
+    // passenger submit feedback
+    public void submitFeedback(Passenger pass) {
 
+        System.out.println("\n----- SUBMIT FEEDBACK -----");
+
+        // show drivers
+        if (Pemandu.isEmpty()) {
+            System.out.println("No drivers available.");
+            return;
+        }
+
+        System.out.println("\nList of Drivers:");
+            for (int i = 0; i < Pemandu.size(); i++) {
+        
+        Driver d = Pemandu.get(i);
+
+        System.out.println((i + 1) + ". "+ d.getStudent_name()+ " (" + d.getStudent_id() + ")");
+        }
+
+        System.out.print("Choose Driver: ");
+        int choice = sc.nextInt();
+        sc.skip("\\R?");
+
+        if (choice < 1 || choice > Pemandu.size()) {
+            System.out.println("Invalid choice.");
+            return;
+    }
+
+        Driver selectedDriver = Pemandu.get(choice - 1);
+
+        System.out.print("Enter your feedback: ");
+        String fdMessage = sc.nextLine();
+
+        Feedback f = new Feedback(String.valueOf(feeds.size() + 1),fdMessage,pass,selectedDriver
+    );
+        feeds.add(f);
+        System.out.println(f.submitFeedback());
+    }
+   
+
+    // driver submit report
+    public void submitReport(Driver driver) {
+
+        System.out.println("\n--- Submit Report ---");
+
+        System.out.print("Report Type: ");
+        String type = sc.nextLine();
+
+        System.out.print("Enter Report Details: ");
+        String details = sc.nextLine();
+
+        String report ="Report ID: R" + (reports.size() + 1)
+        + "\nDriver Name: " + driver.getStudent_name()
+        + "\nDriver ID: " + driver.getStudent_id()
+        + "\nReport Type: " + type
+        + "\nDetails: " + details
+        + "\n============================";
+
+        reports.add(report);
+
+    System.out.println("Report submitted successfully!");
+    }
+    
+    // driver punya dashboard
     public void DashboardDriver(Driver driver) {
 
         System.out.println("");
@@ -261,7 +358,8 @@ public class UCMS {
         System.out.println("|          1)Carpool List               |");
         System.out.println("|          2)Add Carpools               |");
         System.out.println("|          3)Approve Booking            |");
-        System.out.println("|               4)Exit                  |");
+        System.out.println("|          4)Submit Report              |");        
+        System.out.println("|               5)Exit                  |");
         System.out.println("=========================================");
         System.out.print("Choice: ");
 
@@ -282,11 +380,14 @@ public class UCMS {
 
             approveBookings(driver);
             DashboardDriver(driver);
-
         }
-
+        else if (choice == 4){
+            submitReport(driver);
+            DashboardDriver(driver);
+        }
     }
 
+    // passenger punya dashboard
     public void DashboardPass(Passenger pass) {
 
         System.out.println("");
@@ -297,7 +398,10 @@ public class UCMS {
         System.out.println("|          2)Show Booking                |");
         System.out.println("|          3)Delete Booking              |");
         System.out.println("|          4)Search Carpool              |");
-        System.out.println("|               5)Exit                   |");
+        System.out.println("|          5)View Booking Status         |");
+        System.out.println("|          6)View Trip History           |");        
+        System.out.println("|          7)Submit Feedback             |");
+        System.out.println("|          8)Exit                        |");        
         System.out.println("=========================================");
         System.out.print("Choice: ");
 
@@ -359,6 +463,73 @@ public class UCMS {
         } else if (choice == 4) {
             pass.searchCarpool(carpools);
             DashboardPass(pass);
+        }
+        else if (choice == 5){
+            pass.viewBookingStatus();
+            DashboardPass(pass);
+        }
+        else if (choice == 6){
+            pass.checkHistory(carpools);
+            DashboardPass(pass);
+        }
+        else if (choice == 7){
+            submitFeedback(pass);
+            DashboardPass(pass);
+        }
+    }
+    
+    // admin tengok driver punya report
+    public void viewAllReports(){
+        System.out.println("\n----- DRIVER REPORTS -----");
+        if(reports.isEmpty()){
+            System.out.println("No reports submitted.");
+            return;
+        }
+        for (String r : reports){
+            System.out.println(r);
+        }        
+    }
+    
+    // admin punya dashboard
+    public void dashboardAdmin(Admin admins) {
+        System.out.println("");
+        System.out.println("=========================================");
+        System.out.println("  UMPSA Campus Carpool Management System ");
+        System.out.println("=========================================");
+        System.out.println("|          1)Approve Driver              |");
+        System.out.println("|          2)View All Driver             |");
+        System.out.println("|          3)View Feedbacks              |");
+        System.out.println("|          4)View Driver Report          |");
+        System.out.println("|               5)Exit                   |");
+        System.out.println("=========================================");
+        System.out.print("Choice: ");
+
+        int choice = sc.nextInt();
+        sc.skip("\\R?");
+        
+        switch (choice){
+            case 1:
+                Admin.approveDriver(Pemandu);
+                dashboardAdmin(admins);
+                break;
+            case 2:
+                Admin.viewAllDriver(Pemandu);
+                dashboardAdmin(admins);
+                break;
+            case 3:
+                Admin.viewFeedback(feeds);
+                dashboardAdmin(admins);
+                break;
+            case 4:
+                viewAllReports();
+                dashboardAdmin(admins);
+                break;
+            case 5:
+                System.out.println("Exiting....");                
+                break;
+            default:
+                System.out.println("Invalid choice! Please try again.");
+                dashboardAdmin(admins);
         }
     }
 }

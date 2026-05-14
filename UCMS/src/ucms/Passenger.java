@@ -137,7 +137,7 @@ public class Passenger extends Student {
         System.out.println("Luggage Capacity : " + carpool.getLuggageCapacity());
     }
 
-    // view booking status
+    // tengok booking status
     public void viewBookingStatus() {
         System.out.println("----- BOOKING STATUS -----");
         System.out.println("Passenger ID   : " + passengerID);
@@ -154,21 +154,22 @@ public class Passenger extends Student {
     }
 
     // check history trip
-    public void checkHistory(Carpool[] carpool) {
+    public void checkHistory(ArrayList<Carpool> carpool){
         System.out.println("----- TRIP HISTORY -----");
         System.out.println("Passenger    :" + student_name);
         System.out.println("Passenger ID : " + passengerID);
 
         boolean history = false;
 
-        for (int i = 0; i < carpool.length; i++) {
-            if (carpool[i] != null && bookingStatus.equals("COMPLETED")) {
+        for (int i = 0; i < carpool.size(); i++) {
+
+        if (carpool.get(i) != null && bookingStatus.equalsIgnoreCase("COMPLETED")) {
                 System.out.println("----- PREVIOUS TRIP -----");
-                System.out.println("Carpool ID      :" + carpool[i].getCarpoolID());
-                System.out.println("Driver          : " + carpool[i].getDrive().getStudent_name());
-                System.out.println("Pickup Location : " + carpool[i].getPickupLocation());
-                System.out.println("Destination     : " + carpool[i].getDestination());
-                System.out.println("Date            : " + carpool[i].getDate());
+                System.out.println("Carpool ID      :" + carpool.get(i).getCarpoolID());
+                System.out.println("Driver          : " + carpool.get(i).getDrive().getStudent_name());
+                System.out.println("Pickup Location : " + carpool.get(i).getPickupLocation());
+                System.out.println("Destination     : " + carpool.get(i).getDestination());
+                System.out.println("Date            : " + carpool.get(i).getDate());
                 System.out.println("Status        : COMPLETED");
 
                 history = true;
@@ -219,8 +220,4 @@ public class Passenger extends Student {
                 "\nName: " + student_name +
                 "\nPhone: " + phone_num;
     }
-
-    // give feedback
-
-    // report driver arrival
 }
