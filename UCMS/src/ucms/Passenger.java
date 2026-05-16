@@ -182,6 +182,7 @@ public class Passenger extends Student {
     }
 
     // update status trip
+    // ni belum kot
     public void updateStatusTrip() {
         Scanner input = new Scanner(System.in);
         System.out.println("----- TRIP STATUS -----");

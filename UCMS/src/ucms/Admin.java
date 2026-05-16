@@ -47,7 +47,7 @@ public class Admin {
     }
 
     // approve driver
-    public static void approveDriver(ArrayList<Driver> drivers) {
+    public static void approveDriver(ArrayList<Driver> drivers, ArrayList<String> PemanduApproved) {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("\n----- APPROVE DRIVER -----");       
@@ -80,8 +80,10 @@ public class Admin {
                 String approve = sc.nextLine();
 
                 if (approve.equalsIgnoreCase("Y")) {
+                    PemanduApproved.add(d.getDriver_id());
                     System.out.println("Driver " + d.getDriver_id() + " has been approved");
-                } else {
+                } 
+                else {
                     System.out.println("Driver approval cancelled");
                 }
                 driver = true;
@@ -95,7 +97,7 @@ public class Admin {
 
     // view semua driver
     public static void viewAllDriver(ArrayList<Driver> drivers) {
-        System.out.println("\nA----- ALL DRIVERS -----");
+        System.out.println("\n----- ALL DRIVERS -----");
 
         boolean driver = false;
         int count = 1;

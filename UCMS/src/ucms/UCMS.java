@@ -28,6 +28,7 @@ public class UCMS {
     ArrayList<booking> bookings = new ArrayList<>();
     ArrayList<String> reports = new ArrayList<>();
     ArrayList<Feedback> feeds = new ArrayList<>();
+    ArrayList<String> PemanduApproved = new ArrayList<>();
 
     /**
      * @param args the command line arguments
@@ -148,14 +149,14 @@ public class UCMS {
     public void adminLogin() {
 
         System.out.println("\n--- ADMIN LOGIN ---");
-        System.out.print("Admin ID: ");
+        System.out.print("Admin ID : ");
         String id = sc.nextLine();
-        System.out.print("Password: ");
+        System.out.print("Password : ");
         String pass = sc.nextLine();
 
         for (Admin a : Ketua) {
             if (a.getAdminID().equalsIgnoreCase(id)&& a.getAdminPassword().equals(pass)) {
-            System.out.println("Login Successful!");
+            System.out.println("\nLogin Successful!");
             System.out.println("Welcome Admin");
             dashboardAdmin(a);
             return;
@@ -176,13 +177,13 @@ public class UCMS {
                 return;
             }
         }
-        System.out.print("Full Name: ");
+        System.out.print("Full Name    : ");
         String name = sc.nextLine();
-        System.out.print("Phone Number: ");
+        System.out.print("Phone Number : ");
         String notel = sc.nextLine();
-        System.out.print("Password: ");
+        System.out.print("Password     : ");
         String pass = sc.nextLine();
-        System.out.print("Confirm Pass: ");
+        System.out.print("Confirm Pass : ");
         String cpass = sc.nextLine();
 
         if (!pass.equals(cpass)) {
@@ -222,13 +223,13 @@ public class UCMS {
                 return;
             }
         }
-        System.out.print("Full Name: ");
+        System.out.print("Full Name    : ");
         String name = sc.nextLine();
-        System.out.print("Phone Number: ");
+        System.out.print("Phone Number : ");
         String notel = sc.nextLine();
-        System.out.print("Password: ");
+        System.out.print("Password     : ");
         String pass = sc.nextLine();
-        System.out.print("Confirm Pass: ");
+        System.out.print("Confirm Pass : ");
         String cpass = sc.nextLine();
 
         Passenger p = new Passenger("01", id, name, notel, pass);
@@ -328,7 +329,7 @@ public class UCMS {
     // driver submit report
     public void submitReport(Driver driver) {
 
-        System.out.println("\n--- Submit Report ---");
+        System.out.println("\n----- SUBMIT REPORT -----");
 
         System.out.print("Report Type: ");
         String type = sc.nextLine();
@@ -337,11 +338,10 @@ public class UCMS {
         String details = sc.nextLine();
 
         String report ="Report ID: R" + (reports.size() + 1)
-        + "\nDriver Name: " + driver.getStudent_name()
-        + "\nDriver ID: " + driver.getStudent_id()
-        + "\nReport Type: " + type
-        + "\nDetails: " + details
-        + "\n============================";
+        + "\nDriver Name : " + driver.getStudent_name()
+        + "\nDriver ID   : " + driver.getStudent_id()
+        + "\nReport Type : " + type
+        + "\nDetails     : " + details;
 
         reports.add(report);
 
@@ -372,15 +372,24 @@ public class UCMS {
             DashboardDriver(driver);
 
         } else if (choice == 2) {
-
-            Carpool.createCarpool(driver, carpools);
+            if (PemanduApproved.contains(driver.getDriver_id())){
+                Carpool.createCarpool(driver, carpools);
+            }
+            else {
+                System.out.println("\n[WARNING] Your account has not been approved by admin yet.");
+            }            
             DashboardDriver(driver);
-
+            
         } else if (choice == 3) {
-
-            approveBookings(driver);
+            if (PemanduApproved.contains(driver.getDriver_id())){
+                approveBookings(driver);
+            }
+            else {
+                System.out.println("\n[WARNING] Your account has not been approved by admin yet.");            
+            } 
             DashboardDriver(driver);
-        }
+        }       
+                
         else if (choice == 4){
             submitReport(driver);
             DashboardDriver(driver);
@@ -509,7 +518,7 @@ public class UCMS {
         
         switch (choice){
             case 1:
-                Admin.approveDriver(Pemandu);
+                Admin.approveDriver(Pemandu, PemanduApproved);
                 dashboardAdmin(admins);
                 break;
             case 2:
