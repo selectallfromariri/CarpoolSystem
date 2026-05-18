@@ -82,6 +82,7 @@ public class Admin {
                 if (approve.equalsIgnoreCase("Y")) {
                     PemanduApproved.add(d.getDriver_id());
                     System.out.println("Driver " + d.getDriver_id() + " has been approved");
+                    d.setApproved(true);
                 } 
                 else {
                     System.out.println("Driver approval cancelled");

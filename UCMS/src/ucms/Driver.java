@@ -23,7 +23,7 @@ public class Driver extends Student {
         this.driver_license = driver_license;
         this.approved = false;
         this.kereta = new Car(numplate, model, color);
-        this.myCarpools     = new ArrayList<>();
+        this.myCarpools = new ArrayList<>();
     }
 
     public boolean isApproved() {
@@ -67,7 +67,7 @@ public class Driver extends Student {
         super.displayProfile();
         System.out.println("Driver ID : " + driver_id);
         System.out.println("License   : " + driver_license);
-        System.out.println("Approved  : " + (approved ? "Yes" : "Pending"));
+        System.out.println("Approved  : " + (approved ? "Approved" : "Pending"));
         System.out.println("--- Car ---");
         kereta.displayCarInfo();
     }

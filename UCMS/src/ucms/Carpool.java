@@ -20,10 +20,9 @@ public class Carpool {
     private int luggageCapacity;
     private int availableSeat;
     private String pickupLocation;
-    private Carpool[] pool;
+    
 
-    public Carpool(String carpoolID, Driver drive, String destination, String date, int luggageCapacity,
-            int availableSeat, String pickupLocation) {
+    public Carpool(String carpoolID, Driver drive, String destination, String date, int luggageCapacity,int availableSeat, String pickupLocation) {
         this.carpoolID = carpoolID;
         this.driver = drive;
         this.destination = destination;
@@ -99,21 +98,11 @@ public class Carpool {
         return totpassenger;
     }
 
-    // public boolean insertCarpool(Carpool[] pool, Carpool newCarpool) {
-    // for (int i = 0; i < pool.length; i++) {
-    // if (pool[i] == null) {
-    // pool[i] = newCarpool;
-    // return true;
-    // }
-    // }
-    // return false;
-    // }
 
    public static void createCarpool(Driver driver, ArrayList<Carpool> carpools) {
 
         Scanner sc = new Scanner(System.in);
-
-
+        
         System.out.println("Enter Destination : ");
         String des = sc.nextLine();
 
@@ -143,6 +132,8 @@ public class Carpool {
         String carpool_id  = driver.getStudent_name().substring(0, 3) + (int)(Math.random()*900+100) ;
         return carpool_id;
     } 
+    
+    //tak pakai agi
     public void update(String des, String date, int avSeat, int lugCap, String loc) {
         setAvailableSeat(avSeat);
         setDate(date);

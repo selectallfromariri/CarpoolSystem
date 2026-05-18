@@ -91,7 +91,8 @@ public class Passenger extends Student {
 
         @Override
     public void displayProfile() { 
-        super.displayProfile(); System.out.println("Passenger ID: " + passengerID); 
+        super.displayProfile(); 
+        System.out.println("Passenger ID: " + passengerID); 
     }
 
  
@@ -220,6 +221,7 @@ public class Passenger extends Student {
         }
     }
 
+    
     @Override
     public String toString() {
         return "Passenger ID: " + passengerID +

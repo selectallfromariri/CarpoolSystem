@@ -20,15 +20,15 @@ public class UCMS {
         sc = new Scanner(System.in);
     }
 
-    ArrayList<Passenger> penumpang = new ArrayList<>();
-    ArrayList<Driver> Pemandu = new ArrayList<>();
-    ArrayList<Admin> Ketua = new ArrayList<>();
-    ArrayList<Student> Pelajar = new ArrayList<>();
-    ArrayList<Carpool> carpools = new ArrayList<>();
-    ArrayList<booking> bookings = new ArrayList<>();
-    ArrayList<String> reports = new ArrayList<>();
-    ArrayList<Feedback> feeds = new ArrayList<>();
-    ArrayList<String> PemanduApproved = new ArrayList<>();
+    private ArrayList<Passenger> penumpang = new ArrayList<>();
+    private ArrayList<Driver> Pemandu = new ArrayList<>();
+    private ArrayList<Admin> Ketua = new ArrayList<>();
+    private ArrayList<Student> Pelajar = new ArrayList<>();
+    private ArrayList<Carpool> carpools = new ArrayList<>();
+    private ArrayList<booking> bookings = new ArrayList<>();
+    private ArrayList<String> reports = new ArrayList<>();
+    private ArrayList<Feedback> feeds = new ArrayList<>();
+    private ArrayList<String> PemanduApproved = new ArrayList<>();
 
     /**
      * @param args the command line arguments
@@ -55,17 +55,6 @@ public class UCMS {
         while (true) {
             app.menu();
         }
-        //
-        // Carpool[] carpools = new Carpool[5];
-        //
-        // carpools[0] = new Carpool("C001", d1, "KLCC", "2026-05-07", 2, 3, "Gombak");
-        // carpools[1] = new Carpool("C002", d2, "Mid Valley", "2026-05-08", 3, 2, "Batu
-        // Caves");
-        // carpools[2] = new Carpool("C003", d3, "Sunway Pyramid", "2026-05-09", 1, 4,
-        // "Shah Alam");
-        // carpools[3] = new Carpool("C004", d4, "IOI City Mall", "2026-05-10", 2, 2,
-        // "Cheras");
-        // carpools[4] = null;
     }
 
     // first menu
@@ -112,59 +101,7 @@ public class UCMS {
         }
 
     }
-
-    // student login
-    public void studentlogin() {
-        System.out.println("\n--- Student Login ---");
-        System.out.print("Student ID : ");
-        String id = sc.nextLine();
-        System.out.print("Password   : ");
-        String pass = sc.nextLine();
-
-        for (Driver d : Pemandu) {
-            if (d.loginStudent(id, pass)) {
-                System.out.println("Login Successfull");
-                System.out.println("Welcome: " + d.getStudent_name());
-                System.out.println("Role: Driver");
-                DashboardDriver(d);
-                return;
-            }
-        }
-
-        for (Passenger p : penumpang) {
-            if (p.loginStudent(id, pass)) {
-                System.out.println("Login Successfull");
-                System.out.println("Welcome: " + p.getStudent_name());
-                System.out.println("Role: Passenger");
-                DashboardPass(p);
-                return;
-            }
-
-        }
-        System.out.println("[Warning] Incorrect Student ID or password.");
-
-    }    
     
-    // admin login
-    public void adminLogin() {
-
-        System.out.println("\n--- ADMIN LOGIN ---");
-        System.out.print("Admin ID : ");
-        String id = sc.nextLine();
-        System.out.print("Password : ");
-        String pass = sc.nextLine();
-
-        for (Admin a : Ketua) {
-            if (a.getAdminID().equalsIgnoreCase(id)&& a.getAdminPassword().equals(pass)) {
-            System.out.println("\nLogin Successful!");
-            System.out.println("Welcome Admin");
-            dashboardAdmin(a);
-            return;
-            }
-        }
-        System.out.println("[Warning] Invalid Admin ID or password.");
-    }
-
     // driver register
     public void registerDriver() {
         System.out.println("\n-----Register Driver-----");
@@ -236,6 +173,58 @@ public class UCMS {
         p.displayProfile();
 
     }
+
+    // student login
+    public void studentlogin() {
+        System.out.println("\n--- Student Login ---");
+        System.out.print("Student ID : ");
+        String id = sc.nextLine();
+        System.out.print("Password   : ");
+        String pass = sc.nextLine();
+
+        for (Driver d : Pemandu) {
+            if (d.loginStudent(id, pass)) {
+                System.out.println("Login Successfull");
+                System.out.println("Welcome: " + d.getStudent_name());
+                System.out.println("Role: Driver");
+                DashboardDriver(d);
+                return;
+            }
+        }
+
+        for (Passenger p : penumpang) {
+            if (p.loginStudent(id, pass)) {
+                System.out.println("Login Successfull");
+                System.out.println("Welcome: " + p.getStudent_name());
+                System.out.println("Role: Passenger");
+                DashboardPass(p);
+                return;
+            }
+
+        }
+        System.out.println("[Warning] Incorrect Student ID or password.");
+
+    }    
+    
+    // admin login
+    public void adminLogin() {
+
+        System.out.println("\n--- ADMIN LOGIN ---");
+        System.out.print("Admin ID : ");
+        String id = sc.nextLine();
+        System.out.print("Password : ");
+        String pass = sc.nextLine();
+
+        for (Admin a : Ketua) {
+            if (a.loginAdmin(id, pass)) {
+            dashboardAdmin(a);
+            return;
+            }
+        }
+        System.out.println("[Warning] Invalid Admin ID or password.");
+    }
+
+    
 
     // driver approve booking passenger
     public void approveBookings(Driver driver) {
