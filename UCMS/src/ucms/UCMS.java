@@ -48,7 +48,7 @@ public class UCMS {
                 + "                                                                    /$$  \\ $$\n"
                 + "                                                                   |  $$$$$$/\n"
                 + "                                                                    \\______/ ");
-        System.out.println("================================================================================");
+       
         UCMS app = new UCMS();
         Admin admin1 = new Admin("admin1", "Kiwi","admin123");
         app.Ketua.add(admin1);
@@ -95,13 +95,13 @@ public class UCMS {
     // register menu
     public void registerMenu() {
         System.out.println("");
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|          1)Register  as Driver        |");
-        System.out.println("|          2)Register as Passenger      |");
-        System.out.println("|               3)Exit                  |");
-        System.out.println("=========================================");
+        System.out.println("================================================================================");
+        System.out.println("                  t-UMPang:UMPSA Campus Carpool Management System               ");
+        System.out.println("================================================================================");
+        System.out.println("|                                 1)Register  as Driver                        |");
+        System.out.println("|                                2)Register as Passenger                       |");
+        System.out.println("|                                          3)Exit                              |");
+        System.out.println("================================================================================");
         System.out.print("Choice: ");
         int choice = sc.nextInt();
         sc.skip("\\R?");
@@ -207,8 +207,7 @@ public class UCMS {
 
         System.out.println("\nDriver Registered Successfully!");
 
-        pemandubaru.displayDriverInfo();
-        pemandubaru.getKereta().displayCarInfo();
+        pemandubaru.displayProfile();
 
     }
 
@@ -234,7 +233,7 @@ public class UCMS {
 
         Passenger p = new Passenger("01", id, name, notel, pass);
         penumpang.add(p);
-        System.out.println(p);
+        p.displayProfile();
 
     }
 
@@ -352,45 +351,62 @@ public class UCMS {
     public void DashboardDriver(Driver driver) {
 
         System.out.println("");
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|          1)Carpool List               |");
-        System.out.println("|          2)Add Carpools               |");
-        System.out.println("|          3)Approve Booking            |");
-        System.out.println("|          4)Submit Report              |");        
-        System.out.println("|               5)Exit                  |");
-        System.out.println("=========================================");
+
+        System.out.println("================================================================================");
+        System.out.println("                  t-UMPang:UMPSA Campus Carpool Management System               ");
+        System.out.println("================================================================================");
+        System.out.println("|                                   1)View Profile                             |");
+        System.out.println("|                                   2)Carpool List                             |");
+        System.out.println("|                                   3)View My Trip                             |");
+        System.out.println("|                                   4)Post New Trip                            |");
+        System.out.println("|                               5)Manage Booking Request                       |");
+        System.out.println("|                                   6)Submit Report                            |");
+        System.out.println("|                                      0)Logout                                |");
+        System.out.println("================================================================================");
+
         System.out.print("Choice: ");
 
         int choice = sc.nextInt();
         sc.skip("\\R?");
-
-        if (choice == 1) {
+        if (choice == 1){
+            driver.displayProfile();
+            DashboardDriver(driver);
+        }
+        else if (choice == 2) {
 
             Carpool.displayCarpool(carpools);
             DashboardDriver(driver);
 
-        } else if (choice == 2) {
-            if (PemanduApproved.contains(driver.getDriver_id())){
-                Carpool.createCarpool(driver, carpools);
-            }
-            else {
-                System.out.println("\n[WARNING] Your account has not been approved by admin yet.");
-            }            
+        }
+        else if (choice == 3) {
+            System.out.println("\n=== MY TRIPS ====");
+            Carpool.displayCarpool(driver.getMyCarpools());
             DashboardDriver(driver);
+        }
+        else if (choice == 4) {
+            if (PemanduApproved.contains(driver.getDriver_id())) {
+                Carpool.createCarpool(driver, carpools);
+            } else {
+                System.out.println("\n[WARNING] Your account has not been approved by admin yet.");
+            }  
+
+            DashboardDriver(driver);
+
             
-        } else if (choice == 3) {
+        } else if (choice == 5) {
             if (PemanduApproved.contains(driver.getDriver_id())){
                 approveBookings(driver);
+                
             }
             else {
                 System.out.println("\n[WARNING] Your account has not been approved by admin yet.");            
             } 
             DashboardDriver(driver);
-        }       
+
+
+        }     
                 
-        else if (choice == 4){
+        else if (choice == 6){
             submitReport(driver);
             DashboardDriver(driver);
         }
@@ -400,24 +416,31 @@ public class UCMS {
     public void DashboardPass(Passenger pass) {
 
         System.out.println("");
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|          1)Add Booking                 |");
-        System.out.println("|          2)Show Booking                |");
-        System.out.println("|          3)Delete Booking              |");
-        System.out.println("|          4)Search Carpool              |");
-        System.out.println("|          5)View Booking Status         |");
-        System.out.println("|          6)View Trip History           |");        
-        System.out.println("|          7)Submit Feedback             |");
-        System.out.println("|          8)Exit                        |");        
-        System.out.println("=========================================");
+
+        System.out.println("================================================================================");
+        System.out.println("                  t-UMPang:UMPSA Campus Carpool Management System               ");
+        System.out.println("================================================================================");
+        System.out.println("|                                  1)View Profile                              |");
+        System.out.println("|                               2)Search and Book Trip                         |");
+        System.out.println("|                                  3)View My Booking                           |");
+        System.out.println("|                                  4)Cancel Booking                            |");
+        System.out.println("|                                 5)Update Status Trip                         |");
+        System.out.println("|                                   6)Give Feedback                            |");
+        System.out.println("|                                    7)Trip History                            |");
+        System.out.println("|                                      0)Logout                                |");
+        System.out.println("================================================================================");
+
         System.out.print("Choice: ");
 
         int choice = sc.nextInt();
         sc.skip("\\R?");
-
-        if (choice == 1) {
+        if ( choice == 1){
+            pass.displayProfile();
+            DashboardPass(pass);
+        }
+        else if (choice == 2) {
+            
+            pass.searchCarpool(carpools);
 
             System.out.print("Enter Carpool ID: ");
             String id = sc.nextLine();
@@ -431,7 +454,7 @@ public class UCMS {
                 System.out.println("Booking successful!");
             }
             DashboardPass(pass);
-        } else if (choice == 2) {
+        } else if (choice == 3) {
             System.out.println("\n--- Your Bookings ---");
             boolean found = false;
             for (booking b : bookings) {
@@ -449,8 +472,8 @@ public class UCMS {
                 System.out.println("No booking found.");
             }
             DashboardPass(pass);
-        } else if (choice == 3) {
-            System.out.print("Enter Booking ID: ");
+        } else if (choice == 4) {
+            System.out.println("Enter Booking ID: ");
             String bid = sc.nextLine();
             booking target = null;
             for (booking b : bookings) {
@@ -468,9 +491,6 @@ public class UCMS {
             } else {
                 System.out.println("Invalid booking.");
             }
-            DashboardPass(pass);
-        } else if (choice == 4) {
-            pass.searchCarpool(carpools);
             DashboardPass(pass);
         }
         else if (choice == 5){
