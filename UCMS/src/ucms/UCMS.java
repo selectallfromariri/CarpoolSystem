@@ -45,7 +45,7 @@ public class UCMS {
                 + "                                                                    /$$  \\ $$\n"
                 + "                                                                   |  $$$$$$/\n"
                 + "                                                                    \\______/ ");
-        System.out.println("================================================================================");
+       
         UCMS app = new UCMS();
         while (true) {
             app.menu();
@@ -85,13 +85,13 @@ public class UCMS {
 
     public void registerMenu() {
         System.out.println("");
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|          1)Register  as Driver        |");
-        System.out.println("|          2)Register as Passenger      |");
-        System.out.println("|               3)Exit                  |");
-        System.out.println("=========================================");
+        System.out.println("================================================================================");
+        System.out.println("                  t-UMPang:UMPSA Campus Carpool Management System               ");
+        System.out.println("================================================================================");
+        System.out.println("|                                 1)Register  as Driver                        |");
+        System.out.println("|                                2)Register as Passenger                       |");
+        System.out.println("|                                          3)Exit                              |");
+        System.out.println("================================================================================");
         System.out.print("Choice: ");
         int choice = sc.nextInt();
         sc.skip("\\R?");
@@ -175,8 +175,7 @@ public class UCMS {
 
         System.out.println("\nDriver Registered Successfully!");
 
-        pemandubaru.displayDriverInfo();
-        pemandubaru.getKereta().displayCarInfo();
+        pemandubaru.displayProfile();
 
     }
 
@@ -201,7 +200,7 @@ public class UCMS {
 
         Passenger p = new Passenger("01", id, name, notel, pass);
         penumpang.add(p);
-        System.out.println(p);
+        p.displayProfile();
 
     }
 
@@ -255,30 +254,41 @@ public class UCMS {
     public void DashboardDriver(Driver driver) {
 
         System.out.println("");
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|          1)Carpool List               |");
-        System.out.println("|          2)Add Carpools               |");
-        System.out.println("|          3)Approve Booking            |");
-        System.out.println("|               4)Exit                  |");
-        System.out.println("=========================================");
+        System.out.println("================================================================================");
+        System.out.println("                  t-UMPang:UMPSA Campus Carpool Management System               ");
+        System.out.println("================================================================================");
+        System.out.println("|                                   1)View Profile                             |");
+        System.out.println("|                                   2)Carpool List                             |");
+        System.out.println("|                                   3)View My Trip                             |");
+        System.out.println("|                                   4)Post New Trip                            |");
+        System.out.println("|                               5)Manage Booking Request                       |");
+        System.out.println("|                                      0)Logout                                |");
+        System.out.println("================================================================================");
         System.out.print("Choice: ");
 
         int choice = sc.nextInt();
         sc.skip("\\R?");
-
-        if (choice == 1) {
+        if (choice == 1){
+            driver.displayProfile();
+            DashboardDriver(driver);
+        }
+        else if (choice == 2) {
 
             Carpool.displayCarpool(carpools);
             DashboardDriver(driver);
 
-        } else if (choice == 2) {
+        }
+        else if (choice == 3) {
+            System.out.println("\n=== MY TRIPS ====");
+            Carpool.displayCarpool(driver.getMyCarpools());
+            DashboardDriver(driver);
+        }
+        else if (choice == 4) {
 
             Carpool.createCarpool(driver, carpools);
             DashboardDriver(driver);
 
-        } else if (choice == 3) {
+        } else if (choice == 5) {
 
             approveBookings(driver);
             DashboardDriver(driver);
@@ -290,21 +300,29 @@ public class UCMS {
     public void DashboardPass(Passenger pass) {
 
         System.out.println("");
-        System.out.println("=========================================");
-        System.out.println("  UMPSA Campus Carpool Management System ");
-        System.out.println("=========================================");
-        System.out.println("|          1)Add Booking                 |");
-        System.out.println("|          2)Show Booking                |");
-        System.out.println("|          3)Delete Booking              |");
-        System.out.println("|          4)Search Carpool              |");
-        System.out.println("|               5)Exit                   |");
-        System.out.println("=========================================");
+        System.out.println("================================================================================");
+        System.out.println("                  t-UMPang:UMPSA Campus Carpool Management System               ");
+        System.out.println("================================================================================");
+        System.out.println("|                                  1)View Profile                              |");
+        System.out.println("|                               2)Search and Book Trip                         |");
+        System.out.println("|                                  3)View My Booking                           |");
+        System.out.println("|                                  4)Cancel Booking                            |");
+        System.out.println("|                                 5)Update Status Trip                         |");
+        System.out.println("|                                   6)Give Feedback                            |");
+        System.out.println("|                                    7)Trip History                            |");
+        System.out.println("|                                      0)Logout                                |");
+        System.out.println("================================================================================");
         System.out.print("Choice: ");
 
         int choice = sc.nextInt();
         sc.skip("\\R?");
-
-        if (choice == 1) {
+        if ( choice == 1){
+            pass.displayProfile();
+            DashboardPass(pass);
+        }
+        else if (choice == 2) {
+            
+            pass.searchCarpool(carpools);
 
             System.out.print("Enter Carpool ID: ");
             String id = sc.nextLine();
@@ -318,7 +336,7 @@ public class UCMS {
                 System.out.println("Booking successful!");
             }
             DashboardPass(pass);
-        } else if (choice == 2) {
+        } else if (choice == 3) {
             System.out.println("\n--- Your Bookings ---");
             boolean found = false;
             for (booking b : bookings) {
@@ -336,8 +354,8 @@ public class UCMS {
                 System.out.println("No booking found.");
             }
             DashboardPass(pass);
-        } else if (choice == 3) {
-            System.out.print("Enter Booking ID: ");
+        } else if (choice == 4) {
+            System.out.println("Enter Booking ID: ");
             String bid = sc.nextLine();
             booking target = null;
             for (booking b : bookings) {
@@ -356,7 +374,7 @@ public class UCMS {
                 System.out.println("Invalid booking.");
             }
             DashboardPass(pass);
-        } else if (choice == 4) {
+        } else if (choice == 5) {
             pass.searchCarpool(carpools);
             DashboardPass(pass);
         }

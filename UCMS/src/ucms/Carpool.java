@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Carpool {
 
     private String carpoolID;
-    private Driver drive;
+    private Driver driver;
     private String destination;
     private String date;
     private int luggageCapacity;
@@ -25,7 +25,7 @@ public class Carpool {
     public Carpool(String carpoolID, Driver drive, String destination, String date, int luggageCapacity,
             int availableSeat, String pickupLocation) {
         this.carpoolID = carpoolID;
-        this.drive = drive;
+        this.driver = drive;
         this.destination = destination;
         this.date = date;
         this.luggageCapacity = luggageCapacity;
@@ -38,7 +38,7 @@ public class Carpool {
     }
 
     public Driver getDrive() {
-        return drive;
+        return driver;
     }
 
     public String getDestination() {
@@ -66,7 +66,7 @@ public class Carpool {
     }
 
     public void setDrive(Driver drive) {
-        this.drive = drive;
+        this.driver = drive;
     }
 
     public void setDestination(String destination) {
@@ -113,8 +113,6 @@ public class Carpool {
 
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Enter Carpool ID : ");
-        String id = sc.nextLine();
 
         System.out.println("Enter Destination : ");
         String des = sc.nextLine();
@@ -131,24 +129,20 @@ public class Carpool {
 
         System.out.println("Pickup location : ");
         String loc = sc.nextLine();
-
+        String carpoolID = generateID(driver);
         // create object baru
-        Carpool newCarpool = new Carpool(
-                id,
-                driver,
-                des,
-                date,
-                lugCap,
-                avSeat,
-                loc
-        );
-
+        Carpool newCarpool = new Carpool( carpoolID,driver,des,date,lugCap,avSeat,loc);
+        
         // append masuk ArrayList
         carpools.add(newCarpool);
-
+        driver.addCarpoolDriver(newCarpool);
         System.out.println("Carpool added successfully!");
     }
 
+    public static String generateID(Driver driver){
+        String carpool_id  = driver.getStudent_name().substring(0, 3) + (int)(Math.random()*900+100) ;
+        return carpool_id;
+    } 
     public void update(String des, String date, int avSeat, int lugCap, String loc) {
         setAvailableSeat(avSeat);
         setDate(date);

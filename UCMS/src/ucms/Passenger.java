@@ -33,45 +33,45 @@ public class Passenger extends Student {
         this.passengerID = passengerID;
     }
 
-    public String getBookingStatus() {
-        return bookingStatus;
-    }
-
-    public void setBookingStatus(String bookingStatus) {
-        this.bookingStatus = bookingStatus;
-    }
-
-    public Carpool getDate() {
-        return date;
-    }
-
-    public void setDate(Carpool date) {
-        this.date = date;
-    }
-
-    public String getStudent_id() {
-        return student_id;
-    }
-
-    public void setStudent_id(String student_id) {
-        this.student_id = student_id;
-    }
-
-    public String getStudent_name() {
-        return student_name;
-    }
-
-    public void setStudent_name(String student_name) {
-        this.student_name = student_name;
-    }
-
-    public String getPhone_num() {
-        return phone_num;
-    }
-
-    public void setPhone_num(String phone_num) {
-        this.phone_num = phone_num;
-    }
+//    public String getBookingStatus() {
+//        return bookingStatus;
+//    }
+//
+//    public void setBookingStatus(String bookingStatus) {
+//        this.bookingStatus = bookingStatus;
+//    }
+//
+//    public Carpool getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Carpool date) {
+//        this.date = date;
+//    }
+//
+//    public String getStudent_id() {
+//        return student_id;
+//    }
+//
+//    public void setStudent_id(String student_id) {
+//        this.student_id = student_id;
+//    }
+//
+//    public String getStudent_name() {
+//        return student_name;
+//    }
+//
+//    public void setStudent_name(String student_name) {
+//        this.student_name = student_name;
+//    }
+//
+//    public String getPhone_num() {
+//        return phone_num;
+//    }
+//
+//    public void setPhone_num(String phone_num) {
+//        this.phone_num = phone_num;
+//    }
 
     public String getPassword() {
         return password;
@@ -89,6 +89,12 @@ public class Passenger extends Student {
         this.carpoolID = carpoolID;
     }
 
+        @Override
+    public void displayProfile() { 
+        super.displayProfile(); System.out.println("Passenger ID: " + passengerID); 
+    }
+
+ 
     // search carpool
     public void searchCarpool(ArrayList<Carpool> carpool) {
         Scanner input = new Scanner(System.in);
@@ -129,7 +135,7 @@ public class Passenger extends Student {
     private void displaySearchCarpool(Carpool carpool) {
         System.out.println("\n----- CARPOOL DETAILS -----");
         System.out.println("Carpool ID       : " + carpool.getCarpoolID());
-        System.out.println("Driver Name      : " + carpool.getDrive());
+        System.out.println("Driver Name      : " + carpool.getDrive().getStudent_name());
         System.out.println("Destination      : " + carpool.getDestination());
         System.out.println("Pickup Location  : " + carpool.getPickupLocation());
         System.out.println("Date             : " + carpool.getDate());
