@@ -102,7 +102,8 @@ public class Carpool {
    public static void createCarpool(Driver driver, ArrayList<Carpool> carpools) {
 
         Scanner sc = new Scanner(System.in);
-        
+
+
         System.out.println("Enter Destination : ");
         String des = sc.nextLine();
 
@@ -132,8 +133,6 @@ public class Carpool {
         String carpool_id  = driver.getStudent_name().substring(0, 3) + (int)(Math.random()*900+100) ;
         return carpool_id;
     } 
-    
-    //tak pakai agi
     public void update(String des, String date, int avSeat, int lugCap, String loc) {
         setAvailableSeat(avSeat);
         setDate(date);
