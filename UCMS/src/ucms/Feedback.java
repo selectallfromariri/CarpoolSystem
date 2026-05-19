@@ -4,6 +4,8 @@
  */
 package ucms;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author USER
@@ -20,6 +22,10 @@ public class Feedback {
         this.student = student;
         this.driver = driver;
     }
+
+    public Feedback() {
+    }
+    
 
     public String getFeedbackID() {
         return feedbackID;
@@ -55,6 +61,14 @@ public class Feedback {
 
     public String submitFeedback() {
         return "Feedback submitted successfully!";
+    }
+    
+    public void displayDriver(ArrayList<Driver> drivers){
+        for (int i = 0 ; i< drivers.size();i++){
+            Driver d = drivers.get(i);
+            System.out.println((i + 1) + ". "+ d.getStudent_name()+ " (" + d.getStudent_id() + ")");
+        }
+                    
     }
 
     public void displayFeedback() {

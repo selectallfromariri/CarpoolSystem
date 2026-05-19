@@ -14,8 +14,7 @@ import java.util.ArrayList;
 public class Passenger extends Student {
     private String passengerID;
     private String bookingStatus;
-    private Carpool date;
-    private Carpool carpoolID;
+  
 
     public Passenger(String passengerID, String student_id, String student_name, String phone_num, String password) {
         super(student_id, student_name, phone_num, password);
@@ -81,13 +80,6 @@ public class Passenger extends Student {
         this.password = password;
     }
 
-    public Carpool getCarpoolID() {
-        return carpoolID;
-    }
-
-    public void setCarpoolID(Carpool carpoolID) {
-        this.carpoolID = carpoolID;
-    }
 
         @Override
     public void displayProfile() { 
@@ -146,20 +138,20 @@ public class Passenger extends Student {
     }
 
     // tengok booking status
-    public void viewBookingStatus() {
-        System.out.println("----- BOOKING STATUS -----");
-        System.out.println("Passenger ID   : " + passengerID);
-        System.out.println("Passenger Name : " + student_name);
-        System.out.println("Phone Number   : " + phone_num);
-
-        if (bookingStatus.equalsIgnoreCase("NONE")) {
-            System.out.println("Status   : No active booking");
-        } else {
-            System.out.println("Carpool ID     : " + carpoolID);
-            System.out.println("Booking Status : " + bookingStatus);
-            System.out.println("Booking Date   : " + date);
-        }
-    }
+//    public void viewBookingStatus() {
+//        System.out.println("----- BOOKING STATUS -----");
+//        System.out.println("Passenger ID   : " + passengerID);
+//        System.out.println("Passenger Name : " + student_name);
+//        System.out.println("Phone Number   : " + phone_num);
+//
+//        if (bookingStatus.equalsIgnoreCase("NONE")) {
+//            System.out.println("Status   : No active booking");
+//        } else {
+//            System.out.println("Carpool ID     : " + carpoolID);
+//            System.out.println("Booking Status : " + bookingStatus);
+//            System.out.println("Booking Date   : " + date);
+//        }
+//    }
 
     // check history trip
     public void checkHistory(ArrayList<Carpool> carpool){
@@ -189,38 +181,7 @@ public class Passenger extends Student {
         }
     }
 
-    // update status trip
-    // ni belum kot
-    public void updateStatusTrip() {
-        Scanner input = new Scanner(System.in);
-        System.out.println("----- TRIP STATUS -----");
 
-        if (bookingStatus.equalsIgnoreCase("NONE")) {
-            System.out.println("No active booking to update.");
-            return;
-        }
-        System.out.println("Carpool ID      : " + carpoolID);
-        System.out.println("Current Status  : " + bookingStatus);
-        System.out.println("Booking Date    : " + date);
-
-        switch (bookingStatus) {
-            case "PENDING":
-                System.out.println("Status  : Waiting for driver confirmation");
-                break;
-            case "CONFIRMED":
-                System.out.println("Status  : Confirmed");
-                break;
-            case "ON THE WAY":
-                System.out.println("Status  : Driver is on the way");
-                break;
-            case "ARRIVED":
-                System.out.println("Status  : Driver has arrived");
-                break;
-            case "CANCELLED":
-                System.out.println("Status  : Cancelled");
-                break;
-        }
-    }
 
     
     @Override

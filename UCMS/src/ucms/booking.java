@@ -80,6 +80,12 @@ public class booking {
         return false;
     }
 
+    public void startTrip() {
+        bookingStatus = "ONGOING";
+    }
+    public void completeTrip(){
+        bookingStatus = "COMPLETED";
+    }
     public void Approvebooking(String status) {
         bookingStatus = status;
         if (status.equalsIgnoreCase("REJECTED")) {

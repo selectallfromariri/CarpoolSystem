@@ -26,7 +26,7 @@ public class UCMS {
     private ArrayList<Student> Pelajar = new ArrayList<>();
     private ArrayList<Carpool> carpools = new ArrayList<>();
     private ArrayList<booking> bookings = new ArrayList<>();
-    private ArrayList<String> reports = new ArrayList<>();
+    private ArrayList<Report> reports = new ArrayList<>();
     private ArrayList<Feedback> feeds = new ArrayList<>();
     private ArrayList<String> PemanduApproved = new ArrayList<>();
 
@@ -102,6 +102,9 @@ public class UCMS {
             registerDriver();
         } else if (choice == 2) {
             registerPassenger();
+        }
+        else if (choice == 3) {
+            return;
         }
 
     }
@@ -292,13 +295,9 @@ public class UCMS {
             return;
         }
 
-        System.out.println("\nList of Drivers:");
-            for (int i = 0; i < Pemandu.size(); i++) {
+        Feedback ftest = new Feedback();
         
-        Driver d = Pemandu.get(i);
-
-        System.out.println((i + 1) + ". "+ d.getStudent_name()+ " (" + d.getStudent_id() + ")");
-        }
+        ftest.displayDriver(Pemandu);
 
         System.out.print("Choose Driver: ");
         int choice = sc.nextInt();
@@ -307,7 +306,7 @@ public class UCMS {
         if (choice < 1 || choice > Pemandu.size()) {
             System.out.println("Invalid choice.");
             return;
-    }
+        }
 
         Driver selectedDriver = Pemandu.get(choice - 1);
 
@@ -319,28 +318,24 @@ public class UCMS {
         feeds.add(f);
         System.out.println(f.submitFeedback());
     }
-   
 
     // driver submit report
     public void submitReport(Driver driver) {
 
         System.out.println("\n----- SUBMIT REPORT -----");
 
-        System.out.print("Report Type: ");
+        System.out.print("Report Subject: ");
         String type = sc.nextLine();
 
         System.out.print("Enter Report Details: ");
         String details = sc.nextLine();
+        
+        Report r = new Report(String.valueOf(reports.size() + 1), driver, type, details);
+        
 
-        String report ="Report ID: R" + (reports.size() + 1)
-        + "\nDriver Name : " + driver.getStudent_name()
-        + "\nDriver ID   : " + driver.getStudent_id()
-        + "\nReport Type : " + type
-        + "\nDetails     : " + details;
+        reports.add(r);
 
-        reports.add(report);
-
-    System.out.println("Report submitted successfully!");
+        System.out.println("Report submitted successfully!");
     }
     
     // driver punya dashboard
@@ -357,7 +352,7 @@ public class UCMS {
         System.out.println("|                                   4)Post New Trip                            |");
         System.out.println("|                               5)Manage Booking Request                       |");
         System.out.println("|                                   6)Submit Report                            |");
-        System.out.println("|                                   7)Start Trip                               |");
+        System.out.println("|                                   7)View Ongoing Trips                       |");
         System.out.println("|                                      0)Logout                                |");
         System.out.println("================================================================================");
 
@@ -408,7 +403,40 @@ public class UCMS {
             DashboardDriver(driver);
         }
         else if (choice == 7){
+            System.out.println("======= START TRIPS ========");
+            ArrayList<booking> confirmed = new ArrayList<>();
+
+            for (booking b : bookings) {
+                if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())&& b.getBookingStatus().equalsIgnoreCase("CONFIRMED")) {
+                    confirmed.add(b);
+                }
+            }
+
+            if (confirmed.isEmpty()) {
+                System.out.println("No confirmed bookings.");
+                return;
+            }
+            for(int i = 0; i< confirmed.size(); i++){
+                booking b = confirmed.get(i);
+                System.out.println((i + 1) + ") " + b.getBookingID());
+                System.out.println("Carpool ID: " + b.getCarpool().getCarpoolID());
+                System.out.println("Destination: " + b.getCarpool().getDestination());
+                System.out.println("Date: " + b.getBookingDate());
+                System.out.println("Status: " + b.getBookingStatus());
+                System.out.println("----PASSENGERS-----");
+                System.out.println(b.getPassenger().getStudent_name());
+                
+            }
             
+            System.out.print("Select booking to start trip: ");
+            int choiceStart = sc.nextInt();
+            
+            if (choiceStart > 0 && choiceStart <= confirmed.size()) {
+                booking selected = confirmed.get(choiceStart - 1);
+                selected.startTrip();
+                System.out.println("Trip started!\n Have a safe journey!");
+            }
+            DashboardDriver(driver);
         }
         else if (choice == 0) {
             System.out.println("Logged out. Goodbye, " + driver.getStudent_name() + "!");
@@ -429,7 +457,7 @@ public class UCMS {
         System.out.println("|                                   3)Carpool List                             |");
         System.out.println("|                                  4)View My Booking                           |");
         System.out.println("|                                  5)Cancel Booking                            |");
-        System.out.println("|                                 6)Update Status Trip                         |");
+        System.out.println("|                                 6) Complete the Trip                         |");
         System.out.println("|                                   7)Give Feedback                            |");
         System.out.println("|                                    8)Trip History                            |");
         System.out.println("|                                      0)Logout                                |");
@@ -468,7 +496,6 @@ public class UCMS {
             Carpool.displayCarpool(carpools);
             System.out.print("Enter Carpool ID: ");
             String id = sc.nextLine();
-
             booking temp = new booking("temp", pass, null, "", "");
 
             booking b = temp.createBooking(pass, carpools, id);
@@ -519,8 +546,51 @@ public class UCMS {
             }
             DashboardPass(pass);
         }
-        else if (choice == 6){
-            pass.viewBookingStatus();
+        else if (choice == 6) {
+
+            System.out.println("\n=== COMPLETE TRIP ===");
+
+            boolean found = false;
+
+            for (booking b : bookings) {
+
+                if (b.getPassenger().getStudent_id().equals(pass.getStudent_id()) && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+
+                    System.out.println("Booking ID: " + b.getBookingID());
+                    System.out.println("Driver: " + b.getCarpool().getDrive().getStudent_name());
+                    System.out.println("Destination: " + b.getCarpool().getDestination());
+                    System.out.println("-----------------------------------");
+
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                System.out.println("No ongoing trip found.");
+                return;
+            }
+
+            System.out.print("Enter Booking ID to confirm arrival: ");
+            String id = sc.nextLine();
+
+            boolean updated = false;
+
+            for (booking b : bookings) {
+
+                if (b.getBookingID().equalsIgnoreCase(id)
+                        && b.getPassenger().getStudent_id().equals(pass.getStudent_id())
+                        && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+
+                    b.completeTrip(); 
+                    System.out.println("Trip completed. Thank you!");
+                    updated = true;
+                    break;
+                }
+            }
+
+            if (!updated) {
+                System.out.println("Invalid Booking ID or trip not ongoing.");
+            }
             DashboardPass(pass);
         }
         else if (choice == 7){
@@ -545,7 +615,7 @@ public class UCMS {
             System.out.println("No reports submitted.");
             return;
         }
-        for (String r : reports){
+        for (Report r : reports){
             System.out.println(r);
         }        
     }
