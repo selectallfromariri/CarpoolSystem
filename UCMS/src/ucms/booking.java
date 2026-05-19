@@ -92,6 +92,76 @@ public class booking {
             this.carpool.setAvailableSeat(this.carpool.getAvailableSeat() + 1);
         }
     }
+    
+    public static void displayPending(ArrayList<booking> bookings, Driver driver) {
+        System.out.println("\n--- Pending Booking Requests ---");
+        ArrayList<booking> pending = new ArrayList<>();
+        for (booking b : bookings) {
+            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
+                    && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
+                pending.add(b);
+            }
+        }
+        if (pending.isEmpty()) {
+            System.out.println("No pending bookings found.");
+            return;
+        }
+        for (int i = 0; i < pending.size(); i++) {
+            System.out.println((i + 1) + ") Booking ID  : " + pending.get(i).getBookingID());
+            System.out.println("   Passenger   : " + pending.get(i).getPassenger().getStudent_name());
+            System.out.println("   Destination : " + pending.get(i).getCarpool().getDestination());
+            System.out.println("   Date        : " + pending.get(i).getBookingDate());
+            System.out.println("   -------------------------");
+        }
+    }
+    
+    public static ArrayList<booking> displayConfirmed(ArrayList<booking> bookings, Driver driver) {
+        System.out.println("\n--- Confirmed Bookings (Ready to Start) ---");
+        ArrayList<booking> confirmed = new ArrayList<>();
+
+        for (booking b : bookings) {
+            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
+                    && b.getBookingStatus().equalsIgnoreCase("CONFIRMED")) {
+                confirmed.add(b);
+            }
+        }
+
+        if (confirmed.isEmpty()) {
+            System.out.println("No confirmed bookings found.");
+            return confirmed;
+        }
+
+        for (int i = 0; i < confirmed.size(); i++) {
+            booking b = confirmed.get(i);
+            System.out.println((i + 1) + ") Booking ID  : " + b.getBookingID());
+            System.out.println("   Passenger   : " + b.getPassenger().getStudent_name());
+            System.out.println("   Destination : " + b.getCarpool().getDestination());
+            System.out.println("   Date        : " + b.getBookingDate());
+            System.out.println("   -------------------------");
+        }
+
+        return confirmed;
+    }
+    
+    public static void displayMyBookings(ArrayList<booking> bookings, Passenger pass) {
+        System.out.println("\n--- Your Bookings ---");
+        boolean found = false;
+        for (booking b : bookings) {
+            if (b.getPassenger().getStudent_id().equals(pass.getStudent_id())) {
+                System.out.println("Booking ID  : " + b.getBookingID());
+                System.out.println("Carpool ID  : " + b.getCarpool().getCarpoolID());
+                System.out.println("Destination : " + b.getCarpool().getDestination());
+                System.out.println("Date        : " + b.getBookingDate());
+                System.out.println("Status      : " + b.getBookingStatus());
+                System.out.println("-------------------");
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No booking found.");
+        }
+    }
+    
  
     
 }

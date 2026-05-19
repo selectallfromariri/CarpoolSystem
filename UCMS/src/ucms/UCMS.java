@@ -239,33 +239,19 @@ public class UCMS {
 
     // driver approve booking passenger
     public void approveBookings(Driver driver) {
-        System.out.println("\n--- Pending Bookings for Your Carpools ---");
-        ArrayList<booking> pending = new ArrayList<>();
-
-        for (booking b : bookings) {
-            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id()) && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
-                pending.add(b);
-            }
-        }
-
-        if (pending.isEmpty()) {
-            System.out.println("No pending bookings found.");
-            return;
-        }
-
-        for (int i = 0; i < pending.size(); i++) {
-            booking b = pending.get(i);
-            System.out.println((i + 1) + ") Booking ID: " + b.getBookingID());
-            System.out.println("   Passenger: " + b.getPassenger().getStudent_name());
-            System.out.println("   Destination: " + b.getCarpool().getDestination());
-            System.out.println("   Date: " + b.getBookingDate());
-            System.out.println("-------------------------");
-        }
+        booking.displayPending(bookings, driver);
 
         System.out.print("Select booking to manage (0 to cancel): ");
         int choice = sc.nextInt();
         sc.skip("\\R?");
-
+        
+        ArrayList<booking> pending = new ArrayList<>();
+        for (booking b : bookings) {
+            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
+                    && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
+                pending.add(b);
+            }
+        }
         if (choice > 0 && choice <= pending.size()) {
             booking selected = pending.get(choice - 1);
             System.out.print("Approve or Reject? (1: Approve, 2: Reject): ");
@@ -402,39 +388,20 @@ public class UCMS {
             submitReport(driver);
             DashboardDriver(driver);
         }
-        else if (choice == 7){
+        else if (choice == 7) {
             System.out.println("======= START TRIPS ========");
-            ArrayList<booking> confirmed = new ArrayList<>();
+            ArrayList<booking> confirmed = booking.displayConfirmed(bookings, driver);
 
-            for (booking b : bookings) {
-                if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())&& b.getBookingStatus().equalsIgnoreCase("CONFIRMED")) {
-                    confirmed.add(b);
+            if (!confirmed.isEmpty()) {
+                System.out.print("Select booking to start trip (0 to cancel): ");
+                int choiceStart = sc.nextInt();
+                sc.skip("\\R?");
+
+                if (choiceStart > 0 && choiceStart <= confirmed.size()) {
+                    booking selected = confirmed.get(choiceStart - 1);
+                    selected.startTrip();
+                    System.out.println("Trip started! Have a safe journey!");
                 }
-            }
-
-            if (confirmed.isEmpty()) {
-                System.out.println("No confirmed bookings.");
-                return;
-            }
-            for(int i = 0; i< confirmed.size(); i++){
-                booking b = confirmed.get(i);
-                System.out.println((i + 1) + ") " + b.getBookingID());
-                System.out.println("Carpool ID: " + b.getCarpool().getCarpoolID());
-                System.out.println("Destination: " + b.getCarpool().getDestination());
-                System.out.println("Date: " + b.getBookingDate());
-                System.out.println("Status: " + b.getBookingStatus());
-                System.out.println("----PASSENGERS-----");
-                System.out.println(b.getPassenger().getStudent_name());
-                
-            }
-            
-            System.out.print("Select booking to start trip: ");
-            int choiceStart = sc.nextInt();
-            
-            if (choiceStart > 0 && choiceStart <= confirmed.size()) {
-                booking selected = confirmed.get(choiceStart - 1);
-                selected.startTrip();
-                System.out.println("Trip started!\n Have a safe journey!");
             }
             DashboardDriver(driver);
         }
@@ -508,22 +475,7 @@ public class UCMS {
         }
         
         else if (choice == 4) {
-            System.out.println("\n--- Your Bookings ---");
-            boolean found = false;
-            for (booking b : bookings) {
-                if (b.getPassenger().getStudent_id().equals(pass.getStudent_id())) {
-                    System.out.println("Booking ID: " + b.getBookingID());
-                    System.out.println("Carpool ID: " + b.getCarpool().getCarpoolID());
-                    System.out.println("Destination: " + b.getCarpool().getDestination());
-                    System.out.println("Date: " + b.getBookingDate());
-                    System.out.println("Status: " + b.getBookingStatus());
-                    System.out.println("-------------------");
-                    found = true;
-                }
-            }
-            if (!found) {
-                System.out.println("No booking found.");
-            }
+            booking.displayMyBookings(bookings, pass);
             DashboardPass(pass);
         } else if (choice == 5) {
             System.out.println("Enter Booking ID: ");
@@ -577,9 +529,7 @@ public class UCMS {
 
             for (booking b : bookings) {
 
-                if (b.getBookingID().equalsIgnoreCase(id)
-                        && b.getPassenger().getStudent_id().equals(pass.getStudent_id())
-                        && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+                if (b.getBookingID().equalsIgnoreCase(id)&& b.getPassenger().getStudent_id().equals(pass.getStudent_id())&& b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
 
                     b.completeTrip(); 
                     System.out.println("Trip completed. Thank you!");
@@ -598,7 +548,7 @@ public class UCMS {
             DashboardPass(pass);
         }
         else if (choice == 8){
-            pass.checkHistory(carpools);
+            pass.checkHistory(bookings);
             DashboardPass(pass);
         }
         

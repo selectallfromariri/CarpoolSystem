@@ -154,30 +154,24 @@ public class Passenger extends Student {
 //    }
 
     // check history trip
-    public void checkHistory(ArrayList<Carpool> carpool){
-        System.out.println("----- TRIP HISTORY -----");
-        System.out.println("Passenger    :" + student_name);
-        System.out.println("Passenger ID : " + passengerID);
-
-        boolean history = false;
-
-        for (int i = 0; i < carpool.size(); i++) {
-
-        if (carpool.get(i) != null && bookingStatus.equalsIgnoreCase("COMPLETED")) {
-                System.out.println("----- PREVIOUS TRIP -----");
-                System.out.println("Carpool ID      :" + carpool.get(i).getCarpoolID());
-                System.out.println("Driver          : " + carpool.get(i).getDrive().getStudent_name());
-                System.out.println("Pickup Location : " + carpool.get(i).getPickupLocation());
-                System.out.println("Destination     : " + carpool.get(i).getDestination());
-                System.out.println("Date            : " + carpool.get(i).getDate());
-                System.out.println("Status        : COMPLETED");
-
-                history = true;
+ public void checkHistory(ArrayList<booking> bookings) {
+        System.out.println("\n----- TRIP HISTORY -----");
+        boolean found = false;
+        for (booking b : bookings) {
+            if (b.getPassenger().getStudent_id().equals(this.student_id)) {
+                String status = b.getBookingStatus().toUpperCase();
+                if (status.equals("COMPLETED") || status.equals("CANCELLED") || status.equals("REJECTED")) {
+                    System.out.println("Booking ID  : " + b.getBookingID());
+                    System.out.println("Destination : " + b.getCarpool().getDestination());
+                    System.out.println("Date        : " + b.getBookingDate());
+                    System.out.println("Status      : " + b.getBookingStatus());
+                    System.out.println("-------------------");
+                    found = true;
+                }
             }
         }
-
-        if (!history || bookingStatus.equalsIgnoreCase("NONE")) {
-            System.out.println("No trip history in record.");
+        if (!found) {
+            System.out.println("No trip history yet.");
         }
     }
 
