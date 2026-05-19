@@ -78,6 +78,10 @@ public class UCMS {
         else if (choice == 3){
             adminLogin();
         }
+        else if (choice == 4) {
+            System.out.println("Goodbye!");
+            System.exit(0);
+        }
 
     }
 
@@ -167,8 +171,12 @@ public class UCMS {
         String pass = sc.nextLine();
         System.out.print("Confirm Pass : ");
         String cpass = sc.nextLine();
-
-        Passenger p = new Passenger("01", id, name, notel, pass);
+        if (!pass.equals(cpass)) {
+            System.out.println("[WARNING] Passwords do not match. Please try again.");
+            return;
+        }
+        String passengerID = String.format("%02d", penumpang.size() + 1);
+        Passenger p = new Passenger(passengerID, id, name, notel, pass);
         penumpang.add(p);
         p.displayProfile();
 
@@ -232,8 +240,7 @@ public class UCMS {
         ArrayList<booking> pending = new ArrayList<>();
 
         for (booking b : bookings) {
-            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
-                    && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
+            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id()) && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
                 pending.add(b);
             }
         }
@@ -350,6 +357,7 @@ public class UCMS {
         System.out.println("|                                   4)Post New Trip                            |");
         System.out.println("|                               5)Manage Booking Request                       |");
         System.out.println("|                                   6)Submit Report                            |");
+        System.out.println("|                                   7)Start Trip                               |");
         System.out.println("|                                      0)Logout                                |");
         System.out.println("================================================================================");
 
@@ -399,6 +407,13 @@ public class UCMS {
             submitReport(driver);
             DashboardDriver(driver);
         }
+        else if (choice == 7){
+            
+        }
+        else if (choice == 0) {
+            System.out.println("Logged out. Goodbye, " + driver.getStudent_name() + "!");
+            return; 
+        }
     }
 
     // passenger punya dashboard
@@ -411,11 +426,12 @@ public class UCMS {
         System.out.println("================================================================================");
         System.out.println("|                                  1)View Profile                              |");
         System.out.println("|                               2)Search and Book Trip                         |");
-        System.out.println("|                                  3)View My Booking                           |");
-        System.out.println("|                                  4)Cancel Booking                            |");
-        System.out.println("|                                 5)Update Status Trip                         |");
-        System.out.println("|                                   6)Give Feedback                            |");
-        System.out.println("|                                    7)Trip History                            |");
+        System.out.println("|                                   3)Carpool List                             |");
+        System.out.println("|                                  4)View My Booking                           |");
+        System.out.println("|                                  5)Cancel Booking                            |");
+        System.out.println("|                                 6)Update Status Trip                         |");
+        System.out.println("|                                   7)Give Feedback                            |");
+        System.out.println("|                                    8)Trip History                            |");
         System.out.println("|                                      0)Logout                                |");
         System.out.println("================================================================================");
 
@@ -428,9 +444,28 @@ public class UCMS {
             DashboardPass(pass);
         }
         else if (choice == 2) {
-            
-            pass.searchCarpool(carpools);
 
+            boolean found = pass.searchCarpool(carpools);
+
+            if (found) {
+
+                System.out.print("Enter Carpool ID: ");
+                String id = sc.nextLine();
+
+                booking temp = new booking("temp", pass, null, "", "");
+
+                booking b = temp.createBooking(pass, carpools, id);
+
+                if (b != null) {
+                    bookings.add(b);
+                    System.out.println("Booking successful!");
+                }
+            }
+
+            DashboardPass(pass);
+        }
+        else if (choice == 3){
+            Carpool.displayCarpool(carpools);
             System.out.print("Enter Carpool ID: ");
             String id = sc.nextLine();
 
@@ -443,7 +478,9 @@ public class UCMS {
                 System.out.println("Booking successful!");
             }
             DashboardPass(pass);
-        } else if (choice == 3) {
+        }
+        
+        else if (choice == 4) {
             System.out.println("\n--- Your Bookings ---");
             boolean found = false;
             for (booking b : bookings) {
@@ -461,7 +498,7 @@ public class UCMS {
                 System.out.println("No booking found.");
             }
             DashboardPass(pass);
-        } else if (choice == 4) {
+        } else if (choice == 5) {
             System.out.println("Enter Booking ID: ");
             String bid = sc.nextLine();
             booking target = null;
@@ -482,17 +519,22 @@ public class UCMS {
             }
             DashboardPass(pass);
         }
-        else if (choice == 5){
-            pass.viewBookingStatus();
-            DashboardPass(pass);
-        }
         else if (choice == 6){
-            pass.checkHistory(carpools);
+            pass.viewBookingStatus();
             DashboardPass(pass);
         }
         else if (choice == 7){
             submitFeedback(pass);
             DashboardPass(pass);
+        }
+        else if (choice == 8){
+            pass.checkHistory(carpools);
+            DashboardPass(pass);
+        }
+        
+        else if (choice == 0) {
+            System.out.println("Logged out. Goodbye, " + pass.getStudent_name() + "!");
+            return;
         }
     }
     

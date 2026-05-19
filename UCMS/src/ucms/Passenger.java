@@ -97,7 +97,7 @@ public class Passenger extends Student {
 
  
     // search carpool
-    public void searchCarpool(ArrayList<Carpool> carpool) {
+    public boolean searchCarpool(ArrayList<Carpool> carpool) {
         Scanner input = new Scanner(System.in);
         System.out.println("----- SEARCH -----");
         System.out.println("Enter pickup location to search: ");
@@ -113,7 +113,7 @@ public class Passenger extends Student {
         if (!pickup) {
             System.out.println("----- SEARCH RESULT -----");
             System.out.println("No carpool available from " + pickupLocation);
-            return;
+            return false;
         }
         System.out.println("Enter carpool destination to search: ");
         String searchDestination = input.nextLine();
@@ -130,6 +130,7 @@ public class Passenger extends Student {
         if (!foundDestination) {
             System.out.println("No carpool available from " + pickupLocation + " to " + searchDestination);
         }
+        return foundDestination;
     }
 
     // search result

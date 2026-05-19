@@ -73,7 +73,7 @@ public class booking {
 
         if (b != null) {
             b.getCarpool().setAvailableSeat(
-                    b.getCarpool().getAvailableSeat() + 1);
+            b.getCarpool().getAvailableSeat() + 1);
             return true;
         }
 
@@ -81,10 +81,11 @@ public class booking {
     }
 
     public void Approvebooking(String status) {
-        this.bookingStatus = status;
-        // If rejected, return the seat to the carpool
+        bookingStatus = status;
         if (status.equalsIgnoreCase("REJECTED")) {
             this.carpool.setAvailableSeat(this.carpool.getAvailableSeat() + 1);
         }
     }
+ 
+    
 }

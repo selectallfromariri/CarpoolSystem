@@ -105,9 +105,12 @@ public class Admin {
         for (Driver d : drivers) {
             if (d != null) {
                 System.out.println("\nDriver " + (count));
-                System.out.println("Driver ID      : " + d.getDriver_id());
-                System.out.println("License Number : " + d.getDriver_license());
                 System.out.println("Student ID     : " + d.getStudent_id());
+                System.out.println("Driver ID      : " + d.getDriver_id());
+                System.out.println("Driver Name    : "+ d.getStudent_name());
+                System.out.println("Driver Num Tel : "+ d.getPhone_num());
+                System.out.println("License Number : " + d.getDriver_license());
+                
                 driver = true;
             }
         }
