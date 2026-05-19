@@ -33,45 +33,45 @@ public class Passenger extends Student {
         this.passengerID = passengerID;
     }
 
-    public String getBookingStatus() {
-        return bookingStatus;
-    }
-
-    public void setBookingStatus(String bookingStatus) {
-        this.bookingStatus = bookingStatus;
-    }
-
-    public Carpool getDate() {
-        return date;
-    }
-
-    public void setDate(Carpool date) {
-        this.date = date;
-    }
-
-    public String getStudent_id() {
-        return student_id;
-    }
-
-    public void setStudent_id(String student_id) {
-        this.student_id = student_id;
-    }
-
-    public String getStudent_name() {
-        return student_name;
-    }
-
-    public void setStudent_name(String student_name) {
-        this.student_name = student_name;
-    }
-
-    public String getPhone_num() {
-        return phone_num;
-    }
-
-    public void setPhone_num(String phone_num) {
-        this.phone_num = phone_num;
-    }
+//    public String getBookingStatus() {
+//        return bookingStatus;
+//    }
+//
+//    public void setBookingStatus(String bookingStatus) {
+//        this.bookingStatus = bookingStatus;
+//    }
+//
+//    public Carpool getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Carpool date) {
+//        this.date = date;
+//    }
+//
+//    public String getStudent_id() {
+//        return student_id;
+//    }
+//
+//    public void setStudent_id(String student_id) {
+//        this.student_id = student_id;
+//    }
+//
+//    public String getStudent_name() {
+//        return student_name;
+//    }
+//
+//    public void setStudent_name(String student_name) {
+//        this.student_name = student_name;
+//    }
+//
+//    public String getPhone_num() {
+//        return phone_num;
+//    }
+//
+//    public void setPhone_num(String phone_num) {
+//        this.phone_num = phone_num;
+//    }
 
     public String getPassword() {
         return password;
@@ -89,8 +89,15 @@ public class Passenger extends Student {
         this.carpoolID = carpoolID;
     }
 
+        @Override
+    public void displayProfile() { 
+        super.displayProfile(); 
+        System.out.println("Passenger ID: " + passengerID); 
+    }
+
+ 
     // search carpool
-    public void searchCarpool(ArrayList<Carpool> carpool) {
+    public boolean searchCarpool(ArrayList<Carpool> carpool) {
         Scanner input = new Scanner(System.in);
         System.out.println("----- SEARCH -----");
         System.out.println("Enter pickup location to search: ");
@@ -106,7 +113,7 @@ public class Passenger extends Student {
         if (!pickup) {
             System.out.println("----- SEARCH RESULT -----");
             System.out.println("No carpool available from " + pickupLocation);
-            return;
+            return false;
         }
         System.out.println("Enter carpool destination to search: ");
         String searchDestination = input.nextLine();
@@ -123,6 +130,7 @@ public class Passenger extends Student {
         if (!foundDestination) {
             System.out.println("No carpool available from " + pickupLocation + " to " + searchDestination);
         }
+        return foundDestination;
     }
 
     // search result
@@ -137,7 +145,7 @@ public class Passenger extends Student {
         System.out.println("Luggage Capacity : " + carpool.getLuggageCapacity());
     }
 
-    // view booking status
+    // tengok booking status
     public void viewBookingStatus() {
         System.out.println("----- BOOKING STATUS -----");
         System.out.println("Passenger ID   : " + passengerID);
@@ -154,21 +162,22 @@ public class Passenger extends Student {
     }
 
     // check history trip
-    public void checkHistory(Carpool[] carpool) {
+    public void checkHistory(ArrayList<Carpool> carpool){
         System.out.println("----- TRIP HISTORY -----");
         System.out.println("Passenger    :" + student_name);
         System.out.println("Passenger ID : " + passengerID);
 
         boolean history = false;
 
-        for (int i = 0; i < carpool.length; i++) {
-            if (carpool[i] != null && bookingStatus.equals("COMPLETED")) {
+        for (int i = 0; i < carpool.size(); i++) {
+
+        if (carpool.get(i) != null && bookingStatus.equalsIgnoreCase("COMPLETED")) {
                 System.out.println("----- PREVIOUS TRIP -----");
-                System.out.println("Carpool ID      :" + carpool[i].getCarpoolID());
-                System.out.println("Driver          : " + carpool[i].getDrive().getStudent_name());
-                System.out.println("Pickup Location : " + carpool[i].getPickupLocation());
-                System.out.println("Destination     : " + carpool[i].getDestination());
-                System.out.println("Date            : " + carpool[i].getDate());
+                System.out.println("Carpool ID      :" + carpool.get(i).getCarpoolID());
+                System.out.println("Driver          : " + carpool.get(i).getDrive().getStudent_name());
+                System.out.println("Pickup Location : " + carpool.get(i).getPickupLocation());
+                System.out.println("Destination     : " + carpool.get(i).getDestination());
+                System.out.println("Date            : " + carpool.get(i).getDate());
                 System.out.println("Status        : COMPLETED");
 
                 history = true;
@@ -181,6 +190,7 @@ public class Passenger extends Student {
     }
 
     // update status trip
+    // ni belum kot
     public void updateStatusTrip() {
         Scanner input = new Scanner(System.in);
         System.out.println("----- TRIP STATUS -----");
@@ -212,6 +222,7 @@ public class Passenger extends Student {
         }
     }
 
+    
     @Override
     public String toString() {
         return "Passenger ID: " + passengerID +
@@ -219,8 +230,4 @@ public class Passenger extends Student {
                 "\nName: " + student_name +
                 "\nPhone: " + phone_num;
     }
-
-    // give feedback
-
-    // report driver arrival
 }

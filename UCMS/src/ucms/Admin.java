@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ucms;
-
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -47,26 +47,44 @@ public class Admin {
     }
 
     // approve driver
-    public void approveDriver(Driver[] drivers) {
-        sc = new Scanner(System.in);
+    public static void approveDriver(ArrayList<Driver> drivers, ArrayList<String> PemanduApproved) {
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("\n----- APPROVE DRIVER -----");
+        System.out.println("\n----- APPROVE DRIVER -----");       
+           if (drivers.isEmpty()) {
+            System.out.println("No drivers available.");
+            return;
+        }
+        // display semua drivers
+        System.out.println("\nList of Drivers:");
+            for (Driver d : drivers) {
+                if (d != null) {
+                    System.out.println("--------------------------------");
+                    System.out.println("Driver ID      : " + d.getDriver_id());
+                    System.out.println("Driver Name    : " + d.getStudent_name());
+                    System.out.println("License Number : " + d.getDriver_license());
+                }
+            }
+    
         System.out.println("Enter Driver ID to approve: ");
         String driverID = sc.nextLine();
 
         boolean driver = false;
-        for (int i = 0; i < drivers.length; i++) {
-            if (drivers[i] != null && drivers[i].getDriver_id().equalsIgnoreCase(driverID)) {
+        for (Driver d : drivers) {
+            if (d != null && d.getDriver_id().equalsIgnoreCase(driverID)) {
                 System.out.println("\nDriver Details");
-                System.out.println("Driver ID      : " + drivers[i].getDriver_id());
-                System.out.println("License Number : " + drivers[i].getDriver_license());
+                System.out.println("Driver ID      : " + d.getDriver_id());
+                System.out.println("License Number : " + d.getDriver_license());
 
                 System.out.println("\nApprove this driver? (Y/N): ");
                 String approve = sc.nextLine();
 
                 if (approve.equalsIgnoreCase("Y")) {
-                    System.out.println("Driver " + drivers[i].getDriver_id() + "has been approved");
-                } else {
+                    PemanduApproved.add(d.getDriver_id());
+                    System.out.println("Driver " + d.getDriver_id() + " has been approved");
+                    d.setApproved(true);
+                } 
+                else {
                     System.out.println("Driver approval cancelled");
                 }
                 driver = true;
@@ -79,16 +97,20 @@ public class Admin {
     }
 
     // view semua driver
-    public void viewAllDriver(Driver[] drivers) {
-        System.out.println("\nA----- ALL DRIVERS -----");
+    public static void viewAllDriver(ArrayList<Driver> drivers) {
+        System.out.println("\n----- ALL DRIVERS -----");
 
         boolean driver = false;
-        for (int i = 0; i < drivers.length; i++) {
-            if (drivers[i] != null) {
-                System.out.println("\nDriver " + (i + 1));
-                System.out.println("Driver ID      : " + drivers[i].getDriver_id());
-                System.out.println("License Number : " + drivers[i].getDriver_license());
-                System.out.println("Student ID     : " + drivers[i].getStudent_id());
+        int count = 1;
+        for (Driver d : drivers) {
+            if (d != null) {
+                System.out.println("\nDriver " + (count));
+                System.out.println("Student ID     : " + d.getStudent_id());
+                System.out.println("Driver ID      : " + d.getDriver_id());
+                System.out.println("Driver Name    : "+ d.getStudent_name());
+                System.out.println("Driver Num Tel : "+ d.getPhone_num());
+                System.out.println("License Number : " + d.getDriver_license());
+                
                 driver = true;
             }
         }
@@ -98,21 +120,53 @@ public class Admin {
     }
 
     // view feedback
-    public void viewFeedback() {
-    }
+    public static void viewFeedback(ArrayList<Feedback> feeds){
+        System.out.println("\n----- FEEDBACKS FROM PASSENGER -----");        
+            if (feeds.isEmpty()) {
+            System.out.println("No feedbacks recorded in the system.");
+            return;
+        }
 
-    // view driver report
-    public void viewDriverReport(Driver[] drivers) {
-        System.out.println("\n----- DRIVER REPORTS -----");
+        for (int i = 0; i < feeds.size(); i++) {
+            System.out.println("\nFEEDBACK " + (i + 1));
+            feeds.get(i).displayFeedback();
     }
+}
+    
+    // view driver report
+    /**
+    public static void viewDriverReport(ArrayList<Driver> drivers) {
+        System.out.println("\n----- DRIVER REPORTS -----");
+        
+        if (drivers.isEmpty()){
+            System.out.println("No drivers in the recorded in the system.");
+            return;
+        }
+        
+        System.out.println("\nDriver Reports Summary");
+            int count = 1;
+            for (Driver d : drivers) {
+                if (d != null) {
+                    System.out.println("-----------------------------------------------------");
+                    System.out.println("Driver ID    : " + d.getDriver_id());
+                    System.out.println("License Number : " + d.getDriver_license());
+                    System.out.println("-----------------------------------------------------");
+                    System.out.println("Reports : " + );
+                    count++;
+                }
+            }
+    }        
+    */
 
     // admin login
     public boolean loginAdmin(String id, String pass) {
         if (adminID.equalsIgnoreCase(id) && adminPassword.equals(pass)) {
+            System.out.println("\nAdmin login successful!");
+            System.out.println("Welcome:" + adminName + "!");
             return true;
         } else {
+            System.out.println("\nInvalid Admin ID or Password!");
             return false;
         }
-
     }
 }

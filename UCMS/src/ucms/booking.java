@@ -56,12 +56,7 @@ public class booking {
 
                     c.setAvailableSeat(c.getAvailableSeat() - 1);
 
-                    return new booking(
-                            "B" + System.currentTimeMillis(),
-                            pass,
-                            c,
-                            "2026-05-13",
-                            "PENDING");
+                    return new booking( "B" + System.currentTimeMillis(), pass,c,"2026-05-13","PENDING");
 
                 } else {
                     System.out.println("No seats available.");
@@ -78,7 +73,7 @@ public class booking {
 
         if (b != null) {
             b.getCarpool().setAvailableSeat(
-                    b.getCarpool().getAvailableSeat() + 1);
+            b.getCarpool().getAvailableSeat() + 1);
             return true;
         }
 
@@ -86,10 +81,11 @@ public class booking {
     }
 
     public void Approvebooking(String status) {
-        this.bookingStatus = status;
-        // If rejected, return the seat to the carpool
+        bookingStatus = status;
         if (status.equalsIgnoreCase("REJECTED")) {
             this.carpool.setAvailableSeat(this.carpool.getAvailableSeat() + 1);
         }
     }
+ 
+    
 }

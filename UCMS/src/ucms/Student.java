@@ -55,5 +55,12 @@ public class Student {
         this.phone_num = phone_num;
     }
     
+    public void displayProfile() {
+        System.out.println("=== Profile ===");
+        System.out.println("ID    : " + student_id);
+        System.out.println("Name  : " + student_name);
+        System.out.println("Phone : " + phone_num);
+    }
+    
     
 }

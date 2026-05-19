@@ -4,6 +4,8 @@
  */
 package ucms;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author User
@@ -11,15 +13,39 @@ package ucms;
 public class Driver extends Student {
     private String driver_id;
     private String driver_license;
+    private boolean approved;
+    private ArrayList<Carpool> myCarpools;
     private Car kereta;
 
     public Driver(String driver_id, String driver_license, String student_id, String student_name, String phone_num, String password, String numplate, String model, String color) {
         super(student_id, student_name, phone_num, password);
         this.driver_id = "DRV" + driver_id;
         this.driver_license = driver_license;
+        this.approved = false;
         this.kereta = new Car(numplate, model, color);
+        this.myCarpools     = new ArrayList<>();
     }
 
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public ArrayList<Carpool> getMyCarpools() {
+        return myCarpools;
+    }
+
+    public void setMyCarpools(ArrayList<Carpool> myCarpools) {
+        this.myCarpools = myCarpools;
+    }
+
+    public void addCarpoolDriver(Carpool post){
+        myCarpools.add(post);
+    }
+    
     public String getDriver_id() {
         return driver_id;
     }
@@ -36,9 +62,14 @@ public class Driver extends Student {
         this.driver_license = driver_license;
     }
     
-    public void displayDriverInfo() {
-        System.out.println("Driver ID: " + driver_id);
-        System.out.println("Driver License: " + driver_license);
+    @Override
+    public void displayProfile() {
+        super.displayProfile();
+        System.out.println("Driver ID : " + driver_id);
+        System.out.println("License   : " + driver_license);
+        System.out.println("Approved  : " + (approved ? "Approved" : "Pending"));
+        System.out.println("--- Car ---");
+        kereta.displayCarInfo();
     }
 
     public Car getKereta() {
@@ -48,6 +79,8 @@ public class Driver extends Student {
     public void setKereta(Car kereta) {
         this.kereta = kereta;
     }
+    
+    
     
     
 }
