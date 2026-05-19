@@ -129,7 +129,7 @@ public class Passenger extends Student {
     private void displaySearchCarpool(Carpool carpool) {
         System.out.println("\n----- CARPOOL DETAILS -----");
         System.out.println("Carpool ID       : " + carpool.getCarpoolID());
-        System.out.println("Driver Name      : " + carpool.getDrive());
+        System.out.println("Driver Name      : " + carpool.getDrive().getStudent_name());
         System.out.println("Destination      : " + carpool.getDestination());
         System.out.println("Pickup Location  : " + carpool.getPickupLocation());
         System.out.println("Date             : " + carpool.getDate());
