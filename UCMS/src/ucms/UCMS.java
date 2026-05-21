@@ -239,19 +239,11 @@ public class UCMS {
 
     // driver approve booking passenger
     public void approveBookings(Driver driver) {
-        booking.displayPending(bookings, driver);
+        ArrayList<booking> pending = booking.displayPending(bookings, driver);
 
         System.out.print("Select booking to manage (0 to cancel): ");
         int choice = sc.nextInt();
         sc.skip("\\R?");
-        
-        ArrayList<booking> pending = new ArrayList<>();
-        for (booking b : bookings) {
-            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
-                    && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
-                pending.add(b);
-            }
-        }
         if (choice > 0 && choice <= pending.size()) {
             booking selected = pending.get(choice - 1);
             System.out.print("Approve or Reject? (1: Approve, 2: Reject): ");
@@ -478,6 +470,7 @@ public class UCMS {
             booking.displayMyBookings(bookings, pass);
             DashboardPass(pass);
         } else if (choice == 5) {
+            booking.displayMyBookings(bookings, pass);
             System.out.println("Enter Booking ID: ");
             String bid = sc.nextLine();
             booking target = null;
@@ -497,49 +490,23 @@ public class UCMS {
                 System.out.println("Invalid booking.");
             }
             DashboardPass(pass);
-        }
-        else if (choice == 6) {
+        } else if (choice == 6) {
 
-            System.out.println("\n=== COMPLETE TRIP ===");
+            System.out.println("\n=== ONGOING TRIP ===");
 
-            boolean found = false;
+            ArrayList<booking> ongoing = booking.displayOngoing(bookings, pass);
 
-            for (booking b : bookings) {
+            if (!ongoing.isEmpty()) {
 
-                if (b.getPassenger().getStudent_id().equals(pass.getStudent_id()) && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+                System.out.print("Select booking: ");
+                int choiceTrip = sc.nextInt();
 
-                    System.out.println("Booking ID: " + b.getBookingID());
-                    System.out.println("Driver: " + b.getCarpool().getDrive().getStudent_name());
-                    System.out.println("Destination: " + b.getCarpool().getDestination());
-                    System.out.println("-----------------------------------");
+                if (choiceTrip > 0 && choiceTrip <= ongoing.size()) {
 
-                    found = true;
+                    ongoing.get(choiceTrip - 1).completeTrip();
+
+                    System.out.println("Trip completed!");
                 }
-            }
-
-            if (!found) {
-                System.out.println("No ongoing trip found.");
-                return;
-            }
-
-            System.out.print("Enter Booking ID to confirm arrival: ");
-            String id = sc.nextLine();
-
-            boolean updated = false;
-
-            for (booking b : bookings) {
-
-                if (b.getBookingID().equalsIgnoreCase(id)&& b.getPassenger().getStudent_id().equals(pass.getStudent_id())&& b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
-
-                    b.completeTrip(); 
-                    System.out.println("Trip completed. Thank you!");
-                    updated = true;
-                    break;
-                }
-            }
-
-            if (!updated) {
-                System.out.println("Invalid Booking ID or trip not ongoing.");
             }
             DashboardPass(pass);
         }

@@ -93,7 +93,7 @@ public class booking {
         }
     }
     
-    public static void displayPending(ArrayList<booking> bookings, Driver driver) {
+    public static ArrayList<booking> displayPending(ArrayList<booking> bookings, Driver driver) {
         System.out.println("\n--- Pending Booking Requests ---");
         ArrayList<booking> pending = new ArrayList<>();
         for (booking b : bookings) {
@@ -104,7 +104,7 @@ public class booking {
         }
         if (pending.isEmpty()) {
             System.out.println("No pending bookings found.");
-            return;
+            return pending;
         }
         for (int i = 0; i < pending.size(); i++) {
             System.out.println((i + 1) + ") Booking ID  : " + pending.get(i).getBookingID());
@@ -113,6 +113,34 @@ public class booking {
             System.out.println("   Date        : " + pending.get(i).getBookingDate());
             System.out.println("   -------------------------");
         }
+        return pending;
+        
+    }
+    
+    public static ArrayList<booking> displayOngoing(ArrayList<booking> bookings, Passenger pass){
+        ArrayList <booking> ongoing = new ArrayList<>();
+        
+        for (booking b : bookings){
+            if (b.getPassenger().getStudent_id().equals(pass.getStudent_id()) && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+                ongoing.add(b);
+            }
+        }
+        
+        if(ongoing.isEmpty()){
+            System.out.println("No Ongoing Trips");
+            return ongoing;
+        }
+        for (int i = 0; i < ongoing.size(); i++) {
+
+            booking b = ongoing.get(i);
+
+            System.out.println((i + 1) + ") " + b.getBookingID());
+            System.out.println("Driver: " + b.getCarpool().getDrive().getStudent_name());
+            System.out.println("Destination: " + b.getCarpool().getDestination());
+            System.out.println("-----------------------------------");
+        }
+
+        return ongoing;
     }
     
     public static ArrayList<booking> displayConfirmed(ArrayList<booking> bookings, Driver driver) {
