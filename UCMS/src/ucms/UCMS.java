@@ -473,22 +473,7 @@ public class UCMS {
             booking.displayMyBookings(bookings, pass);
             System.out.println("Enter Booking ID: ");
             String bid = sc.nextLine();
-            booking target = null;
-            for (booking b : bookings) {
-                if (b.getBookingID().equalsIgnoreCase(bid)) {
-                    target = b;
-                    break;
-                }
-            }
-            booking temp = new booking("temp", pass, null, "", "");
-            if (temp.cancelBooking(target)) {
-
-                bookings.remove(target);
-                System.out.println("Booking cancelled.");
-
-            } else {
-                System.out.println("Invalid booking.");
-            }
+            pass.cancelBooking(bookings, bid);
             DashboardPass(pass);
         } else if (choice == 6) {
 

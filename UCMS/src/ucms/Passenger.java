@@ -13,13 +13,13 @@ import java.util.ArrayList;
  */
 public class Passenger extends Student {
     private String passengerID;
-    private String bookingStatus;
+   
   
 
     public Passenger(String passengerID, String student_id, String student_name, String phone_num, String password) {
         super(student_id, student_name, phone_num, password);
         this.passengerID = "PS" + passengerID;
-        this.bookingStatus = "pending";
+//        this.bookingStatus = "pending";
         // this.date = date;
         // this.carpoolID = carpoolID;
     }
@@ -137,21 +137,23 @@ public class Passenger extends Student {
         System.out.println("Luggage Capacity : " + carpool.getLuggageCapacity());
     }
 
-    // tengok booking status
-//    public void viewBookingStatus() {
-//        System.out.println("----- BOOKING STATUS -----");
-//        System.out.println("Passenger ID   : " + passengerID);
-//        System.out.println("Passenger Name : " + student_name);
-//        System.out.println("Phone Number   : " + phone_num);
-//
-//        if (bookingStatus.equalsIgnoreCase("NONE")) {
-//            System.out.println("Status   : No active booking");
-//        } else {
-//            System.out.println("Carpool ID     : " + carpoolID);
-//            System.out.println("Booking Status : " + bookingStatus);
-//            System.out.println("Booking Date   : " + date);
-//        }
-//    }
+    
+    public void cancelBooking(ArrayList<booking> bookings, String bookingID) {
+
+        for (booking b : bookings) {
+
+            if (b.getBookingID().equalsIgnoreCase(bookingID)) {
+
+                bookings.remove(b);
+
+                System.out.println("Booking cancelled.");
+                return;
+            }
+        }
+
+        System.out.println("Invalid booking.");
+    }
+    
 
     // check history trip
  public void checkHistory(ArrayList<booking> bookings) {

@@ -133,13 +133,7 @@ public class Carpool {
         String carpool_id  = driver.getStudent_name().substring(0, 3) + (int)(Math.random()*900+100) ;
         return carpool_id;
     } 
-    public void update(String des, String date, int avSeat, int lugCap, String loc) {
-        setAvailableSeat(avSeat);
-        setDate(date);
-        setDestination(des);
-        setLuggageCapacity(lugCap);
-        setPickupLocation(loc);
-    }
+
 
     public static void displayCarpool(ArrayList<Carpool> pool) {
         if (pool.isEmpty()) {
