@@ -192,29 +192,28 @@ public class UCMS {
         String id = sc.nextLine();
         System.out.print("Password   : ");
         String pass = sc.nextLine();
-
-        for (Driver d : Pemandu) {
-            if (d.loginStudent(id, pass)) {
-                System.out.println("Login Successfull");
-                System.out.println("Welcome: " + d.getStudent_name());
-                System.out.println("Role: Driver");
-                DashboardDriver(d);
-                return;
-            }
+        for (Driver d : Pemandu){
+             Pelajar.add(d);
         }
-
-        for (Passenger p : penumpang) {
-            if (p.loginStudent(id, pass)) {
-                System.out.println("Login Successfull");
-                System.out.println("Welcome: " + p.getStudent_name());
-                System.out.println("Role: Passenger");
-                DashboardPass(p);
-                return;
+        for (Passenger p : penumpang){
+            Pelajar.add(p);
+        }
+        for (Student s: Pelajar){
+            if(s.loginStudent(id, pass)){
+                System.out.println("Welcome " + s.student_name);
+                
+                if (s instanceof Driver){
+                    System.out.println("Role: Driver");
+                    DashboardDriver((Driver)s);
+                }
+                else if (s instanceof Passenger){
+                    System.out.println("Role: Passenger");
+                    DashboardPass((Passenger)s);
+                }
+            return;
             }
-
         }
         System.out.println("[Warning] Incorrect Student ID or password.");
-
     }    
     
     // admin login
@@ -522,6 +521,40 @@ public class UCMS {
         }        
     }
     
+    public void searchStudent(){
+        System.out.println("Enter Student ID:");
+        String id = sc.next();
+        for (Driver d : Pemandu){
+             Pelajar.add(d);
+        }
+        for (Passenger p : penumpang){
+            Pelajar.add(p);
+        }
+        
+        for (Student s : Pelajar){
+            if(s.getStudent_id().equalsIgnoreCase(id)){
+                s.displayProfile();
+                
+                if(s instanceof Driver){
+                    Driver d = (Driver)s;
+                    System.out.println("Role     : Driver");
+                    System.out.println("License  : " + d.getDriver_license());
+                    System.out.println("Approved : " + (d.isApproved() ? "Yes" : "Pending"));
+                }
+                else if (s instanceof Passenger){
+                    Passenger p = (Passenger)s;
+                    System.out.println("Role         : Passenger");
+                    System.out.println("Passenger ID : " + p.getPassengerID());
+                }
+            return;
+            }
+           
+        }
+        System.out.println("[Warning] Student not found.");
+    }
+    
+
+    
     // admin punya dashboard
     public void dashboardAdmin(Admin admins) {
         System.out.println("");
@@ -532,7 +565,8 @@ public class UCMS {
         System.out.println("|          2)View All Driver             |");
         System.out.println("|          3)View Feedbacks              |");
         System.out.println("|          4)View Driver Report          |");
-        System.out.println("|               5)Exit                   |");
+        System.out.println("|          5)Search Student              |");
+        System.out.println("|               0)Exit                   |");
         System.out.println("=========================================");
         System.out.print("Choice: ");
 
@@ -557,6 +591,9 @@ public class UCMS {
                 dashboardAdmin(admins);
                 break;
             case 5:
+                searchStudent();
+                dashboardAdmin(admins);
+            case 0:
                 System.out.println("Exiting....");                
                 break;
             default:
