@@ -80,6 +80,11 @@ public class Driver extends Student {
         this.kereta = kereta;
     }
     
+    public String getRole(){
+        String role = "Driver";
+        return role;
+    }
+    
     
     
     

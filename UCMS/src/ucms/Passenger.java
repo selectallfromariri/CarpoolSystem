@@ -187,4 +187,9 @@ public class Passenger extends Student {
                 "\nName: " + student_name +
                 "\nPhone: " + phone_num;
     }
+    
+    public String getRole(){
+        String role = "Passengers";
+        return role;
+    }
 }

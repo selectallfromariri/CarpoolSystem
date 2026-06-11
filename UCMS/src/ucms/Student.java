@@ -8,7 +8,7 @@ package ucms;
  *
  * @author User
  */
-public class Student {
+public abstract class Student {
     protected String student_id;
     protected String student_name;
     protected String phone_num;
@@ -61,6 +61,8 @@ public class Student {
         System.out.println("Name  : " + student_name);
         System.out.println("Phone : " + phone_num);
     }
+    
+    abstract public String getRole();
     
     
 }

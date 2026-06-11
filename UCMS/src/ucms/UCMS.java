@@ -201,13 +201,11 @@ public class UCMS {
         for (Student s: Pelajar){
             if(s.loginStudent(id, pass)){
                 System.out.println("Welcome " + s.student_name);
-                
+                 System.out.println("Role: " + s.getRole());
                 if (s instanceof Driver){
-                    System.out.println("Role: Driver");
                     DashboardDriver((Driver)s);
                 }
                 else if (s instanceof Passenger){
-                    System.out.println("Role: Passenger");
                     DashboardPass((Passenger)s);
                 }
             return;
