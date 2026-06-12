@@ -70,4 +70,9 @@
     nbproject/build-impl.xml file. 
 
     -->
+<target name="-post-compile-single">
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+        </copy>
+    </target>
 </project>
