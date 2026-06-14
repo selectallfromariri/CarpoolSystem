@@ -13,13 +13,11 @@ import java.util.ArrayList;
  */
 public class Passenger extends Student {
     private String passengerID;
-   
-  
 
     public Passenger(String passengerID, String student_id, String student_name, String phone_num, String password) {
         super(student_id, student_name, phone_num, password);
         this.passengerID = "PS" + passengerID;
-//        this.bookingStatus = "pending";
+        // this.bookingStatus = "pending";
         // this.date = date;
         // this.carpoolID = carpoolID;
     }
@@ -32,45 +30,45 @@ public class Passenger extends Student {
         this.passengerID = passengerID;
     }
 
-//    public String getBookingStatus() {
-//        return bookingStatus;
-//    }
-//
-//    public void setBookingStatus(String bookingStatus) {
-//        this.bookingStatus = bookingStatus;
-//    }
-//
-//    public Carpool getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(Carpool date) {
-//        this.date = date;
-//    }
-//
-//    public String getStudent_id() {
-//        return student_id;
-//    }
-//
-//    public void setStudent_id(String student_id) {
-//        this.student_id = student_id;
-//    }
-//
-//    public String getStudent_name() {
-//        return student_name;
-//    }
-//
-//    public void setStudent_name(String student_name) {
-//        this.student_name = student_name;
-//    }
-//
-//    public String getPhone_num() {
-//        return phone_num;
-//    }
-//
-//    public void setPhone_num(String phone_num) {
-//        this.phone_num = phone_num;
-//    }
+    // public String getBookingStatus() {
+    // return bookingStatus;
+    // }
+    //
+    // public void setBookingStatus(String bookingStatus) {
+    // this.bookingStatus = bookingStatus;
+    // }
+    //
+    // public Carpool getDate() {
+    // return date;
+    // }
+    //
+    // public void setDate(Carpool date) {
+    // this.date = date;
+    // }
+    //
+    // public String getStudent_id() {
+    // return student_id;
+    // }
+    //
+    // public void setStudent_id(String student_id) {
+    // this.student_id = student_id;
+    // }
+    //
+    // public String getStudent_name() {
+    // return student_name;
+    // }
+    //
+    // public void setStudent_name(String student_name) {
+    // this.student_name = student_name;
+    // }
+    //
+    // public String getPhone_num() {
+    // return phone_num;
+    // }
+    //
+    // public void setPhone_num(String phone_num) {
+    // this.phone_num = phone_num;
+    // }
 
     public String getPassword() {
         return password;
@@ -80,14 +78,12 @@ public class Passenger extends Student {
         this.password = password;
     }
 
-
-        @Override
-    public void displayProfile() { 
-        super.displayProfile(); 
-        System.out.println("Passenger ID: " + passengerID); 
+    @Override
+    public void displayProfile() {
+        super.displayProfile();
+        System.out.println("Passenger ID: " + passengerID);
     }
 
- 
     // search carpool
     public boolean searchCarpool(ArrayList<Carpool> carpool) {
         Scanner input = new Scanner(System.in);
@@ -137,7 +133,6 @@ public class Passenger extends Student {
         System.out.println("Luggage Capacity : " + carpool.getLuggageCapacity());
     }
 
-    
     public void cancelBooking(ArrayList<booking> bookings, String bookingID) {
 
         for (booking b : bookings) {
@@ -153,10 +148,9 @@ public class Passenger extends Student {
 
         System.out.println("Invalid booking.");
     }
-    
 
     // check history trip
- public void checkHistory(ArrayList<booking> bookings) {
+    public void checkHistory(ArrayList<booking> bookings) {
         System.out.println("\n----- TRIP HISTORY -----");
         boolean found = false;
         for (booking b : bookings) {
@@ -177,9 +171,6 @@ public class Passenger extends Student {
         }
     }
 
-
-
-    
     @Override
     public String toString() {
         return "Passenger ID: " + passengerID +
@@ -187,8 +178,8 @@ public class Passenger extends Student {
                 "\nName: " + student_name +
                 "\nPhone: " + phone_num;
     }
-    
-    public String getRole(){
+
+    public String getRole() {
         String role = "Passengers";
         return role;
     }
