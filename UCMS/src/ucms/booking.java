@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author harir
  */
-public class booking {
+public class booking implements BookingInterface {
 
     private String bookingID;
     private Passenger passenger;
@@ -26,54 +26,36 @@ public class booking {
         this.bookingStatus = bookingStatus;
     }
 
+    @Override
     public Passenger getPassenger() {
         return passenger;
     }
 
+    @Override
     public Carpool getCarpool() {
         return carpool;
     }
 
+    @Override
     public String getBookingID() {
         return bookingID;
     }
 
+    @Override
     public String getBookingDate() {
         return bookingDate;
     }
 
+    @Override
     public String getBookingStatus() {
         return bookingStatus;
-    }
-
-    public booking createBooking(Passenger pass, ArrayList<Carpool> pool, String carpoolID) {
-
-        for (Carpool c : pool) {
-
-            if (c.getCarpoolID().equalsIgnoreCase(carpoolID)) {
-
-                if (c.getAvailableSeat() > 0) {
-
-                    c.setAvailableSeat(c.getAvailableSeat() - 1);
-
-                    return new booking( "B" + System.currentTimeMillis(), pass,c,"2026-05-13","PENDING");
-
-                } else {
-                    System.out.println("No seats available.");
-                    return null;
-                }
-            }
-        }
-
-        System.out.println("Carpool not found.");
-        return null;
     }
 
     public boolean cancelBooking(booking b) {
 
         if (b != null) {
             b.getCarpool().setAvailableSeat(
-            b.getCarpool().getAvailableSeat() + 1);
+                    b.getCarpool().getAvailableSeat() + 1);
             return true;
         }
 
@@ -83,16 +65,28 @@ public class booking {
     public void startTrip() {
         bookingStatus = "ONGOING";
     }
-    public void completeTrip(){
+
+    public void completeTrip() {
         bookingStatus = "COMPLETED";
     }
+
     public void Approvebooking(String status) {
         bookingStatus = status;
         if (status.equalsIgnoreCase("REJECTED")) {
             this.carpool.setAvailableSeat(this.carpool.getAvailableSeat() + 1);
         }
     }
-    
+
+    @Override
+    public void displayBooking() {
+        System.out.println("Booking ID  : " + bookingID);
+        System.out.println("Passenger   : " + passenger.getStudent_name());
+        System.out.println("Destination : " + carpool.getDestination());
+        System.out.println("Date        : " + bookingDate);
+        System.out.println("Status      : " + bookingStatus);
+        System.out.println("-------------------");
+    }
+
     public static ArrayList<booking> displayPending(ArrayList<booking> bookings, Driver driver) {
         System.out.println("\n--- Pending Booking Requests ---");
         ArrayList<booking> pending = new ArrayList<>();
@@ -107,81 +101,58 @@ public class booking {
             return pending;
         }
         for (int i = 0; i < pending.size(); i++) {
-            System.out.println((i + 1) + ") Booking ID  : " + pending.get(i).getBookingID());
-            System.out.println("   Passenger   : " + pending.get(i).getPassenger().getStudent_name());
-            System.out.println("   Destination : " + pending.get(i).getCarpool().getDestination());
-            System.out.println("   Date        : " + pending.get(i).getBookingDate());
-            System.out.println("   -------------------------");
+            System.out.println((i + 1) + ")");
+            pending.get(i).displayBooking(); 
         }
         return pending;
-        
     }
-    
-    public static ArrayList<booking> displayOngoing(ArrayList<booking> bookings, Passenger pass){
-        ArrayList <booking> ongoing = new ArrayList<>();
-        
-        for (booking b : bookings){
-            if (b.getPassenger().getStudent_id().equals(pass.getStudent_id()) && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
-                ongoing.add(b);
-            }
-        }
-        
-        if(ongoing.isEmpty()){
-            System.out.println("No Ongoing Trips");
-            return ongoing;
-        }
-        for (int i = 0; i < ongoing.size(); i++) {
 
-            booking b = ongoing.get(i);
-
-            System.out.println((i + 1) + ") " + b.getBookingID());
-            System.out.println("Driver: " + b.getCarpool().getDrive().getStudent_name());
-            System.out.println("Destination: " + b.getCarpool().getDestination());
-            System.out.println("-----------------------------------");
-        }
-
-        return ongoing;
-    }
-    
     public static ArrayList<booking> displayConfirmed(ArrayList<booking> bookings, Driver driver) {
         System.out.println("\n--- Confirmed Bookings (Ready to Start) ---");
         ArrayList<booking> confirmed = new ArrayList<>();
-
         for (booking b : bookings) {
             if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
                     && b.getBookingStatus().equalsIgnoreCase("CONFIRMED")) {
                 confirmed.add(b);
             }
         }
-
         if (confirmed.isEmpty()) {
             System.out.println("No confirmed bookings found.");
             return confirmed;
         }
-
         for (int i = 0; i < confirmed.size(); i++) {
-            booking b = confirmed.get(i);
-            System.out.println((i + 1) + ") Booking ID  : " + b.getBookingID());
-            System.out.println("   Passenger   : " + b.getPassenger().getStudent_name());
-            System.out.println("   Destination : " + b.getCarpool().getDestination());
-            System.out.println("   Date        : " + b.getBookingDate());
-            System.out.println("   -------------------------");
+            System.out.println((i + 1) + ")");
+            confirmed.get(i).displayBooking();  
         }
-
         return confirmed;
     }
-    
+
+    public static ArrayList<booking> displayOngoing(ArrayList<booking> bookings, Passenger pass) {
+        System.out.println("\n--- Ongoing Trips ---");
+        ArrayList<booking> ongoing = new ArrayList<>();
+        for (booking b : bookings) {
+            if (b.getPassenger().getStudent_id().equals(pass.getStudent_id())
+                    && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+                ongoing.add(b);
+            }
+        }
+        if (ongoing.isEmpty()) {
+            System.out.println("No ongoing trips.");
+            return ongoing;
+        }
+        for (int i = 0; i < ongoing.size(); i++) {
+            System.out.println((i + 1) + ")");
+            ongoing.get(i).displayBooking();  
+        }
+        return ongoing;
+    }
+
     public static void displayMyBookings(ArrayList<booking> bookings, Passenger pass) {
         System.out.println("\n--- Your Bookings ---");
         boolean found = false;
         for (booking b : bookings) {
             if (b.getPassenger().getStudent_id().equals(pass.getStudent_id())) {
-                System.out.println("Booking ID  : " + b.getBookingID());
-                System.out.println("Carpool ID  : " + b.getCarpool().getCarpoolID());
-                System.out.println("Destination : " + b.getCarpool().getDestination());
-                System.out.println("Date        : " + b.getBookingDate());
-                System.out.println("Status      : " + b.getBookingStatus());
-                System.out.println("-------------------");
+                b.displayBooking();  
                 found = true;
             }
         }
@@ -190,6 +161,4 @@ public class booking {
         }
     }
 
- 
-    
 }

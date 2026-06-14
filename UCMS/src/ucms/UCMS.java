@@ -23,17 +23,26 @@ public class UCMS {
     private ArrayList<Passenger> penumpang = new ArrayList<>();
     private ArrayList<Driver> Pemandu = new ArrayList<>();
     private ArrayList<Admin> Ketua = new ArrayList<>();
-    private ArrayList<Student> Pelajar = new ArrayList<>();
     private ArrayList<Carpool> carpools = new ArrayList<>();
     private ArrayList<booking> bookings = new ArrayList<>();
     private ArrayList<Report> reports = new ArrayList<>();
     private ArrayList<Feedback> feeds = new ArrayList<>();
     private ArrayList<String> PemanduApproved = new ArrayList<>();
-
+    private ArrayList<BookingInterface> bookingconcrete = new ArrayList<>();
     /**
      * @param args the command line arguments
      */
 
+    private ArrayList<Student> Pelajar() {
+        ArrayList<Student> all = new ArrayList<>();
+        for (Driver d : Pemandu) {
+            all.add(d);
+        }
+        for (Passenger p : penumpang) {
+            all.add(p);
+        }
+        return all;
+    }
     public static void main(String[] args) {
 
         System.out.println("================================================================================");
@@ -192,13 +201,7 @@ public class UCMS {
         String id = sc.nextLine();
         System.out.print("Password   : ");
         String pass = sc.nextLine();
-        for (Driver d : Pemandu){
-             Pelajar.add(d);
-        }
-        for (Passenger p : penumpang){
-            Pelajar.add(p);
-        }
-        for (Student s: Pelajar){
+        for (Student s: Pelajar()){
             if(s.loginStudent(id, pass)){
                 System.out.println("Welcome " + s.student_name);
                  System.out.println("Role: " + s.getRole());
@@ -435,13 +438,12 @@ public class UCMS {
 
                 System.out.print("Enter Carpool ID: ");
                 String id = sc.nextLine();
-
-                booking temp = new booking("temp", pass, null, "", "");
-
-                booking b = temp.createBooking(pass, carpools, id);
+                
+                BookingInterface b = BookingFactory.createBooking(pass, carpools, id);
 
                 if (b != null) {
-                    bookings.add(b);
+                    bookingconcrete.add(b);
+                    
                     System.out.println("Booking successful!");
                 }
             }
@@ -452,12 +454,11 @@ public class UCMS {
             Carpool.displayCarpool(carpools);
             System.out.print("Enter Carpool ID: ");
             String id = sc.nextLine();
-            booking temp = new booking("temp", pass, null, "", "");
-
-            booking b = temp.createBooking(pass, carpools, id);
+            BookingInterface b = BookingFactory.createBooking(pass, carpools, id);
 
             if (b != null) {
-                bookings.add(b);
+                bookingconcrete.add(b);
+
                 System.out.println("Booking successful!");
             }
             DashboardPass(pass);
@@ -522,14 +523,8 @@ public class UCMS {
     public void searchStudent(){
         System.out.println("Enter Student ID:");
         String id = sc.next();
-        for (Driver d : Pemandu){
-             Pelajar.add(d);
-        }
-        for (Passenger p : penumpang){
-            Pelajar.add(p);
-        }
         
-        for (Student s : Pelajar){
+        for (Student s : Pelajar()){
             if(s.getStudent_id().equalsIgnoreCase(id)){
                 s.displayProfile();
                 
@@ -591,6 +586,7 @@ public class UCMS {
             case 5:
                 searchStudent();
                 dashboardAdmin(admins);
+                break;
             case 0:
                 System.out.println("Exiting....");                
                 break;
