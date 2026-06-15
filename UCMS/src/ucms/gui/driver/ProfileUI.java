@@ -4,6 +4,11 @@
  */
 package ucms.gui.driver;
 
+/**
+ *
+ * @author User
+ */
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -15,97 +20,15 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
-
-/**
- *
- * @author User
- */
-public class DashboardUI extends javax.swing.JFrame {
+public class ProfileUI extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardUI.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProfileUI.class.getName());
 
     /**
-     * Creates new form DashboardUI
+     * Creates new form ProfileUI
      */
-    public DashboardUI() {
-        System.out.println(getClass().getResource("/ucms/resources/Dashboard.png"));
-
-        System.out.println(getClass().getResource("/ucms/resources/t-UMPang_logo.png"));
+    public ProfileUI() {
         initComponents();
-        
-        //Profile Pic
-        ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
-        CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
-        c.setPreferredSize(new Dimension(100, 100));
-        c.setBackground(new Color(245,166,35));
-        ProfilePnl.add(c);
-        ProfilePnl.revalidate();
-        ProfilePnl.repaint();
-        
-        //DataMatric
-        CardMatrix card1 = new CardMatrix();
-        CardMatrix card2 = new CardMatrix();
-        CardMatrix card3 = new CardMatrix();
-
-      
-        card1.setColor1(new Color(30, 90, 150));
-        card1.setColor2(new Color(15, 61, 92));
-
-        card2.setColor1(new Color(150, 60, 30));
-        card2.setColor2(new Color(92, 30, 15));
-
-        card3.setColor1(new Color(30, 130, 80));
-        card3.setColor2(new Color(15, 92, 50));
-
-  
-        card1.SetData(new Matrix_Card( new ImageIcon(getClass().getResource("/ucms/resources/Car.png")), "Total Trips", "30", "All time trips"));
-
-        card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Bell.png")),"Pending Request", "5", "Awaiting approval" ));
-
-        card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png")),"Avg Rating", "3.5", "Based on reviews"));
-
-  
-        card1.setPreferredSize(new Dimension(320, 200));
-        card2.setPreferredSize(new Dimension(320, 200));
-        card3.setPreferredSize(new Dimension(320, 200));
-
-   
-        MatrixData.setLayout(new FlowLayout(FlowLayout.LEFT, 18, 22));
-        MatrixData.add(card1);
-        MatrixData.add(card2);
-        MatrixData.add(card3);
-        MatrixData.revalidate();
-        MatrixData.repaint();
-        
-        
-        // Upcoming
-        upcomingTrips.setLayout(new GridBagLayout());
-        upcomingTrips.setBackground(new Color(48, 48, 46));
-        upcomingTrips.setPreferredSize(new Dimension(1000, 420));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(0, 0, 0, 10);
-
-        gbc.gridx = 0;
-        gbc.weightx = 0.65;
-        upcomingTrips.add(new UpcomingTripsPanel(), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.35;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        upcomingTrips.add(new RecentRequestsPanel(), gbc);
-
-        upcomingTrips.revalidate();
-        upcomingTrips.repaint();
-
-//        Icon i =IconTrip.getIcon();
-//        
-//        ImageIcon icon = (ImageIcon)i;
-//        Image image = icon.getImage().getScaledInstance(IconTrip.getWidth(),IconTrip.getHeight(),Image.SCALE_SMOOTH);
-//        IconTrip.setIcon(new ImageIcon(image));
     }
 
     /**
@@ -693,13 +616,10 @@ public class DashboardUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(sidebar_pnl, java.awt.BorderLayout.LINE_START);
-
         main_pnl.setBackground(new java.awt.Color(48, 48, 46));
         main_pnl.setLayout(new java.awt.BorderLayout());
 
         header.setBackground(new java.awt.Color(48, 48, 46));
-        header.setPreferredSize(new java.awt.Dimension(1066, 110));
         header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         header.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 107, 1066, -1));
 
@@ -765,7 +685,30 @@ public class DashboardUI extends javax.swing.JFrame {
 
         main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
 
-        getContentPane().add(main_pnl, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1386, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)
+                    .addComponent(main_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, 1111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 837, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(main_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -795,7 +738,7 @@ public class DashboardUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel5MouseExited
 
     private void jLabel7MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseEntered
-       MyTripsLabel.setBackground(new Color(56,80,81));
+        MyTripsLabel.setBackground(new Color(56,80,81));
         pn_line4.setBackground(new Color(245,166,35));
     }//GEN-LAST:event_jLabel7MouseEntered
 
@@ -877,7 +820,7 @@ public class DashboardUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DashboardUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ProfileUI().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

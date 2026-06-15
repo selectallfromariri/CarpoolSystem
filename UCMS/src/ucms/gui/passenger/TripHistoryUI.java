@@ -9,6 +9,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import ucms.booking;
+import ucms.Passenger;
 
 /**
  *
@@ -18,22 +22,47 @@ public class TripHistoryUI extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(TripHistoryUI.class.getName());
+    private Passenger passenger;
+    private ArrayList<booking> bookings;
 
     /**
      * Creates new form DashboardUI
      */
-    public TripHistoryUI() {
-        System.out.println(getClass().getResource("/ucms/resources/Dashboard.png"));
-
-        System.out.println(getClass().getResource("/ucms/resources/t-UMPang_logo.png"));
+    public TripHistoryUI(Passenger passenger, ArrayList<booking> bookings) {
         initComponents();
-        ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
-        CircleLabel c = new CircleLabel(new Color(15, 61, 92), 0);
-        c.setPreferredSize(new Dimension(100, 100));
-        c.setBackground(new Color(245, 166, 35));
-        ProfilePnl.add(c);
-        ProfilePnl.revalidate();
-        ProfilePnl.repaint();
+        tripHistory.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Booking ID", "Destination", "Date", "Status"
+                }
+        ));
+
+        this.passenger = passenger;
+        this.bookings = bookings;
+
+        loadHistory(passenger, bookings);
+    }
+
+    public void loadHistory(Passenger passenger, ArrayList<booking> bookings) {
+
+        DefaultTableModel model = (DefaultTableModel) tripHistory.getModel();
+        model.setRowCount(0);
+
+        ArrayList<booking> history = passenger.getHistory(bookings);
+
+        // DEBUG - remove later
+        System.out.println("Total bookings passed in: " + bookings.size());
+        System.out.println("History found: " + history.size());
+
+        for (booking b : history) {
+            System.out.println("Adding: " + b.getBookingID() + " | " + b.getBookingStatus());
+            model.addRow(new Object[]{
+                b.getBookingID(),
+                b.getCarpool().getDestination(),
+                b.getBookingDate(),
+                b.getBookingStatus()
+            });
+        }
     }
 
     /**
@@ -72,9 +101,8 @@ public class TripHistoryUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tripHistory = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
 
@@ -318,11 +346,18 @@ public class TripHistoryUI extends javax.swing.JFrame {
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel19.setText("Trip History");
 
-        jLabel1.setText("Booking ID");
-
-        jLabel3.setText("Destination");
-
-        jLabel5.setText("Date");
+        tripHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tripHistory);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -332,12 +367,7 @@ public class TripHistoryUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel19)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -346,12 +376,8 @@ public class TripHistoryUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addContainerGap(674, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(319, Short.MAX_VALUE))
         );
 
         jTextField1.setText("Search and Book trip");
@@ -378,7 +404,7 @@ public class TripHistoryUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -448,7 +474,7 @@ public class TripHistoryUI extends javax.swing.JFrame {
         // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TripHistoryUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new TripHistoryUI(new Passenger("00", "S000", "Test", "0000", "pass"), new ArrayList<>()).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -459,7 +485,6 @@ public class TripHistoryUI extends javax.swing.JFrame {
     private javax.swing.JLabel datelabel;
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -467,12 +492,11 @@ public class TripHistoryUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -482,6 +506,7 @@ public class TripHistoryUI extends javax.swing.JFrame {
     private javax.swing.JPanel pn_line5;
     private javax.swing.JPanel pn_line9;
     private javax.swing.JPanel sidebar_pnl;
+    private javax.swing.JTable tripHistory;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

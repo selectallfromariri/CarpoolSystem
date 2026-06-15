@@ -9,6 +9,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.ArrayList;
+import ucms.Passenger;
+import ucms.Driver;
+import ucms.Feedback;
 
 /**
  *
@@ -19,21 +23,23 @@ public class FeedbackUI extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(FeedbackUI.class.getName());
 
+    private Passenger passenger;
+    private ArrayList<Driver> drivers;
+    private ArrayList<Feedback> feeds;
+
     /**
      * Creates new form DashboardUI
      */
-    public FeedbackUI() {
-        System.out.println(getClass().getResource("/ucms/resources/Dashboard.png"));
-
-        System.out.println(getClass().getResource("/ucms/resources/t-UMPang_logo.png"));
+    public FeedbackUI(Passenger passenger, ArrayList<Driver> drivers, ArrayList<Feedback> feeds) {
         initComponents();
-        ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
-        CircleLabel c = new CircleLabel(new Color(15, 61, 92), 0);
-        c.setPreferredSize(new Dimension(100, 100));
-        c.setBackground(new Color(245, 166, 35));
-        ProfilePnl.add(c);
-        ProfilePnl.revalidate();
-        ProfilePnl.repaint();
+        this.passenger = passenger;
+        this.drivers = drivers;
+        this.feeds = feeds;
+
+        // populate driver dropdown
+        for (Driver d : drivers) {
+            driverComboBox.addItem(d.getStudent_name() + " (" + d.getStudent_id() + ")");
+        }
     }
 
     /**
@@ -75,6 +81,7 @@ public class FeedbackUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
+        driverComboBox = new javax.swing.JComboBox<>();
         jTextField1 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
 
@@ -323,6 +330,9 @@ public class FeedbackUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setText("Submit");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
+        driverComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -331,7 +341,10 @@ public class FeedbackUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel19)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(driverComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -345,7 +358,9 @@ public class FeedbackUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(driverComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(643, Short.MAX_VALUE))
@@ -397,6 +412,34 @@ public class FeedbackUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel22MouseExited
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String comment = jTextArea1.getText().trim();
+
+        if (comment.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please enter your feedback.");
+            return;
+        }
+
+        if (drivers.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No drivers available.");
+            return;
+        }
+
+        int selectedIndex = driverComboBox.getSelectedIndex();
+        Driver selectedDriver = drivers.get(selectedIndex);
+
+        Feedback f = new Feedback(
+                String.valueOf(feeds.size() + 1),
+                comment,
+                passenger,
+                selectedDriver
+        );
+        feeds.add(f);
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Feedback submitted successfully!");
+        jTextArea1.setText("");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private void jLabel17MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel17MouseEntered
 
     }// GEN-LAST:event_jLabel17MouseEntered
@@ -445,7 +488,11 @@ public class FeedbackUI extends javax.swing.JFrame {
         // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FeedbackUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FeedbackUI(
+                new Passenger("00", "S000", "Test", "0000", "pass"),
+                new ArrayList<>(),
+                new ArrayList<>()
+        ).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -454,6 +501,7 @@ public class FeedbackUI extends javax.swing.JFrame {
     private javax.swing.JLabel NamePassengerLabel;
     private javax.swing.JPanel ProfilePnl;
     private javax.swing.JLabel datelabel;
+    private javax.swing.JComboBox<String> driverComboBox;
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;

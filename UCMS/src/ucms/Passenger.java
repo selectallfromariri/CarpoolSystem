@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author yana
  */
 public class Passenger extends Student {
+
     private String passengerID;
 
     public Passenger(String passengerID, String student_id, String student_name, String phone_num, String password) {
@@ -69,7 +70,6 @@ public class Passenger extends Student {
     // public void setPhone_num(String phone_num) {
     // this.phone_num = phone_num;
     // }
-
     public String getPassword() {
         return password;
     }
@@ -87,36 +87,35 @@ public class Passenger extends Student {
     // search carpool
     public boolean searchCarpool(ArrayList<Carpool> carpool) {
         Scanner input = new Scanner(System.in);
-        System.out.println("----- SEARCH -----");
-        System.out.println("Enter pickup location to search: ");
-        String pickupLocation = input.nextLine();
-        boolean pickup = false;
-
-        for (int i = 0; i < carpool.size(); i++) {
-            if (carpool.get(i) != null && carpool.get(i).getPickupLocation().equalsIgnoreCase(pickupLocation)) {
-                pickup = true;
-                break;
-            }
-        }
-        if (!pickup) {
-            System.out.println("----- SEARCH RESULT -----");
-            System.out.println("No carpool available from " + pickupLocation);
-            return false;
-        }
+//        System.out.println("----- SEARCH -----");
+//        System.out.println("Enter pickup location to search: ");
+//        String pickupLocation = input.nextLine();
+//        boolean pickup = false;
+//
+//        for (int i = 0; i < carpool.size(); i++) {
+//            if (carpool.get(i) != null && carpool.get(i).getPickupLocation().equalsIgnoreCase(pickupLocation)) {
+//                pickup = true;
+//                break;
+//            }
+//        }
+//        if (!pickup) {
+//            System.out.println("----- SEARCH RESULT -----");
+//            System.out.println("No carpool available from " + pickupLocation);
+//            return false;
+//        }
         System.out.println("Enter carpool destination to search: ");
         String searchDestination = input.nextLine();
         boolean foundDestination = false;
 
         System.out.println("----- SEARCH RESULT -----");
         for (int i = 0; i < carpool.size(); i++) {
-            if (carpool.get(i) != null && carpool.get(i).getDestination().equalsIgnoreCase(searchDestination)
-                    && carpool.get(i).getPickupLocation().equalsIgnoreCase(pickupLocation)) {
+            if (carpool.get(i) != null && carpool.get(i).getDestination().equalsIgnoreCase(searchDestination)){
                 displaySearchCarpool(carpool.get(i));
                 foundDestination = true;
             }
         }
         if (!foundDestination) {
-            System.out.println("No carpool available from " + pickupLocation + " to " + searchDestination);
+            System.out.println("No carpool available Destination"  + " to " + searchDestination);
         }
         return foundDestination;
     }
@@ -171,12 +170,34 @@ public class Passenger extends Student {
         }
     }
 
+    public ArrayList<booking> getHistory(ArrayList<booking> bookings) {
+
+        ArrayList<booking> history = new ArrayList<>();
+
+        for (booking b : bookings) {
+
+            if (b.getPassenger().getStudent_id().equals(this.student_id)) {
+
+                String status = b.getBookingStatus().toUpperCase();
+
+                if (status.equals("COMPLETED")
+                        || status.equals("CANCELLED")
+                        || status.equals("REJECTED")) {
+
+                    history.add(b);
+                }
+            }
+        }
+
+        return history;
+    }
+
     @Override
     public String toString() {
-        return "Passenger ID: " + passengerID +
-                "\nStudent ID: " + student_id +
-                "\nName: " + student_name +
-                "\nPhone: " + phone_num;
+        return "Passenger ID: " + passengerID
+                + "\nStudent ID: " + student_id
+                + "\nName: " + student_name
+                + "\nPhone: " + phone_num;
     }
 
     public String getRole() {
