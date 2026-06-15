@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class BookingFactory {
     public static BookingInterface createBooking(Passenger pass,ArrayList<Carpool> pool,String carpoolID) {
-        // Find the carpool
+        
         Carpool selected = null;
         for (Carpool c : pool) {
             if (c.getCarpoolID().equalsIgnoreCase(carpoolID)) {
@@ -21,19 +21,19 @@ public class BookingFactory {
             }
         }
 
-        // Carpool not found
+        
         if (selected == null) {
-            System.out.println("[!] Carpool not found.");
+            System.out.println("Carpool not found.");
             return null;
         }
 
-        // No seats left
+       
         if (selected.getAvailableSeat() <= 0) {
-            System.out.println("[!] No seats available.");
+            System.out.println("No seats available.");
             return null;
         }
 
-        // Create booking — factory handles the object creation
+
         selected.setAvailableSeat(selected.getAvailableSeat() - 1);
         String id = "BK-" + System.currentTimeMillis();
         return new booking(id, pass, selected, "2026-05-13", "PENDING");

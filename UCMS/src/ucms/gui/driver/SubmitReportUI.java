@@ -8,7 +8,6 @@ package ucms.gui.driver;
  *
  * @author User
  */
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -20,14 +19,14 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
-public class ProfileUI extends javax.swing.JFrame {
+public class SubmitReportUI extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProfileUI.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SubmitReportUI.class.getName());
 
     /**
-     * Creates new form ProfileUI
+     * Creates new form SubmitReportUI
      */
-    public ProfileUI() {
+    public SubmitReportUI() {
         initComponents();
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
@@ -37,13 +36,6 @@ public class ProfileUI extends javax.swing.JFrame {
         ProfilePnl.revalidate();
         ProfilePnl.repaint();
         
-        ProfilePnl1.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
-        CircleLabel c1 = new CircleLabel(new Color(15,61,92), 0);
-        c1.setPreferredSize(new Dimension(100, 100));
-        c1.setBackground(new Color(245,166,35));
-        ProfilePnl1.add(c1);
-        ProfilePnl1.revalidate();
-        ProfilePnl1.repaint();
     }
 
     /**
@@ -55,6 +47,26 @@ public class ProfileUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        main_pnl = new javax.swing.JPanel();
+        header = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        welcomeLabel = new javax.swing.JLabel();
+        datelabel = new javax.swing.JLabel();
+        MainCont = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel22 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel24 = new javax.swing.JLabel();
+        clearbtn = new javax.swing.JButton();
+        Submitbtn = new javax.swing.JButton();
         sidebar_pnl = new javax.swing.JPanel();
         logo_layout = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -95,42 +107,148 @@ public class ProfileUI extends javax.swing.JFrame {
         pn_line9 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        main_pnl = new javax.swing.JPanel();
-        header = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        welcomeLabel = new javax.swing.JLabel();
-        btnposttrip = new javax.swing.JButton();
-        datelabel = new javax.swing.JLabel();
-        MainCont = new javax.swing.JPanel();
-        infoPanel = new javax.swing.JPanel();
-        ProfilePnl1 = new javax.swing.JPanel();
-        EmailLabel = new javax.swing.JLabel();
-        NameLabel = new javax.swing.JLabel();
-        MatricLabel = new javax.swing.JLabel();
-        CarInfoPanel2 = new javax.swing.JPanel();
-        CarInfoLabel2 = new javax.swing.JLabel();
-        CarIcon2 = new javax.swing.JLabel();
-        CarModelLabel2 = new javax.swing.JLabel();
-        CarModelInput = new javax.swing.JTextField();
-        LesenLabel2 = new javax.swing.JLabel();
-        LicenceInput = new javax.swing.JTextField();
-        NumPlateLabel2 = new javax.swing.JLabel();
-        NumPlateInput = new javax.swing.JTextField();
-        PhoneNumLabel3 = new javax.swing.JLabel();
-        CarColorInput = new javax.swing.JTextField();
-        UserInfoPanel1 = new javax.swing.JPanel();
-        personalLabel1 = new javax.swing.JLabel();
-        IconUser1 = new javax.swing.JLabel();
-        FullNameLabel1 = new javax.swing.JLabel();
-        FullNameInput1 = new javax.swing.JTextField();
-        EmailLabel2 = new javax.swing.JLabel();
-        EmailInput2 = new javax.swing.JTextField();
-        MatricLabel2 = new javax.swing.JLabel();
-        MatricInput1 = new javax.swing.JTextField();
-        PhoneNumLabel1 = new javax.swing.JLabel();
-        EmailInput3 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        main_pnl.setBackground(new java.awt.Color(48, 48, 46));
+        main_pnl.setLayout(new java.awt.BorderLayout());
+
+        header.setBackground(new java.awt.Color(48, 48, 46));
+        header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        header.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 107, 1066, -1));
+
+        welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        welcomeLabel.setText("Submit Report");
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
+
+        datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        datelabel.setForeground(new java.awt.Color(153, 153, 153));
+        datelabel.setText("Report an issue and concern");
+        header.add(datelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 200, 30));
+
+        main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
+
+        MainCont.setBackground(new java.awt.Color(48, 48, 46));
+
+        jPanel1.setBackground(new java.awt.Color(48, 48, 46));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true));
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setText("New Report");
+
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png"))); // NOI18N
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setText("Report Type");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel22.setText("Report Title");
+
+        jTextField1.setText("Brief of Report");
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setText("Passengers Involved ( Optional )");
+
+        jTextField2.setText("Name or Matric ID");
+        jTextField2.addActionListener(this::jTextField2ActionPerformed);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setText("Description");
+
+        clearbtn.setText("Clear");
+
+        Submitbtn.setText("Submit");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel23)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
+                    .addComponent(jLabel22)
+                    .addComponent(jLabel21)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel19))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(clearbtn)
+                .addGap(18, 18, 18)
+                .addComponent(Submitbtn)
+                .addGap(43, 43, 43))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
+                .addComponent(jLabel24)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(clearbtn)
+                    .addComponent(Submitbtn))
+                .addContainerGap(70, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
+        MainCont.setLayout(MainContLayout);
+        MainContLayout.setHorizontalGroup(
+            MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainContLayout.createSequentialGroup()
+                .addContainerGap(218, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(204, 204, 204))
+        );
+        MainContLayout.setVerticalGroup(
+            MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainContLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(193, Short.MAX_VALUE))
+        );
+
+        main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
+
+        getContentPane().add(main_pnl, java.awt.BorderLayout.CENTER);
 
         sidebar_pnl.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -712,334 +830,18 @@ public class ProfileUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        main_pnl.setBackground(new java.awt.Color(48, 48, 46));
-        main_pnl.setLayout(new java.awt.BorderLayout());
-
-        header.setBackground(new java.awt.Color(48, 48, 46));
-        header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        header.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 107, 1066, -1));
-
-        welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
-        welcomeLabel.setText("My Profile");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
-
-        btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
-        btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnposttrip.setForeground(new java.awt.Color(255, 255, 255));
-        btnposttrip.setText("Update Profile");
-        header.add(btnposttrip, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 150, 40));
-
-        datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        datelabel.setForeground(new java.awt.Color(153, 153, 153));
-        datelabel.setText("View and Update Personal Details");
-        header.add(datelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 220, 30));
-
-        main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
-
-        MainCont.setBackground(new java.awt.Color(48, 48, 46));
-
-        infoPanel.setBackground(new java.awt.Color(38, 38, 36));
-        infoPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 2, true));
-
-        ProfilePnl1.setBackground(new java.awt.Color(38, 38, 36));
-
-        javax.swing.GroupLayout ProfilePnl1Layout = new javax.swing.GroupLayout(ProfilePnl1);
-        ProfilePnl1.setLayout(ProfilePnl1Layout);
-        ProfilePnl1Layout.setHorizontalGroup(
-            ProfilePnl1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 163, Short.MAX_VALUE)
-        );
-        ProfilePnl1Layout.setVerticalGroup(
-            ProfilePnl1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 170, Short.MAX_VALUE)
-        );
-
-        EmailLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        EmailLabel.setForeground(new java.awt.Color(255, 255, 255));
-        EmailLabel.setText("Email");
-
-        NameLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        NameLabel.setForeground(new java.awt.Color(255, 255, 255));
-        NameLabel.setText("Name");
-
-        MatricLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        MatricLabel.setForeground(new java.awt.Color(255, 255, 255));
-        MatricLabel.setText("Matric ID");
-
-        javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
-        infoPanel.setLayout(infoPanelLayout);
-        infoPanelLayout.setHorizontalGroup(
-            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(infoPanelLayout.createSequentialGroup()
-                .addGap(223, 223, 223)
-                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
-                        .addComponent(NameLabel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
-                        .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(MatricLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-                            .addComponent(EmailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(398, 398, 398))))
-            .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(infoPanelLayout.createSequentialGroup()
-                    .addGap(43, 43, 43)
-                    .addComponent(ProfilePnl1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(478, Short.MAX_VALUE)))
-        );
-        infoPanelLayout.setVerticalGroup(
-            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(infoPanelLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(NameLabel)
-                .addGap(18, 18, 18)
-                .addComponent(MatricLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EmailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ProfilePnl1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(26, 26, 26)))
-        );
-
-        CarInfoPanel2.setBackground(new java.awt.Color(38, 38, 36));
-        CarInfoPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 2, true));
-
-        CarInfoLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        CarInfoLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        CarInfoLabel2.setText("Car Information");
-
-        CarIcon2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/Car.png"))); // NOI18N
-
-        CarModelLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        CarModelLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        CarModelLabel2.setText("Car Model");
-
-        CarModelInput.setText("MYVI");
-        CarModelInput.addActionListener(this::CarModelInputActionPerformed);
-
-        LesenLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        LesenLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        LesenLabel2.setText("Licence Number");
-
-        LicenceInput.setText("Email@gmail.com");
-
-        NumPlateLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        NumPlateLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        NumPlateLabel2.setText("Num Plate");
-
-        NumPlateInput.setText("DBD8544");
-        NumPlateInput.addActionListener(this::NumPlateInputActionPerformed);
-
-        PhoneNumLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        PhoneNumLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        PhoneNumLabel3.setText("Car Color");
-
-        CarColorInput.setText("Silver");
-        CarColorInput.addActionListener(this::CarColorInputActionPerformed);
-
-        javax.swing.GroupLayout CarInfoPanel2Layout = new javax.swing.GroupLayout(CarInfoPanel2);
-        CarInfoPanel2.setLayout(CarInfoPanel2Layout);
-        CarInfoPanel2Layout.setHorizontalGroup(
-            CarInfoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(CarInfoPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(CarInfoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(CarModelLabel2)
-                    .addGroup(CarInfoPanel2Layout.createSequentialGroup()
-                        .addComponent(CarIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CarInfoLabel2))
-                    .addComponent(CarModelInput)
-                    .addComponent(LicenceInput, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                    .addComponent(LesenLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addGroup(CarInfoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(PhoneNumLabel3)
-                    .addComponent(NumPlateLabel2)
-                    .addComponent(NumPlateInput, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                    .addComponent(CarColorInput))
-                .addGap(47, 47, 47))
-        );
-        CarInfoPanel2Layout.setVerticalGroup(
-            CarInfoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(CarInfoPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(CarInfoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(CarInfoPanel2Layout.createSequentialGroup()
-                        .addComponent(NumPlateLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(NumPlateInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PhoneNumLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CarColorInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(CarInfoPanel2Layout.createSequentialGroup()
-                        .addGroup(CarInfoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(CarInfoLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(CarIcon2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(CarModelLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(CarModelInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LesenLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LicenceInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
-        );
-
-        UserInfoPanel1.setBackground(new java.awt.Color(38, 38, 36));
-        UserInfoPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 2, true));
-
-        personalLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        personalLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        personalLabel1.setText("Personal Information");
-
-        IconUser1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/UserMale.png"))); // NOI18N
-
-        FullNameLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        FullNameLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        FullNameLabel1.setText("Full Name");
-
-        FullNameInput1.setText("Name");
-
-        EmailLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        EmailLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        EmailLabel2.setText("UMP EMAIL");
-
-        EmailInput2.setText("Email@gmail.com");
-
-        MatricLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        MatricLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        MatricLabel2.setText("Matric Number");
-
-        MatricInput1.setText("RC13266");
-        MatricInput1.addActionListener(this::MatricInput1ActionPerformed);
-
-        PhoneNumLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        PhoneNumLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        PhoneNumLabel1.setText("Telephone Number");
-
-        EmailInput3.setText("01129234038");
-
-        javax.swing.GroupLayout UserInfoPanel1Layout = new javax.swing.GroupLayout(UserInfoPanel1);
-        UserInfoPanel1.setLayout(UserInfoPanel1Layout);
-        UserInfoPanel1Layout.setHorizontalGroup(
-            UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(EmailLabel2)
-                    .addComponent(FullNameLabel1)
-                    .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                        .addComponent(IconUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(personalLabel1))
-                    .addComponent(FullNameInput1)
-                    .addComponent(EmailInput2, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(PhoneNumLabel1)
-                    .addComponent(MatricLabel2)
-                    .addComponent(MatricInput1)
-                    .addComponent(EmailInput3, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                .addGap(47, 47, 47))
-        );
-        UserInfoPanel1Layout.setVerticalGroup(
-            UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                        .addComponent(MatricLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MatricInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PhoneNumLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmailInput3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                        .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(personalLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(IconUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(FullNameLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(FullNameInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmailLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmailInput2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
-        MainCont.setLayout(MainContLayout);
-        MainContLayout.setHorizontalGroup(
-            MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainContLayout.createSequentialGroup()
-                .addGap(190, 190, 190)
-                .addGroup(MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(CarInfoPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UserInfoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(233, Short.MAX_VALUE))
-        );
-        MainContLayout.setVerticalGroup(
-            MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainContLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(UserInfoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CarInfoPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
-        );
-
-        main_pnl.add(MainCont, java.awt.BorderLayout.PAGE_END);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1386, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 275, Short.MAX_VALUE)
-                    .addComponent(main_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, 1111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(1105, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 849, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(main_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
+        getContentPane().add(sidebar_pnl, java.awt.BorderLayout.LINE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void MatricInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MatricInput1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_MatricInput1ActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
@@ -1211,17 +1013,7 @@ public class ProfileUI extends javax.swing.JFrame {
         LogoutLabel.setBackground(new Color(15,61,92));
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
-    private void CarModelInputActionPerformed(java.awt.event.ActionEvent evt) {
-        // handle car model input action (press Enter in field)
-    }
 
-    private void NumPlateInputActionPerformed(java.awt.event.ActionEvent evt) {
-        // handle num plate input action
-    }
-
-    private void CarColorInputActionPerformed(java.awt.event.ActionEvent evt) {
-        // handle car color input action
-    }
     /**
      * @param args the command line arguments
      */
@@ -1244,50 +1036,26 @@ public class ProfileUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ProfileUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new SubmitReportUI().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BookingReqLabel;
-    private javax.swing.JTextField CarColorInput;
-    private javax.swing.JLabel CarIcon2;
-    private javax.swing.JLabel CarInfoLabel2;
-    private javax.swing.JPanel CarInfoPanel2;
-    private javax.swing.JTextField CarModelInput;
-    private javax.swing.JLabel CarModelLabel2;
     private javax.swing.JPanel CarpoolListLabel;
     private javax.swing.JPanel DashboardLabel;
-    private javax.swing.JTextField EmailInput2;
-    private javax.swing.JTextField EmailInput3;
-    private javax.swing.JLabel EmailLabel;
-    private javax.swing.JLabel EmailLabel2;
-    private javax.swing.JTextField FullNameInput1;
-    private javax.swing.JLabel FullNameLabel1;
-    private javax.swing.JLabel IconUser1;
-    private javax.swing.JLabel LesenLabel2;
-    private javax.swing.JTextField LicenceInput;
     private javax.swing.JPanel LogoutLabel;
     private javax.swing.JPanel MainCont;
-    private javax.swing.JTextField MatricInput1;
-    private javax.swing.JLabel MatricLabel;
-    private javax.swing.JLabel MatricLabel2;
     private javax.swing.JPanel MyTripsLabel;
     private javax.swing.JLabel NameDriverLabel;
-    private javax.swing.JLabel NameLabel;
-    private javax.swing.JTextField NumPlateInput;
-    private javax.swing.JLabel NumPlateLabel2;
-    private javax.swing.JLabel PhoneNumLabel1;
-    private javax.swing.JLabel PhoneNumLabel3;
     private javax.swing.JPanel ProfileLabel;
     private javax.swing.JPanel ProfilePnl;
-    private javax.swing.JPanel ProfilePnl1;
     private javax.swing.JPanel ReportLabel;
+    private javax.swing.JButton Submitbtn;
     private javax.swing.JPanel TripLabel;
-    private javax.swing.JPanel UserInfoPanel1;
-    private javax.swing.JButton btnposttrip;
+    private javax.swing.JButton clearbtn;
     private javax.swing.JLabel datelabel;
     private javax.swing.JPanel header;
-    private javax.swing.JPanel infoPanel;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1298,7 +1066,13 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1306,12 +1080,16 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel logo_layout;
     private javax.swing.JPanel main_pnl;
-    private javax.swing.JLabel personalLabel1;
     private javax.swing.JPanel pn_line;
     private javax.swing.JPanel pn_line1;
     private javax.swing.JPanel pn_line4;

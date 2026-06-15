@@ -14,6 +14,7 @@ import java.awt.GridLayout;
 import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
 /**
@@ -28,9 +29,7 @@ public class DashboardUI extends javax.swing.JFrame {
      * Creates new form DashboardUI
      */
     public DashboardUI() {
-        System.out.println(getClass().getResource("/ucms/resources/Dashboard.png"));
 
-        System.out.println(getClass().getResource("/ucms/resources/t-UMPang_logo.png"));
         initComponents();
         
         //Profile Pic
@@ -46,30 +45,26 @@ public class DashboardUI extends javax.swing.JFrame {
         CardMatrix card1 = new CardMatrix();
         CardMatrix card2 = new CardMatrix();
         CardMatrix card3 = new CardMatrix();
-
       
-        card1.setColor1(new Color(30, 90, 150));
-        card1.setColor2(new Color(15, 61, 92));
+        card1.setColor1(new Color(38,38,36));
+        card1.setColor2(new Color(38,38,36));
 
-        card2.setColor1(new Color(150, 60, 30));
-        card2.setColor2(new Color(92, 30, 15));
+        card2.setColor1(new Color(38,38,36));
+        card2.setColor2(new Color(38,38,36));
+ 
+        card3.setColor1(new Color(38,38,36));
+        card3.setColor2(new Color(38,38,36));
 
-        card3.setColor1(new Color(30, 130, 80));
-        card3.setColor2(new Color(15, 92, 50));
-
-  
         card1.SetData(new Matrix_Card( new ImageIcon(getClass().getResource("/ucms/resources/Car.png")), "Total Trips", "30", "All time trips"));
 
         card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Bell.png")),"Pending Request", "5", "Awaiting approval" ));
 
         card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png")),"Avg Rating", "3.5", "Based on reviews"));
 
-  
         card1.setPreferredSize(new Dimension(320, 200));
         card2.setPreferredSize(new Dimension(320, 200));
         card3.setPreferredSize(new Dimension(320, 200));
 
-   
         MatrixData.setLayout(new FlowLayout(FlowLayout.LEFT, 18, 22));
         MatrixData.add(card1);
         MatrixData.add(card2);
@@ -78,28 +73,7 @@ public class DashboardUI extends javax.swing.JFrame {
         MatrixData.repaint();
         
         
-        // Upcoming
-        upcomingTrips.setLayout(new GridBagLayout());
-        upcomingTrips.setBackground(new Color(48, 48, 46));
-        upcomingTrips.setPreferredSize(new Dimension(1000, 420));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(0, 0, 0, 10);
-
-        gbc.gridx = 0;
-        gbc.weightx = 0.65;
-        upcomingTrips.add(new UpcomingTripsPanel(), gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.35;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        upcomingTrips.add(new RecentRequestsPanel(), gbc);
-
-        upcomingTrips.revalidate();
-        upcomingTrips.repaint();
+        
 
 //        Icon i =IconTrip.getIcon();
 //        
@@ -165,7 +139,6 @@ public class DashboardUI extends javax.swing.JFrame {
         datelabel = new javax.swing.JLabel();
         MainCont = new javax.swing.JPanel();
         MatrixData = new javax.swing.JPanel();
-        upcomingTrips = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -202,6 +175,11 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel2.setText("Role + Matric ID");
 
         DashboardLabel.setBackground(new java.awt.Color(15, 61, 92));
+        DashboardLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                DashboardLabelMouseClicked(evt);
+            }
+        });
 
         pn_line.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -221,6 +199,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel3.setText("Dashboard");
         jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel3MouseEntered(evt);
             }
@@ -256,6 +237,11 @@ public class DashboardUI extends javax.swing.JFrame {
         );
 
         ProfileLabel.setBackground(new java.awt.Color(15, 61, 92));
+        ProfileLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ProfileLabelMouseClicked(evt);
+            }
+        });
 
         pn_line1.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -275,6 +261,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel5.setText("My Profile");
         jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel5MouseEntered(evt);
             }
@@ -310,6 +299,11 @@ public class DashboardUI extends javax.swing.JFrame {
         );
 
         MyTripsLabel.setBackground(new java.awt.Color(15, 61, 92));
+        MyTripsLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MyTripsLabelMouseClicked(evt);
+            }
+        });
 
         pn_line4.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -329,6 +323,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel7.setText("My Trips");
         jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel7MouseEntered(evt);
             }
@@ -364,6 +361,11 @@ public class DashboardUI extends javax.swing.JFrame {
         );
 
         CarpoolListLabel.setBackground(new java.awt.Color(15, 61, 92));
+        CarpoolListLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CarpoolListLabelMouseClicked(evt);
+            }
+        });
 
         pn_line5.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -383,6 +385,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel9.setText("Carpool List");
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel9MouseEntered(evt);
             }
@@ -418,6 +423,11 @@ public class DashboardUI extends javax.swing.JFrame {
         );
 
         BookingReqLabel.setBackground(new java.awt.Color(15, 61, 92));
+        BookingReqLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BookingReqLabelMouseClicked(evt);
+            }
+        });
 
         pn_line6.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -437,6 +447,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel11.setText("Booking Request");
         jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel11MouseEntered(evt);
             }
@@ -472,6 +485,11 @@ public class DashboardUI extends javax.swing.JFrame {
         );
 
         ReportLabel.setBackground(new java.awt.Color(15, 61, 92));
+        ReportLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ReportLabelMouseClicked(evt);
+            }
+        });
 
         pn_line7.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -491,6 +509,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel13.setText("Submit Report");
         jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel13MouseEntered(evt);
             }
@@ -526,6 +547,11 @@ public class DashboardUI extends javax.swing.JFrame {
         );
 
         TripLabel.setBackground(new java.awt.Color(15, 61, 92));
+        TripLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TripLabelMouseClicked(evt);
+            }
+        });
 
         pn_line8.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -545,6 +571,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel15.setText("Ongoing Trip");
         jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel15MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel15MouseEntered(evt);
             }
@@ -705,7 +734,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
-        welcomeLabel.setText("Welcome User ");
+        welcomeLabel.setText("Welcome User");
         header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
 
         btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
@@ -722,45 +751,40 @@ public class DashboardUI extends javax.swing.JFrame {
         main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
 
         MainCont.setBackground(new java.awt.Color(48, 48, 46));
+        MainCont.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MainContMouseClicked(evt);
+            }
+        });
 
         MatrixData.setBackground(new java.awt.Color(48, 48, 46));
-        MatrixData.setOpaque(false);
 
         javax.swing.GroupLayout MatrixDataLayout = new javax.swing.GroupLayout(MatrixData);
         MatrixData.setLayout(MatrixDataLayout);
         MatrixDataLayout.setHorizontalGroup(
             MatrixDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1034, Short.MAX_VALUE)
+            .addGap(0, 862, Short.MAX_VALUE)
         );
         MatrixDataLayout.setVerticalGroup(
             MatrixDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 146, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
-
-        upcomingTrips.setLayout(new java.awt.GridBagLayout());
 
         javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
         MainCont.setLayout(MainContLayout);
         MainContLayout.setHorizontalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
-                .addGroup(MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MainContLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(MainContLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(upcomingTrips, javax.swing.GroupLayout.PREFERRED_SIZE, 1072, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(20, 20, 20)
+                .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(188, Short.MAX_VALUE))
         );
         MainContLayout.setVerticalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(50, 50, 50)
                 .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(upcomingTrips, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(577, Short.MAX_VALUE))
         );
 
         main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
@@ -772,14 +796,15 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseEntered
         // TODO add your handling code here:
-        DashboardLabel.setBackground(new Color(56,80,81));
-        pn_line.setBackground(new Color(245,166,35));
+ 
+        DashboardLabel.setBackground(new Color(15,61,92));
+        pn_line.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel3MouseEntered
 
     private void jLabel3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseExited
         // TODO add your handling code here:
-        DashboardLabel.setBackground(new Color(15,61,92));
-        pn_line.setBackground(new Color(15,61,92));
+       DashboardLabel.setBackground(new Color(56,80,81));
+        pn_line.setBackground(new Color(245,166,35));
     }//GEN-LAST:event_jLabel3MouseExited
 
     private void jLabel5MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseEntered
@@ -855,6 +880,96 @@ public class DashboardUI extends javax.swing.JFrame {
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
 
+    private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
+        // TODO add your handling code here:
+        new DashboardUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_DashboardLabelMouseClicked
+
+    private void MainContMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MainContMouseClicked
+
+    }//GEN-LAST:event_MainContMouseClicked
+
+    private void ProfileLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProfileLabelMouseClicked
+        // TODO add your handling code here:
+        new ProfileUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ProfileLabelMouseClicked
+
+    private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
+        // TODO add your handling code here:
+        new MyTripsUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_MyTripsLabelMouseClicked
+
+    private void CarpoolListLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabelMouseClicked
+        // TODO add your handling code here:
+        new CarPoolListUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_CarpoolListLabelMouseClicked
+
+    private void BookingReqLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookingReqLabelMouseClicked
+        // TODO add your handling code here:
+        new BookingRequestUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BookingReqLabelMouseClicked
+
+    private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
+        // TODO add your handling code here:
+       new SubmitReportUI().setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_ReportLabelMouseClicked
+
+    private void TripLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TripLabelMouseClicked
+        // TODO add your handling code here:
+        new OngoingTripUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_TripLabelMouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // TODO add your handling code here:
+        new DashboardUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        // TODO add your handling code here:
+        new ProfileUI().setVisible(true);
+        this.dispose();
+  
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        // TODO add your handling code here:
+        new MyTripsUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        // TODO add your handling code here:
+        new CarPoolListUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel9MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        // TODO add your handling code here:
+        new BookingRequestUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        // TODO add your handling code here:
+       new SubmitReportUI().setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
+        // TODO add your handling code here:
+       new OngoingTripUI().setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jLabel15MouseClicked
+
+    
     /**
      * @param args the command line arguments
      */
@@ -928,7 +1043,6 @@ public class DashboardUI extends javax.swing.JFrame {
     private javax.swing.JPanel pn_line8;
     private javax.swing.JPanel pn_line9;
     private javax.swing.JPanel sidebar_pnl;
-    private javax.swing.JPanel upcomingTrips;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
