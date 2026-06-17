@@ -433,16 +433,16 @@ public RegisterPassenger() {
             psStudent.setString(2, fullName);
             psStudent.setString(3, phone);
             psStudent.setString(4, password);
-            psStudent.executeUpdate();
-
+            int studentResult = psStudent.executeUpdate();
+            
             String sqlPassenger= "INSERT INTO passenger(passenger_id,student_id) VALUES (?,?)";
 
             PreparedStatement psPassenger = conn.prepareStatement(sqlPassenger);
             psPassenger.setString(1,passengerID);
             psPassenger.setString(2, p.getStudent_id());
-            psPassenger.executeUpdate();
+            
 
-            int studentResult = psStudent.executeUpdate();
+            
             int passengerResult = psPassenger.executeUpdate();
 
             if (studentResult > 0 && passengerResult > 0) {
