@@ -50,4 +50,11 @@ public class Car {
         System.out.println("Car Model: " + model);
         System.out.println("Car Color: " + color);
     }
+    
+    public void updateCar(String newPlate, String newModel, String newColor) {
+        this.numplate = newPlate;
+        this.model = newModel;
+        this.color = newColor;
+        System.out.println("Car info updated.");
+    }
 }

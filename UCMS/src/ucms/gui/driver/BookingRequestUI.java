@@ -718,7 +718,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "#", "Passebgers", "Matric", "Seat", "Status"
+                "#", "Passengers", "Matric", "Seat", "Status"
             }
         ));
         jTable1.setFocusable(false);

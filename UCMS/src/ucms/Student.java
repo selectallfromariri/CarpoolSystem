@@ -62,6 +62,16 @@ public abstract class Student {
         System.out.println("Phone : " + phone_num);
     }
     
+    public void updateName(String newName) {
+        this.student_name = newName;
+        System.out.println("Name updated to: " + student_name);
+    }
+
+    public void updatePhone(String newPhone) {
+        this.phone_num = newPhone;
+        System.out.println("Phone updated to: " + phone_num);
+    }
+    
     abstract public String getRole();
     
     

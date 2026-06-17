@@ -85,7 +85,13 @@ public class Driver extends Student {
         return role;
     }
     
-    
+    public void updateProfile(String student_name,String phonenum,String newPlate, String newModel, String newColor){
+        updateName(student_name);
+        updatePhone(phonenum);
+        kereta.updateCar(newPlate, newModel, newColor);
+        System.out.println("Driver Profile updatedd succesfully");
+        displayProfile();
+    }
     
     
 }

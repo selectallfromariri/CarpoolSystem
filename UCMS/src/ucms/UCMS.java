@@ -307,6 +307,49 @@ public class UCMS {
 
         System.out.println("Report submitted successfully!");
     }
+    
+    public void updateProfileDriver(Driver driver) {
+        System.out.println("----- UPDATE PROFILE -----");
+        System.out.println("Leave blank to keep current value.");
+
+        System.out.println("Current Name  : " + driver.getStudent_name());
+        System.out.print("New Name      : ");
+        String newName = sc.nextLine();
+        if (newName.isEmpty()) {
+            newName = driver.getStudent_name();
+        }
+
+        System.out.println("Current Phone : " + driver.getPhone_num());
+        System.out.print("New Phone     : ");
+        String newPhone = sc.nextLine();
+        if (newPhone.isEmpty()) {
+            newPhone = driver.getPhone_num();
+        }
+
+        System.out.println("  -- Car Info --");
+        System.out.println("Current Plate : " + driver.getKereta().getNumplate());
+        System.out.print("New Plate     : ");
+        String newPlate = sc.nextLine();
+        if (newPlate.isEmpty()) {
+            newPlate = driver.getKereta().getNumplate();
+        }
+
+        System.out.println("Current Model : " + driver.getKereta().getModel());
+        System.out.print("New Model     : ");
+        String newModel = sc.nextLine();
+        if (newModel.isEmpty()) {
+            newModel = driver.getKereta().getModel();
+        }
+
+        System.out.println("Current Color : " + driver.getKereta().getColor());
+        System.out.print("New Color     : ");
+        String newColor = sc.nextLine();
+        if (newColor.isEmpty()) {
+            newColor = driver.getKereta().getColor();
+        }
+
+        driver.updateProfile(newName, newPhone, newPlate, newModel, newColor);
+    }
 
     // driver punya dashboard
     public void DashboardDriver(Driver driver) {
@@ -323,6 +366,7 @@ public class UCMS {
         System.out.println("|                               5)Manage Booking Request                       |");
         System.out.println("|                                   6)Submit Report                            |");
         System.out.println("|                                   7)View Ongoing Trips                       |");
+        System.out.println("|                               8)Update Driver Profile                        |");
         System.out.println("|                                      0)Logout                                |");
         System.out.println("================================================================================");
 
@@ -381,7 +425,12 @@ public class UCMS {
                 }
             }
             DashboardDriver(driver);
-        } else if (choice == 0) {
+        }else if (choice == 8){
+            updateProfileDriver(driver);
+            DashboardDriver(driver);
+        } 
+        
+        else if (choice == 0) {
             System.out.println("Logged out. Goodbye, " + driver.getStudent_name() + "!");
             return;
         }
