@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import ucms.Passenger;
 
 /**
  *
@@ -26,8 +27,8 @@ public RegisterPassenger() {
 
     private void applyDarkTheme() {
         java.awt.Color pageBg = new java.awt.Color(0x30, 0x30, 0x2E);
-        java.awt.Color cardBg = new java.awt.Color(145, 145, 145);    
-        java.awt.Color inputBg = new java.awt.Color(145, 145, 145);    
+        java.awt.Color cardBg = new java.awt.Color(38,38,36);    
+        java.awt.Color inputBg = new java.awt.Color(48,48,46);    
         java.awt.Color white = java.awt.Color.WHITE;
         java.awt.Color biru = new java.awt.Color(0x0F, 0x3D, 0x5C);
 
@@ -164,7 +165,7 @@ public RegisterPassenger() {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel2.setBackground(new java.awt.Color(38, 38, 36));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -396,7 +397,6 @@ public RegisterPassenger() {
         String studentId = jTextField1.getText().trim();
         String fullName = jTextField2.getText().trim();
         String phone = jTextField3.getText().trim();
-
         String password = new String(jPasswordField1.getPassword());
         String confirmPassword = new String(jPasswordField2.getPassword());
 
@@ -424,24 +424,33 @@ public RegisterPassenger() {
                 JOptionPane.showMessageDialog(this,"Student ID already registered.");
                 return;
             }
+            String passengerID = "PS" + studentId.substring(2) + studentId.substring(0, 2);
+            Passenger p = new Passenger(passengerID,studentId, fullName, phone, password);
+            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password) "+ "VALUES (?, ?, ?, ?)";
 
-            String sql ="INSERT INTO passenger " +"(student_id, full_name, phone_number, password) " +"VALUES (?, ?, ?, ?)";
+            PreparedStatement psStudent = conn.prepareStatement(sqlStudent);
+            psStudent.setString(1, studentId);
+            psStudent.setString(2, fullName);
+            psStudent.setString(3, phone);
+            psStudent.setString(4, password);
+            psStudent.executeUpdate();
 
-            PreparedStatement ps = conn.prepareStatement(sql);
+            String sqlPassenger= "INSERT INTO passenger(passenger_id,student_id) VALUES (?,?)";
 
-            ps.setString(1, studentId);
-            ps.setString(2, fullName);
-            ps.setString(3, phone);
-            ps.setString(4, password);
+            PreparedStatement psPassenger = conn.prepareStatement(sqlPassenger);
+            psPassenger.setString(1,passengerID);
+            psPassenger.setString(2, p.getStudent_id());
+            psPassenger.executeUpdate();
 
-            int result = ps.executeUpdate();
+            int studentResult = psStudent.executeUpdate();
+            int passengerResult = psPassenger.executeUpdate();
 
-            if(result > 0) {
-                JOptionPane.showMessageDialog(this,"Registration successful!");
+            if (studentResult > 0 && passengerResult > 0) {
+                JOptionPane.showMessageDialog(this, "Registration successful!");
                 new RegisterMenu().setVisible(true);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this,"Registration failed.");
+                JOptionPane.showMessageDialog(this, "Registration failed.");
             }
 
             conn.close();

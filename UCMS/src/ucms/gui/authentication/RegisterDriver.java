@@ -26,7 +26,7 @@ public RegisterDriver() {
 
     private void applyDarkTheme() {
         java.awt.Color pageBg = new java.awt.Color(0x30, 0x30, 0x2E);
-        java.awt.Color cardBg = new java.awt.Color(145, 145, 145);    
+        java.awt.Color cardBg = new java.awt.Color(38,38,36);    
         java.awt.Color inputBg = new java.awt.Color(145, 145, 145);    
         java.awt.Color white = java.awt.Color.WHITE;
         java.awt.Color biru = new java.awt.Color(0x0F, 0x3D, 0x5C);
@@ -172,7 +172,7 @@ public RegisterDriver() {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel2.setBackground(new java.awt.Color(38, 38, 36));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -339,7 +339,7 @@ public RegisterDriver() {
                 .addGap(0, 12, Short.MAX_VALUE))
         );
 
-        jPanel6.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel6.setBackground(new java.awt.Color(38, 38, 36));
         jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
@@ -535,88 +535,88 @@ public RegisterDriver() {
         String carModel = jTextField6.getText().trim();
         String carPlate = jTextField7.getText().trim();
         String carColor = jTextField8.getText().trim();
-        
-        if(studentId.isEmpty() || fullName.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() ||
-            licenseNo.isEmpty() || carPlate.isEmpty() || carModel.isEmpty() || carColor.isEmpty()) {
-                JOptionPane.showMessageDialog(this,"Please fill in all fields.");
-                return;
-        }
-        
-        if(!password.equals(confirmPassword)) {
-            JOptionPane.showMessageDialog(this,"Passwords do not match.");
+
+        if (studentId.isEmpty() || fullName.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()
+                || licenseNo.isEmpty() || carPlate.isEmpty() || carModel.isEmpty() || carColor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
-        }       
-        
+        }
+
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match.");
+            return;
+        }
+
         try {
             Connection conn = ucms.database.DBConnection.getConnection();
 
-        // check student dah wujud ke
-        String checkSql = "SELECT student_id FROM driver WHERE student_id = ?";
-        PreparedStatement checkPs = conn.prepareStatement(checkSql);
-        checkPs.setString(1, studentId);
+            // check student dah wujud ke
+            String checkSql = "SELECT student_id FROM driver WHERE student_id = ?";
+            PreparedStatement checkPs = conn.prepareStatement(checkSql);
+            checkPs.setString(1, studentId);
 
-        ResultSet rs = checkPs.executeQuery();
+            ResultSet rs = checkPs.executeQuery();
 
-        if (rs.next()) {
-            JOptionPane.showMessageDialog(this,"Student ID already registered.");
-            return;
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Student ID already registered.");
+                return;
+            }
+
+            // check license num ada tak
+            String checkLicense = "SELECT license_no FROM driver WHERE license_no = ?";
+            PreparedStatement psLicense = conn.prepareStatement(checkLicense);
+            psLicense.setString(1, licenseNo);
+
+            ResultSet rsLicense = psLicense.executeQuery();
+
+            if (rsLicense.next()) {
+                JOptionPane.showMessageDialog(this, "License number already registered.");
+                return;
+            }
+
+            // check plate num ada tak
+            String checkPlate = "SELECT car_plate FROM driver WHERE car_plate = ?";
+            PreparedStatement psPlate = conn.prepareStatement(checkPlate);
+            psPlate.setString(1, carPlate);
+
+            ResultSet rsPlate = psPlate.executeQuery();
+
+            if (rsPlate.next()) {
+                JOptionPane.showMessageDialog(this, "Car plate number already registered.");
+                return;
+            }
+
+            // tambah new driver
+            String sql = "INSERT INTO driver " + "(student_id, full_name, phone_number, password, "
+                    + "license_no, car_plate, car_model, car_color) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, studentId);
+            ps.setString(2, fullName);
+            ps.setString(3, phone);
+            ps.setString(4, password);
+            ps.setString(5, licenseNo);
+            ps.setString(6, carPlate);
+            ps.setString(7, carModel);
+            ps.setString(8, carColor);
+
+            int result = ps.executeUpdate();
+
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this, "Registration successful!");
+                new RegisterMenu().setVisible(true);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Registration failed.");
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
-        
-        // check license num ada tak
-        String checkLicense = "SELECT license_no FROM driver WHERE license_no = ?";
-        PreparedStatement psLicense = conn.prepareStatement(checkLicense);       
-        psLicense.setString(1, licenseNo);
-
-        ResultSet rsLicense = psLicense.executeQuery();
-
-        if(rsLicense.next()) {
-            JOptionPane.showMessageDialog(this,"License number already registered.");
-            return;
-        }
-        
-        // check plate num ada tak
-        String checkPlate = "SELECT car_plate FROM driver WHERE car_plate = ?";
-        PreparedStatement psPlate = conn.prepareStatement(checkPlate);
-        psPlate.setString(1, carPlate);
-
-        ResultSet rsPlate = psPlate.executeQuery();
-
-        if(rsPlate.next()) {
-            JOptionPane.showMessageDialog(this,"Car plate number already registered.");
-            return;
-        }
-
-        // tambah new driver
-        String sql ="INSERT INTO driver " + "(student_id, full_name, phone_number, password, " +
-        "license_no, car_plate, car_model, car_color) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        ps.setString(1, studentId);
-        ps.setString(2, fullName);
-        ps.setString(3, phone);
-        ps.setString(4, password);
-        ps.setString(5, licenseNo);
-        ps.setString(6, carPlate);
-        ps.setString(7, carModel);
-        ps.setString(8, carColor);
-
-        int result = ps.executeUpdate();
-
-        if(result > 0) {
-            JOptionPane.showMessageDialog(this,"Registration successful!");
-            new RegisterMenu().setVisible(true);
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this,"Registration failed.");
-        }
-
-        conn.close();
-
-    } catch(Exception e) {
-        JOptionPane.showMessageDialog(this, e.getMessage());
-    }
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
