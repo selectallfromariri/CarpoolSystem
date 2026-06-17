@@ -4,7 +4,11 @@
  */
 package ucms.gui.authentication;
 
+import java.sql.Connection;
 import javax.swing.JOptionPane;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import ucms.Admin;
 /**
  *
  * @author USER
@@ -96,23 +100,22 @@ public class LoginAdminUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(studentHeader))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(233, 233, 233)
-                        .addComponent(jLabel2)))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addGap(228, 228, 228)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(78, Short.MAX_VALUE)
+                .addComponent(studentHeader)
+                .addGap(34, 34, 34))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(282, 282, 282)
+                .addGap(430, 430, 430)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(studentHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(30, 30, 30));
@@ -188,7 +191,7 @@ public class LoginAdminUI extends javax.swing.JFrame {
                 .addComponent(adminLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(adminBack)
-                .addContainerGap(295, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -218,39 +221,40 @@ public class LoginAdminUI extends javax.swing.JFrame {
     }//GEN-LAST:event_adminBackActionPerformed
 
     private void adminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminLoginActionPerformed
-        String adminID = txtAdminID.getText().trim();
-        String password = new String(adminPassword.getPassword()); // Converts char[] securely to String
+          String adminID = txtAdminID.getText().trim();
+        String password = new String(adminPassword.getPassword());
 
-        // 1. Check for empty inputs
         if (adminID.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                    "Please fill in both the Admin ID and Password.", 
-                    "Input Warning", 
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please fill in both Admin ID and Password.", "Input Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // 2. Mock Authentication Verification
-        // Change "admin" and "admin123" to match your DB validation layer later
-        if (adminID.equals("admin") && password.equals("admin123")) {
-            JOptionPane.showMessageDialog(this, 
-                    "Login Successful! Access Granted.", 
-                    "Success", 
-                    JOptionPane.INFORMATION_MESSAGE);
-            
-            // TODO: Route destination window here 
-            // example: new AdminDashboardForm().setVisible(true);
-            // this.dispose();
-            
-        } else {
-            // 3. Incorrect credentials warning
-            JOptionPane.showMessageDialog(this, 
-                    "Invalid Admin ID or Password. Access Denied.", 
-                    "Authentication Failed", 
-                    JOptionPane.ERROR_MESSAGE);
-            
-            adminPassword.setText("");
-            adminPassword.requestFocus();
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+            String sql = "SELECT * FROM admin WHERE admin_id = ? AND admin_password = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, adminID);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+           
+            if (rs.next()) {
+                Admin admin = new Admin( rs.getString("admin_id"),rs.getString("admin_name"),rs.getString("admin_password"));
+
+                JOptionPane.showMessageDialog(this, "Login Successful! Welcome, " + admin.getAdminName(), "Success", JOptionPane.INFORMATION_MESSAGE);
+                new AdminDashboardUI(admin).setVisible(true);
+                this.dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid Admin ID or Password.", "Authentication Failed", JOptionPane.ERROR_MESSAGE);
+                adminPassword.setText("");
+                adminPassword.requestFocus();
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_adminLoginActionPerformed
 
