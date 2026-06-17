@@ -48,6 +48,12 @@ public class SearchBookUI extends javax.swing.JFrame {
         NamePassengerLabel.setText(passenger.getStudent_name());
         jLabel2.setText(passenger.getStudent_id());
         welcomeLabel.setText("Welcome, " + passenger.getStudent_name());
+        jLabel22.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        new TripHistoryUI(passenger, new java.util.ArrayList<>()).setVisible(true);
+        dispose();
+    }
+});
     }
 
     /**
@@ -89,8 +95,6 @@ public class SearchBookUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -375,21 +379,10 @@ public class SearchBookUI extends javax.swing.JFrame {
                 .addContainerGap(322, Short.MAX_VALUE))
         );
 
-        jTextField1.setText("Search and Book trip");
-
-        jButton3.setText("Search");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -398,11 +391,7 @@ public class SearchBookUI extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(72, 72, 72)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -442,38 +431,6 @@ public class SearchBookUI extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Booking failed. Carpool not found.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String keyword = jTextField1.getText().trim();
-
-        if (keyword.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a destination to search.");
-            return;
-        }
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-
-        boolean found = false;
-        for (Carpool c : carpools) {
-            if (c.getDestination().equalsIgnoreCase(keyword)) {
-                model.addRow(new Object[]{
-                    c.getCarpoolID(),
-                    c.getDrive().getStudent_name(),
-                    c.getDestination(),
-                    c.getDate(),
-                    c.getAvailableSeat(),
-                    c.getLuggageCapacity(),
-                    c.getPickupLocation()
-                });
-                found = true;
-            }
-        }
-
-        if (!found) {
-            javax.swing.JOptionPane.showMessageDialog(this, "No carpool found to: " + keyword);
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel17MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel17MouseEntered
 
@@ -539,7 +496,6 @@ public class SearchBookUI extends javax.swing.JFrame {
     private javax.swing.JLabel datelabel;
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -556,7 +512,6 @@ public class SearchBookUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel logo_layout;
     private javax.swing.JPanel main_pnl;
     private javax.swing.JPanel pn_line5;

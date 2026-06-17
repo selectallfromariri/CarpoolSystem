@@ -5,10 +5,16 @@
 package ucms.gui.passenger;
 
 import ucms.gui.driver.*;
+import ucms.Passenger;
+import ucms.booking;
+import ucms.Carpool;
+import ucms.Driver;
+import ucms.Feedback;
+import ucms.BookingInterface;
+import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 
 /**
  *
@@ -16,26 +22,32 @@ import java.awt.Font;
  */
 public class DashboardPassengerUI extends javax.swing.JFrame {
 
+    private Passenger passenger;
+    private ArrayList<booking> bookings;
+    private ArrayList<Carpool> carpools;
+    private ArrayList<Driver> drivers;
+    private ArrayList<Feedback> feeds;
+    private ArrayList<BookingInterface> bookingconcrete;
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(DashboardPassengerUI.class.getName());
 
     /**
      * Creates new form DashboardUI
      */
-    public DashboardPassengerUI() {
-        System.out.println(getClass().getResource("/ucms/resources/Dashboard.png"));
-
-        System.out.println(getClass().getResource("/ucms/resources/t-UMPang_logo.png"));
+    public DashboardPassengerUI(Passenger passenger, ArrayList<booking> bookings,
+            ArrayList<Carpool> carpools, ArrayList<Driver> drivers,
+            ArrayList<Feedback> feeds, ArrayList<BookingInterface> bookingconcrete) {
         initComponents();
-        NamePassengerLabel.setText("Adam");
-        jLabel2.setText("CB25156");
-        welcomeLabel.setText("Adam");
-        
-        book.setText("BK-1001");
-        carpool.setText("CP-2050");
-        destinations.setText("UMP Gambang");
-        dates.setText("21 Dec 2026");
-        statuss.setText("Pending");
+        this.passenger = passenger;
+        this.bookings = bookings;
+        this.carpools = carpools;
+        this.drivers = drivers;
+        this.feeds = feeds;
+        this.bookingconcrete = bookingconcrete;
+
+        NamePassengerLabel.setText(passenger.getStudent_name());
+        jLabel2.setText(passenger.getStudent_id());
+        welcomeLabel.setText("Welcome, " + passenger.getStudent_name());
 
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15, 61, 92), 0);
@@ -44,7 +56,112 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         ProfilePnl.add(c);
         ProfilePnl.revalidate();
         ProfilePnl.repaint();
+
+        setupAllBookingsTable();
+        setupOngoingTable();
+        loadAllBookings();
+        loadOngoingTrips();
+
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new SearchBookUI(passenger, carpools, bookings, bookingconcrete).setVisible(true);
+                dispose();
+            }
+        });
+
+        jLabel22.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new TripHistoryUI(passenger, bookings).setVisible(true);
+                dispose();
+            }
+        });
     }
+    private void setupAllBookingsTable() {
+    jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Booking ID", "Carpool ID", "Destination", "Date", "Status"}
+    ) {
+        public boolean isCellEditable(int row, int col) { return false; }
+    });
+}
+
+private void setupOngoingTable() {
+    jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Booking ID", "Carpool ID", "Destination", "Date", "Status"}
+    ) {
+        public boolean isCellEditable(int row, int col) { return false; }
+    });
+}
+
+private void loadAllBookings() {
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
+    for (booking b : bookings) {
+        if (b.getPassenger().getStudent_id().equals(passenger.getStudent_id())) {
+            model.addRow(new Object[]{
+                b.getBookingID(),
+                b.getCarpool().getCarpoolID(),
+                b.getCarpool().getDestination(),
+                b.getBookingDate(),
+                b.getBookingStatus()
+            });
+        }
+    }
+}
+
+private void loadOngoingTrips() {
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) jTable2.getModel();
+    model.setRowCount(0);
+    for (booking b : bookings) {
+        if (b.getPassenger().getStudent_id().equals(passenger.getStudent_id())
+                && b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+            model.addRow(new Object[]{
+                b.getBookingID(),
+                b.getCarpool().getCarpoolID(),
+                b.getCarpool().getDestination(),
+                b.getBookingDate(),
+                b.getBookingStatus()
+            });
+        }
+    }
+}
+
+private booking findBookingByID(String bookingID) {
+    for (booking b : bookings) {
+        if (b.getBookingID().equals(bookingID)) return b;
+    }
+    return null;
+}
+
+private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+    int selectedRow = jTable1.getSelectedRow();
+    if (selectedRow == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please select a booking to cancel.");
+        return;
+    }
+    String bookingID = (String) jTable1.getValueAt(selectedRow, 0);
+    String status = (String) jTable1.getValueAt(selectedRow, 4);
+
+    if (!status.equalsIgnoreCase("PENDING")) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Only PENDING bookings can be cancelled.");
+        return;
+    }
+
+    int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+        "Cancel booking " + bookingID + "?", "Confirm",
+        javax.swing.JOptionPane.YES_NO_OPTION);
+    if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        booking b = findBookingByID(bookingID);
+        if (b != null) {
+            b.Approvebooking("CANCELLED");
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking cancelled.");
+            loadAllBookings();
+        }
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -70,10 +187,10 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         pn_line9 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         main_pnl = new javax.swing.JPanel();
         header = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -82,33 +199,17 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
-        dates = new javax.swing.JLabel();
-        statuss = new javax.swing.JLabel();
-        book = new javax.swing.JLabel();
-        carpool = new javax.swing.JLabel();
-        destinations = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        book1 = new javax.swing.JLabel();
-        carpool1 = new javax.swing.JLabel();
-        destinations1 = new javax.swing.JLabel();
-        dates1 = new javax.swing.JLabel();
-        statuss1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -227,8 +328,6 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/Dashboard.png"))); // NOI18N
-
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Carpool List");
@@ -257,6 +356,8 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/Dashboard.png"))); // NOI18N
+
         javax.swing.GroupLayout sidebar_pnlLayout = new javax.swing.GroupLayout(sidebar_pnl);
         sidebar_pnl.setLayout(sidebar_pnlLayout);
         sidebar_pnlLayout.setHorizontalGroup(
@@ -273,6 +374,11 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                             .addComponent(jSeparator3)
                             .addComponent(LogoutLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(sidebar_pnlLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(sidebar_pnlLayout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(NamePassengerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -280,15 +386,9 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(sidebar_pnlLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(sidebar_pnlLayout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(sidebar_pnlLayout.createSequentialGroup()
-                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         sidebar_pnlLayout.setVerticalGroup(
@@ -303,17 +403,17 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel10)
+                .addGap(44, 44, 44)
+                .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel16)
                     .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72)
+                .addGap(40, 40, 40)
                 .addComponent(CarpoolListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 368, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 417, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -350,27 +450,20 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel19.setText("All Booking");
 
-        jLabel1.setText("Booking ID");
-
-        jLabel3.setText("Carpool ID");
-
-        jLabel5.setText("Destination");
-
-        jLabel6.setText("Date ");
-
-        jLabel7.setText("Status");
-
         jButton4.setText("Cancel");
 
-        dates.setText("Dates");
-
-        statuss.setText("Statuss");
-
-        book.setText("Book");
-
-        carpool.setText("Carpool");
-
-        destinations.setText("Destinations");
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -378,54 +471,23 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel19)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(book, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(carpool, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(destinations, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(statuss, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                                    .addComponent(dates, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                .addGap(149, 149, 149))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel19)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel19)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel6)
-                    .addComponent(dates)
-                    .addComponent(book))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel7)
-                    .addComponent(statuss)
-                    .addComponent(carpool))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jButton4)
-                    .addComponent(destinations))
-                .addContainerGap(614, Short.MAX_VALUE))
+                .addComponent(jButton4)
+                .addGap(289, 289, 289))
         );
 
         jTextField1.setText("Search and Book trip");
@@ -439,31 +501,24 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel8.setText("Ongoing Trip");
 
-        jLabel11.setText("Booking ID");
-
-        jLabel12.setText("Carpool ID");
-
-        jLabel13.setText("Destination");
-
-        jLabel14.setText("Date");
-
-        jLabel15.setText("Status");
-
         jButton1.setText("Complete");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton2.setText("Feedback");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
-        book1.setText("Book");
-
-        carpool1.setText("Carpool");
-
-        destinations1.setText("Destinations");
-
-        dates1.setText("Dates");
-
-        statuss1.setText("Statuss");
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -471,42 +526,17 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13))
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(8, 8, 8)
-                                        .addComponent(carpool1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(book1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(35, 35, 35)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel15)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(statuss1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel14)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(dates1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(destinations1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1)
-                                .addGap(27, 27, 27)
-                                .addComponent(jButton2)
-                                .addGap(69, 69, 69))))))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGap(6, 6, 6)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel8)))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -514,24 +544,12 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel14)
-                    .addComponent(book1)
-                    .addComponent(dates1))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel15)
-                    .addComponent(carpool1)
-                    .addComponent(statuss1))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
                     .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(destinations1))
-                .addContainerGap(616, Short.MAX_VALUE))
+                    .addComponent(jButton2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -547,7 +565,7 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -557,7 +575,7 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -573,7 +591,19 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+            int selectedRow = jTable2.getSelectedRow();
+    if (selectedRow == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please select an ongoing trip.");
+        return;
+    }
+    String bookingID = (String) jTable2.getValueAt(selectedRow, 0);
+    booking b = findBookingByID(bookingID);
+    if (b != null) {
+        b.completeTrip();
+        javax.swing.JOptionPane.showMessageDialog(this, "Trip marked as completed!");
+        loadOngoingTrips();
+        loadAllBookings();
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel22MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel22MouseEntered
@@ -585,7 +615,13 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel22MouseExited
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+            int selectedRow = jTable2.getSelectedRow();
+    if (selectedRow == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please select a trip first.");
+        return;
+    }
+    new FeedbackUI(passenger, drivers, feeds).setVisible(true);
+    dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -593,8 +629,9 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String search = jTextField1.getText();
-        
+            new SearchBookUI(passenger, carpools, bookings, bookingconcrete).setVisible(true);
+    dispose();
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jLabel17MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel17MouseEntered
@@ -641,7 +678,14 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DashboardPassengerUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new DashboardPassengerUI(
+    new ucms.Passenger("00", "S000", "Test", "0123456789", "pass"),
+    new ArrayList<>(),
+    new ArrayList<>(),
+    new ArrayList<>(),
+    new ArrayList<>(),
+    new ArrayList<>()
+).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -649,54 +693,38 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
     private javax.swing.JPanel LogoutLabel;
     private javax.swing.JLabel NamePassengerLabel;
     private javax.swing.JPanel ProfilePnl;
-    private javax.swing.JLabel book;
-    private javax.swing.JLabel book1;
-    private javax.swing.JLabel carpool;
-    private javax.swing.JLabel carpool1;
     private javax.swing.JLabel datelabel;
-    private javax.swing.JLabel dates;
-    private javax.swing.JLabel dates1;
-    private javax.swing.JLabel destinations;
-    private javax.swing.JLabel destinations1;
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel logo_layout;
     private javax.swing.JPanel main_pnl;
     private javax.swing.JPanel pn_line5;
     private javax.swing.JPanel pn_line9;
     private javax.swing.JPanel sidebar_pnl;
-    private javax.swing.JLabel statuss;
-    private javax.swing.JLabel statuss1;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }
