@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ucms.gui.authentication;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import ucms.Driver;
 
 /**
  *
@@ -17,22 +19,22 @@ public class RegisterDriver extends javax.swing.JFrame {
     /**
      * Creates new form RegisterStudentUI
      */
-public RegisterDriver() {
-    initComponents();
-    applyDarkTheme();
-    setLocationRelativeTo(null); 
-    
-}
+    public RegisterDriver() {
+        initComponents();
+        applyDarkTheme();
+        setLocationRelativeTo(null);
+
+    }
 
     private void applyDarkTheme() {
         java.awt.Color pageBg = new java.awt.Color(0x30, 0x30, 0x2E);
-        java.awt.Color cardBg = new java.awt.Color(38,38,36);    
-        java.awt.Color inputBg = new java.awt.Color(145, 145, 145);    
+        java.awt.Color cardBg = new java.awt.Color(38, 38, 36);
+        java.awt.Color inputBg = new java.awt.Color(145, 145, 145);
         java.awt.Color white = java.awt.Color.WHITE;
         java.awt.Color biru = new java.awt.Color(0x0F, 0x3D, 0x5C);
 
         getContentPane().setBackground(pageBg);
-       
+
         jPanel1.setBackground(pageBg);
         jPanel2.setBackground(cardBg);
         jPanel1.setBackground(biru);
@@ -56,7 +58,7 @@ public RegisterDriver() {
         jPasswordField1.setForeground(white);
         jPasswordField2.setBackground(inputBg);
         jPasswordField2.setForeground(white);
-    
+
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     }
@@ -517,18 +519,16 @@ public RegisterDriver() {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
-                new RegisterMenu().setVisible(true);
-                dispose();
+        new RegisterMenu().setVisible(true);
+        dispose();
     }//GEN-LAST:event_jButtonBackActionPerformed
 
     private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterActionPerformed
-        // TODO add your handling code here:
         String studentId = jTextField1.getText().trim();
         String fullName = jTextField2.getText().trim();
         String phone = jTextField3.getText().trim();
 
         String password = new String(jPasswordField1.getPassword());
-
         String confirmPassword = new String(jPasswordField2.getPassword());
 
         String licenseNo = jTextField4.getText().trim();
@@ -536,9 +536,12 @@ public RegisterDriver() {
         String carPlate = jTextField7.getText().trim();
         String carColor = jTextField8.getText().trim();
 
-        if (studentId.isEmpty() || fullName.isEmpty() || phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()
-                || licenseNo.isEmpty() || carPlate.isEmpty() || carModel.isEmpty() || carColor.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+        if (studentId.isEmpty() || fullName.isEmpty() || phone.isEmpty()
+                || password.isEmpty() || confirmPassword.isEmpty()
+                || licenseNo.isEmpty() || carModel.isEmpty()
+                || carPlate.isEmpty() || carColor.isEmpty()) {
+
+            JOptionPane.showMessageDialog(this, "All fields must be filled.");
             return;
         }
 
@@ -550,8 +553,9 @@ public RegisterDriver() {
         try {
             Connection conn = ucms.database.DBConnection.getConnection();
 
-            // check student dah wujud ke
+            // check driver exists (same pattern as passenger check)
             String checkSql = "SELECT student_id FROM driver WHERE student_id = ?";
+
             PreparedStatement checkPs = conn.prepareStatement(checkSql);
             checkPs.setString(1, studentId);
 
@@ -562,49 +566,45 @@ public RegisterDriver() {
                 return;
             }
 
-            // check license num ada tak
-            String checkLicense = "SELECT license_no FROM driver WHERE license_no = ?";
-            PreparedStatement psLicense = conn.prepareStatement(checkLicense);
-            psLicense.setString(1, licenseNo);
+            String DriverID = "DRV" + studentId.substring(2) + studentId.substring(0, 2);
+            // generate driver object (same style as Passenger p)
+            Driver d = new Driver(DriverID, studentId, fullName, phone, password, licenseNo, carPlate, carModel, carColor);
 
-            ResultSet rsLicense = psLicense.executeQuery();
+            // insert into student (same as passenger)
+            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password) "
+                    + "VALUES (?, ?, ?, ?)";
 
-            if (rsLicense.next()) {
-                JOptionPane.showMessageDialog(this, "License number already registered.");
-                return;
-            }
+            PreparedStatement psStudent = conn.prepareStatement(sqlStudent);
+            psStudent.setString(1, studentId);
+            psStudent.setString(2, fullName);
+            psStudent.setString(3, phone);
+            psStudent.setString(4, password);
 
-            // check plate num ada tak
-            String checkPlate = "SELECT car_plate FROM driver WHERE car_plate = ?";
-            PreparedStatement psPlate = conn.prepareStatement(checkPlate);
-            psPlate.setString(1, carPlate);
+            int studentResult = psStudent.executeUpdate();
 
-            ResultSet rsPlate = psPlate.executeQuery();
+            // insert into driver table
+            String sqlDriver = "INSERT INTO driver(driver_id,driver_license,approved,student_id) "
+                    + "VALUES (?, ?, ?, ?)";
 
-            if (rsPlate.next()) {
-                JOptionPane.showMessageDialog(this, "Car plate number already registered.");
-                return;
-            }
+            PreparedStatement psDriver = conn.prepareStatement(sqlDriver);
+            psDriver.setString(1, d.getDriver_id());          // from Student
+            psDriver.setString(2, d.getDriver_license());      // from Driver
+            psDriver.setString(3, "0");
+            psDriver.setString(4, studentId);
 
-            // tambah new driver
-            String sql = "INSERT INTO driver " + "(student_id, full_name, phone_number, password, "
-                    + "license_no, car_plate, car_model, car_color) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            int driverResult = psDriver.executeUpdate();
+            
+            String sqlCar = "INSERT INTO car(numplate, model, color) "
+                    + "VALUES (?, ?, ?)";
 
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement psCar = conn.prepareStatement(sqlCar);   // from Driver
+            psDriver.setString(1, carPlate);
+            psDriver.setString(2, d.getKereta().getModel());
+            psDriver.setString(3, d.getKereta().getColor());
 
-            ps.setString(1, studentId);
-            ps.setString(2, fullName);
-            ps.setString(3, phone);
-            ps.setString(4, password);
-            ps.setString(5, licenseNo);
-            ps.setString(6, carPlate);
-            ps.setString(7, carModel);
-            ps.setString(8, carColor);
+            int carResult = psCar.executeUpdate();
 
-            int result = ps.executeUpdate();
-
-            if (result > 0) {
+            if (studentResult > 0 && driverResult > 0 && carResult > 0) {
                 JOptionPane.showMessageDialog(this, "Registration successful!");
                 new RegisterMenu().setVisible(true);
                 dispose();
@@ -615,7 +615,7 @@ public RegisterDriver() {
             conn.close();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }//GEN-LAST:event_jButtonRegisterActionPerformed
 

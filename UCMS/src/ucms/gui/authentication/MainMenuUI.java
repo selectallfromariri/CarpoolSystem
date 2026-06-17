@@ -139,7 +139,7 @@ public class MainMenuUI extends javax.swing.JFrame {
     studentCard.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent e) {
-            //new StudentLogin().setVisible(true);
+            new LoginStudentUI().setVisible(true);
             dispose();
         }
         @Override
@@ -156,7 +156,7 @@ public class MainMenuUI extends javax.swing.JFrame {
     adminCard.addMouseListener(new java.awt.event.MouseAdapter() {
         @Override
         public void mouseClicked(java.awt.event.MouseEvent e) {
-            //new AdminLogin().setVisible(true);
+            new LoginAdminUI().setVisible(true);
             dispose();
         }
         @Override
@@ -423,7 +423,7 @@ public class MainMenuUI extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
+                .addContainerGap(45, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
