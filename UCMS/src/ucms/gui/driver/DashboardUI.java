@@ -16,6 +16,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import ucms.Driver;
 
 /**
  *
@@ -24,22 +25,30 @@ import javax.swing.ImageIcon;
 public class DashboardUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardUI.class.getName());
-
+    private static Driver currDriver;
     /**
      * Creates new form DashboardUI
      */
-    public DashboardUI() {
+    public DashboardUI(Driver currentDriver) {
 
         initComponents();
+        this.currDriver = currentDriver;
         
+        //profile name
+        NameDriverLabel.setText(currDriver.getStudent_name());
+        jLabel2.setText(" Driver ." + currDriver.getStudent_id());
+        welcomeLabel.setText("Welcome " + currDriver.getStudent_name());
+        String profilename = currDriver.getStudent_name().substring(0, 2);
         //Profile Pic
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
+        c.setText(profilename);
         c.setPreferredSize(new Dimension(100, 100));
         c.setBackground(new Color(245,166,35));
         ProfilePnl.add(c);
         ProfilePnl.revalidate();
         ProfilePnl.repaint();
+        
         
         //DataMatric
         CardMatrix card1 = new CardMatrix();
@@ -882,7 +891,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DashboardLabelMouseClicked
 
@@ -928,7 +937,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
@@ -992,7 +1001,7 @@ public class DashboardUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DashboardUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new DashboardUI(currDriver).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

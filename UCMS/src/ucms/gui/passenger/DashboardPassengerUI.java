@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import ucms.Passenger;
 
 /**
  *
@@ -18,18 +19,19 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(DashboardPassengerUI.class.getName());
-
+    private static Passenger passenger;
     /**
      * Creates new form DashboardUI
      */
-    public DashboardPassengerUI() {
+    public DashboardPassengerUI(Passenger currentpass) {
         System.out.println(getClass().getResource("/ucms/resources/Dashboard.png"));
 
         System.out.println(getClass().getResource("/ucms/resources/t-UMPang_logo.png"));
         initComponents();
-        NamePassengerLabel.setText("Adam");
-        jLabel2.setText("CB25156");
-        welcomeLabel.setText("Adam");
+        this.passenger = currentpass;
+        NamePassengerLabel.setText(passenger.getStudent_name());
+        jLabel2.setText(passenger.getRole() + ". " + passenger.getStudent_id());
+        welcomeLabel.setText("Welcome " + passenger.getStudent_name());
         
 //        book.setText("BK-1001");
 //        carpool.setText("CP-2050");
@@ -38,7 +40,9 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
 //        statuss.setText("Pending");
 
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
-        CircleLabel c = new CircleLabel(new Color(15, 61, 92), 0);
+        String profilename = passenger.getStudent_name().substring(0, 2);
+        CircleLabels c = new CircleLabels(new Color(15,61,92), 0);
+        c.setText(profilename);
         c.setPreferredSize(new Dimension(100, 100));
         c.setBackground(new Color(245, 166, 35));
         ProfilePnl.add(c);
@@ -506,12 +510,6 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                             .addComponent(jSeparator3)
                             .addComponent(LogoutLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(sidebar_pnlLayout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(NamePassengerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(sidebar_pnlLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(DashboardLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(sidebar_pnlLayout.createSequentialGroup()
@@ -521,6 +519,12 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(CarpoolListLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(sidebar_pnlLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(NamePassengerLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         sidebar_pnlLayout.setVerticalGroup(
             sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -834,7 +838,7 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
 
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardPassengerUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel23MouseClicked
 
@@ -853,7 +857,7 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
         // TODO add your handling code here:
-        new DashboardPassengerUI().setVisible(true);
+        new DashboardPassengerUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DashboardLabelMouseClicked
 
@@ -976,7 +980,7 @@ public class DashboardPassengerUI extends javax.swing.JFrame {
         // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new DashboardPassengerUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new DashboardPassengerUI(passenger).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

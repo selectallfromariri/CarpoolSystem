@@ -566,19 +566,20 @@ public class RegisterDriver extends javax.swing.JFrame {
                 return;
             }
 
-            String DriverID = "DRV" + studentId.substring(2) + studentId.substring(0, 2);
+            String DriverID = studentId.substring(2) + studentId.substring(0, 2);
             // generate driver object (same style as Passenger p)
             Driver d = new Driver(DriverID, studentId, fullName, phone, password, licenseNo, carPlate, carModel, carColor);
 
             // insert into student (same as passenger)
-            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password) "
-                    + "VALUES (?, ?, ?, ?)";
+            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password,role) "
+                    + "VALUES (?, ?, ?, ?,?)";
 
             PreparedStatement psStudent = conn.prepareStatement(sqlStudent);
             psStudent.setString(1, studentId);
             psStudent.setString(2, fullName);
             psStudent.setString(3, phone);
             psStudent.setString(4, password);
+            psStudent.setString(5, "passenger");
 
             int studentResult = psStudent.executeUpdate();
 
@@ -587,20 +588,21 @@ public class RegisterDriver extends javax.swing.JFrame {
                     + "VALUES (?, ?, ?, ?)";
 
             PreparedStatement psDriver = conn.prepareStatement(sqlDriver);
-            psDriver.setString(1, d.getDriver_id());          // from Student
-            psDriver.setString(2, d.getDriver_license());      // from Driver
-            psDriver.setString(3, "0");
+            psDriver.setString(1, d.getDriver_id());         
+            psDriver.setString(2, d.getDriver_license());   
+            psDriver.setInt(3, 0);
             psDriver.setString(4, studentId);
 
             int driverResult = psDriver.executeUpdate();
             
-            String sqlCar = "INSERT INTO car(numplate, model, color) "
-                    + "VALUES (?, ?, ?)";
+            String sqlCar = "INSERT INTO car(numplate, model, color,driver_id) "
+                    + "VALUES (?, ?, ?,?)";
 
-            PreparedStatement psCar = conn.prepareStatement(sqlCar);   // from Driver
-            psDriver.setString(1, carPlate);
-            psDriver.setString(2, d.getKereta().getModel());
-            psDriver.setString(3, d.getKereta().getColor());
+            PreparedStatement psCar = conn.prepareStatement(sqlCar);   
+            psCar.setString(1, carPlate);
+            psCar.setString(2, d.getKereta().getModel());
+            psCar.setString(3, d.getKereta().getColor());
+            psCar.setString(4, d.getDriver_id());
 
             int carResult = psCar.executeUpdate();
 

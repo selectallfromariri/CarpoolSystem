@@ -221,7 +221,7 @@ public class LoginAdminUI extends javax.swing.JFrame {
     }//GEN-LAST:event_adminBackActionPerformed
 
     private void adminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminLoginActionPerformed
-          String adminID = txtAdminID.getText().trim();
+        String adminID = txtAdminID.getText().trim();
         String password = new String(adminPassword.getPassword());
 
         if (adminID.isEmpty() || password.isEmpty()) {

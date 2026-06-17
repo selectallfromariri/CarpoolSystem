@@ -19,17 +19,20 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import ucms.Driver;
 public class CarPoolListUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CarPoolListUI.class.getName());
-
+    private Driver currDriver;
     /**
      * Creates new form CarPoolListUI
      */
     public CarPoolListUI() {
         initComponents();
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        String profilename = currDriver.getStudent_name().substring(0, 2);
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
+        c.setText(profilename);
         c.setPreferredSize(new Dimension(100, 100));
         c.setBackground(new Color(245,166,35));
         ProfilePnl.add(c);
@@ -753,7 +756,7 @@ public class CarPoolListUI extends javax.swing.JFrame {
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
@@ -772,7 +775,7 @@ public class CarPoolListUI extends javax.swing.JFrame {
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DashboardLabelMouseClicked
 

@@ -20,10 +20,11 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import ucms.Driver;
 public class ProfileUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProfileUI.class.getName());
-
+    private static Driver currDriver;
     /**
      * Creates new form ProfileUI
      */
@@ -31,7 +32,9 @@ public class ProfileUI extends javax.swing.JFrame {
         initComponents();
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
+        String profilename = currDriver.getStudent_name().substring(0, 2);
         c.setPreferredSize(new Dimension(100, 100));
+        c.setText(profilename);
         c.setBackground(new Color(245,166,35));
         ProfilePnl.add(c);
         ProfilePnl.revalidate();
@@ -39,6 +42,7 @@ public class ProfileUI extends javax.swing.JFrame {
         
         ProfilePnl1.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c1 = new CircleLabel(new Color(15,61,92), 0);
+        c1.setText(profilename);
         c1.setPreferredSize(new Dimension(100, 100));
         c1.setBackground(new Color(245,166,35));
         ProfilePnl1.add(c1);
@@ -1043,7 +1047,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
@@ -1062,7 +1066,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DashboardLabelMouseClicked
 

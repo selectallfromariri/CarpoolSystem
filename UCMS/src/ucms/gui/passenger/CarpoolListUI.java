@@ -716,7 +716,7 @@ public class CarpoolListUI extends javax.swing.JFrame {
 
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardPassengerUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel23MouseClicked
 
@@ -735,7 +735,7 @@ public class CarpoolListUI extends javax.swing.JFrame {
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
         // TODO add your handling code here:
-        new DashboardUI().setVisible(true);
+        new DashboardPassengerUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DashboardLabelMouseClicked
 

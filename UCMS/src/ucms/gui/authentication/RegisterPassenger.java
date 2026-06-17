@@ -426,13 +426,14 @@ public RegisterPassenger() {
             }
             String passengerID = "PS" + studentId.substring(2) + studentId.substring(0, 2);
             Passenger p = new Passenger(passengerID,studentId, fullName, phone, password);
-            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password) "+ "VALUES (?, ?, ?, ?)";
+            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password,role) "+ "VALUES (?, ?, ?, ?,?)";
 
             PreparedStatement psStudent = conn.prepareStatement(sqlStudent);
             psStudent.setString(1, studentId);
             psStudent.setString(2, fullName);
             psStudent.setString(3, phone);
             psStudent.setString(4, password);
+            psStudent.setString(5, "Passenger");
             int studentResult = psStudent.executeUpdate();
             
             String sqlPassenger= "INSERT INTO passenger(passenger_id,student_id) VALUES (?,?)";

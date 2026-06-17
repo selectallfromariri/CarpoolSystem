@@ -4,6 +4,15 @@
  */
 package ucms.gui.authentication;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import ucms.Driver;
+import ucms.Passenger;
+import ucms.gui.driver.DashboardUI;
+import ucms.gui.passenger.DashboardPassengerUI;
+
 /**
  *
  * @author USER
@@ -101,6 +110,11 @@ public class LoginStudentUI extends javax.swing.JFrame {
 
         studentLogin.setBackground(new java.awt.Color(255, 180, 0));
         studentLogin.setText("LOGIN");
+        studentLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentLoginActionPerformed(evt);
+            }
+        });
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Login with your student credentials");
@@ -169,6 +183,113 @@ public class LoginStudentUI extends javax.swing.JFrame {
     private void studentPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_studentPasswordActionPerformed
+
+    private void studentLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentLoginActionPerformed
+        // TODO add your handling code here:
+        String studentID = txtStudentID.getText().trim();
+        String password = new String(studentPassword.getPassword());
+
+        if (studentID.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please fill in both Student ID and Password.",
+                    "Input Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+
+            // Check student table first
+            String sql = "SELECT * FROM student WHERE student_id = ? AND password = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, studentID);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String name = rs.getString("student_name");
+                String phone = rs.getString("phone_num");
+                String role = rs.getString("role");
+
+                if (role.equalsIgnoreCase("driver")) {
+                    // Get driver data
+                    PreparedStatement ps1 = conn.prepareStatement(
+                            "SELECT * FROM driver WHERE student_id = ?");
+                    ps1.setString(1, studentID);
+                    ResultSet rs1 = ps1.executeQuery();
+
+                    if (rs1.next()) {
+                        String driverId = rs1.getString("driver_id");
+                        String license = rs1.getString("driver_license");
+
+                        // Get car data
+                        PreparedStatement ps2 = conn.prepareStatement(
+                                "SELECT * FROM car WHERE driver_id = ?");
+                        ps2.setString(1, driverId);
+                        ResultSet rs2 = ps2.executeQuery();
+
+                        if (rs2.next()) {
+                            String numplate = rs2.getString("numplate");
+                            String model = rs2.getString("model");
+                            String color = rs2.getString("color");
+
+                            Driver d = new Driver(driverId, license, studentID, name, phone, password,numplate, model, color);
+                            JOptionPane.showMessageDialog(this,
+                                    "Login Successful! Welcome, " + name);
+                            new DashboardUI(d).setVisible(true);
+                            this.dispose();
+
+                        } else {
+                            JOptionPane.showMessageDialog(this,
+                                    "Driver car data not found.",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Driver data not found.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else if (role.equalsIgnoreCase("passenger")) {
+                    // Get passenger data
+                    PreparedStatement ps1 = conn.prepareStatement(
+                            "SELECT * FROM passenger WHERE student_id = ?");
+                    ps1.setString(1, studentID);
+                    ResultSet rs1 = ps1.executeQuery();
+
+                    if (rs1.next()) {
+                        String passengerID = rs1.getString("passenger_id"); // fix: get from db
+
+                        Passenger p = new Passenger(passengerID, studentID, name, phone, password);
+
+                        JOptionPane.showMessageDialog(this,
+                                "Login Successful! Welcome, " + p.getStudent_name());
+                        new DashboardPassengerUI(p).setVisible(true);
+                        this.dispose();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Passenger data not found.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Invalid Student ID or Password.",
+                        "Authentication Failed", JOptionPane.ERROR_MESSAGE);
+                studentPassword.setText("");
+                studentPassword.requestFocus();
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Database error: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_studentLoginActionPerformed
 
     /**
      * @param args the command line arguments
