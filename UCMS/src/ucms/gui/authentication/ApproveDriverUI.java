@@ -4,6 +4,8 @@
  */
 package ucms.gui.authentication;
 
+import ucms.Admin;
+
 /**
  *
  * @author USER
@@ -13,8 +15,11 @@ public class ApproveDriverUI extends javax.swing.JFrame {
     /**
      * Creates new form ApproveDriverForm
      */
-    public ApproveDriverUI() {
+    private static Admin currentAdmin;
+    public ApproveDriverUI(Admin currAdmin) {
         initComponents();
+        this.currentAdmin = currAdmin;
+        welcomeAdminHeader.setText("WELCOME" + currentAdmin.getAdminName());
     }
 
     /**
@@ -240,7 +245,7 @@ public class ApproveDriverUI extends javax.swing.JFrame {
     }//GEN-LAST:event_ApproveDriverActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        new AdminDashboardUI().setVisible(true);
+        new AdminDashboardUI(currentAdmin).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backActionPerformed
 
@@ -280,7 +285,7 @@ public class ApproveDriverUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApproveDriverUI().setVisible(true);
+                new ApproveDriverUI(currentAdmin).setVisible(true);
             }
         });
     }
