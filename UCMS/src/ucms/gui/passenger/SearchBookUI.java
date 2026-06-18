@@ -753,7 +753,7 @@ public class SearchBookUI extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+//        new CarPoolListUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -769,7 +769,7 @@ public class SearchBookUI extends javax.swing.JFrame {
 
     private void CarpoolListLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabel1MouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+//        new CarPoolListUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabel1MouseClicked
 

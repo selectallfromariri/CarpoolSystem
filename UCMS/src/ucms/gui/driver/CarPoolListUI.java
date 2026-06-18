@@ -18,17 +18,26 @@ import java.awt.GridLayout;
 import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.time.LocalDate;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import ucms.Driver;
 public class CarPoolListUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CarPoolListUI.class.getName());
-    private Driver currDriver;
+    private static Driver currDriver;
     /**
      * Creates new form CarPoolListUI
      */
-    public CarPoolListUI() {
+    public CarPoolListUI(Driver currDriver) {
         initComponents();
+        this.currDriver = currDriver;
+        NameDriverLabel.setText(currDriver.getStudent_name());
+        jLabel2.setText(" Driver ." + currDriver.getStudent_id());
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         String profilename = currDriver.getStudent_name().substring(0, 2);
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
@@ -39,16 +48,56 @@ public class CarPoolListUI extends javax.swing.JFrame {
         ProfilePnl.revalidate();
         ProfilePnl.repaint();
         
-        jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD,14));
-        jTable1.getTableHeader().setOpaque(false);
-        jTable1.getTableHeader().setBackground(Color.black);
-        jTable1.getTableHeader().setForeground(Color.black);
-        jTable1.getTableHeader().setPreferredSize(new Dimension(0, 35));
+        CarpoolTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD,14));
+        CarpoolTable.getTableHeader().setOpaque(false);
+        CarpoolTable.getTableHeader().setBackground(Color.black);
+        CarpoolTable.getTableHeader().setForeground(Color.black);
+        CarpoolTable.getTableHeader().setPreferredSize(new Dimension(0, 35));
         jScrollPane1.getViewport().setBackground(new Color(48, 48, 46));
         jScrollPane1.setBackground(new Color(48, 48, 46));
-        
+        loadtable();
     }
 
+    
+    private void loadtable() {
+        DefaultTableModel model = (DefaultTableModel) CarpoolTable.getModel();
+        model.setRowCount(0);
+
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+
+            String sql
+                    = "SELECT c.carpool_id, s.student_name, "
+                    + "c.pickup_location, c.destination, "
+                    + "c.date, c.available_seat "
+                    + "FROM carpool c "
+                    + "JOIN driver d ON c.driver_id = d.driver_id "
+                    + "JOIN student s ON d.student_id = s.student_id";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                Object[] row = {
+                    rs.getString("carpool_id"),
+                    rs.getString("student_name"),
+                    rs.getString("pickup_location"),
+                    rs.getString("destination"),
+                    rs.getString("date"),
+                    rs.getInt("available_seat")
+                };
+
+                model.addRow(row);
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading drivers: " + e.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,7 +154,7 @@ public class CarPoolListUI extends javax.swing.JFrame {
         datelabel = new javax.swing.JLabel();
         MainCont = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        CarpoolTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -701,7 +750,7 @@ public class CarPoolListUI extends javax.swing.JFrame {
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
         welcomeLabel.setText("Carpool List");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 310, 30));
 
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         datelabel.setForeground(new java.awt.Color(153, 153, 153));
@@ -712,23 +761,24 @@ public class CarPoolListUI extends javax.swing.JFrame {
 
         MainCont.setBackground(new java.awt.Color(48, 48, 46));
 
-        jTable1.setBackground(new java.awt.Color(48, 48, 46));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        CarpoolTable.setBackground(new java.awt.Color(48, 48, 46));
+        CarpoolTable.setForeground(new java.awt.Color(255, 255, 255));
+        CarpoolTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Driver", "Pick Up Point", "To", "Date", "Seat"
+                "Carpool ID", "Driver Name", "Pick Up Point", "To", "Date", "Seat"
             }
         ));
-        jTable1.setFocusable(false);
-        jTable1.setRowHeight(25);
-        jTable1.setSelectionBackground(new java.awt.Color(102, 102, 102));
-        jTable1.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        jScrollPane1.setViewportView(jTable1);
+        CarpoolTable.setFocusable(false);
+        CarpoolTable.setRowHeight(25);
+        CarpoolTable.setSelectionBackground(new java.awt.Color(102, 102, 102));
+        CarpoolTable.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setViewportView(CarpoolTable);
 
         javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
         MainCont.setLayout(MainContLayout);
@@ -829,7 +879,7 @@ public class CarPoolListUI extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -845,7 +895,7 @@ public class CarPoolListUI extends javax.swing.JFrame {
 
     private void CarpoolListLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabelMouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabelMouseClicked
 
@@ -947,12 +997,13 @@ public class CarPoolListUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CarPoolListUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new CarPoolListUI(currDriver).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BookingReqLabel;
     private javax.swing.JPanel CarpoolListLabel;
+    private javax.swing.JTable CarpoolTable;
     private javax.swing.JPanel DashboardLabel;
     private javax.swing.JPanel LogoutLabel;
     private javax.swing.JPanel MainCont;
@@ -986,7 +1037,6 @@ public class CarPoolListUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel logo_layout;
     private javax.swing.JPanel main_pnl;
     private javax.swing.JPanel pn_line;

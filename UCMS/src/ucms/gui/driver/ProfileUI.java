@@ -24,6 +24,7 @@ import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import ucms.Driver;
 public class ProfileUI extends javax.swing.JFrame {
     
@@ -35,6 +36,7 @@ public class ProfileUI extends javax.swing.JFrame {
     public ProfileUI(Driver currenDriver) {
         initComponents();
         this.currDriver = currenDriver;
+        jLabel2.setText(" Driver ." + currDriver.getStudent_id());
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
         String profilename = currDriver.getStudent_name().substring(0, 2);
@@ -1176,7 +1178,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -1192,7 +1194,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void CarpoolListLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabelMouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabelMouseClicked
 

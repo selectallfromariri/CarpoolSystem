@@ -916,7 +916,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -932,7 +932,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void CarpoolListLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabelMouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabelMouseClicked
 

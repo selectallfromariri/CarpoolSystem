@@ -751,7 +751,7 @@ public class DashboardUI extends javax.swing.JFrame {
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
         welcomeLabel.setText("Welcome User");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 530, 30));
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 500, 30));
 
         btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
         btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -763,7 +763,7 @@ public class DashboardUI extends javax.swing.JFrame {
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         datelabel.setForeground(new java.awt.Color(153, 153, 153));
         datelabel.setText("Friday, 21 Dec 2026");
-        header.add(datelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 160, 30));
+        header.add(datelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 170, 30));
 
         main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
 
@@ -921,7 +921,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void CarpoolListLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabelMouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabelMouseClicked
 
@@ -964,7 +964,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        new CarPoolListUI().setVisible(true);
+        new CarPoolListUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
