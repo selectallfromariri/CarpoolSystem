@@ -38,11 +38,6 @@ public class AdminDashboardUI extends javax.swing.JFrame {
         welcomeAdminHeader = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        Logout = new javax.swing.JButton();
-        ApproveDriver1 = new javax.swing.JButton();
-        ViewFeedback = new javax.swing.JButton();
-        ApproveDriver = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         card1 = new javax.swing.JLabel();
@@ -54,6 +49,11 @@ public class AdminDashboardUI extends javax.swing.JFrame {
         card3 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         searchbtn = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        Logout1 = new javax.swing.JButton();
+        ViewFeedback1 = new javax.swing.JButton();
+        ApproveDriver4 = new javax.swing.JButton();
+        ViewFeedback2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(45, 45, 45));
@@ -101,60 +101,6 @@ public class AdminDashboardUI extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2))
-        );
-
-        jPanel3.setBackground(new java.awt.Color(15, 61, 92));
-
-        Logout.setBackground(new java.awt.Color(15, 61, 92));
-        Logout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        Logout.setForeground(new java.awt.Color(255, 51, 51));
-        Logout.setText("LOGOUT");
-        Logout.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        Logout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LogoutActionPerformed(evt);
-            }
-        });
-
-        ApproveDriver1.setBackground(new java.awt.Color(51, 255, 0));
-        ApproveDriver1.setText("View All Drivers");
-
-        ViewFeedback.setBackground(new java.awt.Color(153, 0, 255));
-        ViewFeedback.setText("View Feedback");
-
-        ApproveDriver.setBackground(new java.awt.Color(255, 153, 0));
-        ApproveDriver.setText("Approve Driver");
-        ApproveDriver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ApproveDriverActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(Logout, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(ViewFeedback)
-                    .addComponent(ApproveDriver)
-                    .addComponent(ApproveDriver1))
-                .addGap(24, 24, 24))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(ApproveDriver1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ViewFeedback)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ApproveDriver)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Logout)
-                .addContainerGap())
         );
 
         jPanel5.setBackground(new java.awt.Color(30, 30, 30));
@@ -298,15 +244,79 @@ public class AdminDashboardUI extends javax.swing.JFrame {
                 .addContainerGap(204, Short.MAX_VALUE))
         );
 
+        jPanel9.setBackground(new java.awt.Color(15, 61, 92));
+
+        Logout1.setBackground(new java.awt.Color(15, 61, 92));
+        Logout1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Logout1.setForeground(new java.awt.Color(255, 51, 51));
+        Logout1.setText("LOGOUT");
+        Logout1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        Logout1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Logout1ActionPerformed(evt);
+            }
+        });
+
+        ViewFeedback1.setBackground(new java.awt.Color(51, 255, 51));
+        ViewFeedback1.setText("View Report");
+        ViewFeedback1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewFeedback1ActionPerformed(evt);
+            }
+        });
+
+        ApproveDriver4.setBackground(new java.awt.Color(255, 153, 0));
+        ApproveDriver4.setText("Approve Driver");
+        ApproveDriver4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApproveDriver4ActionPerformed(evt);
+            }
+        });
+
+        ViewFeedback2.setBackground(new java.awt.Color(255, 255, 0));
+        ViewFeedback2.setText("View Feedback");
+        ViewFeedback2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewFeedback2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(Logout1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(ViewFeedback1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ApproveDriver4)
+                    .addComponent(ViewFeedback2))
+                .addGap(24, 24, 24))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(ViewFeedback1)
+                .addGap(18, 18, 18)
+                .addComponent(ViewFeedback2)
+                .addGap(18, 18, 18)
+                .addComponent(ApproveDriver4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Logout1)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -317,27 +327,16 @@ public class AdminDashboardUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
-        new LoginAdminUI().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_LogoutActionPerformed
-
-    private void ApproveDriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveDriverActionPerformed
-        // TODO add your handling code here:
-        new ApproveDriverUI(currentAdmin).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_ApproveDriverActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -415,16 +414,10 @@ public class AdminDashboardUI extends javax.swing.JFrame {
                     }
                 }
 
-                JOptionPane.showMessageDialog(this,
-                        info.toString(),
-                        "Search Result",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, info.toString(),"Search Result",JOptionPane.INFORMATION_MESSAGE);
 
             } else {
-                JOptionPane.showMessageDialog(this,
-                        "No student found with ID: " + searchID,
-                        "Not Found",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"No student found with ID: " + searchID,"Not Found",JOptionPane.WARNING_MESSAGE);
             }
 
             conn.close();
@@ -436,6 +429,29 @@ public class AdminDashboardUI extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_searchbtnActionPerformed
+
+    private void Logout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Logout1ActionPerformed
+        new LoginAdminUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_Logout1ActionPerformed
+
+    private void ViewFeedback1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewFeedback1ActionPerformed
+        // TODO add your handling code here:
+        new ViewReportUI(currentAdmin).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ViewFeedback1ActionPerformed
+
+    private void ApproveDriver4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveDriver4ActionPerformed
+        // TODO add your handling code here:
+        new ApproveDriverUI(currentAdmin).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ApproveDriver4ActionPerformed
+
+    private void ViewFeedback2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewFeedback2ActionPerformed
+        // TODO add your handling code here:
+        new ViewFeedbackUI(currentAdmin).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ViewFeedback2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -474,10 +490,10 @@ public class AdminDashboardUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ApproveDriver;
-    private javax.swing.JButton ApproveDriver1;
-    private javax.swing.JButton Logout;
-    private javax.swing.JButton ViewFeedback;
+    private javax.swing.JButton ApproveDriver4;
+    private javax.swing.JButton Logout1;
+    private javax.swing.JButton ViewFeedback1;
+    private javax.swing.JButton ViewFeedback2;
     private javax.swing.JLabel card1;
     private javax.swing.JLabel card2;
     private javax.swing.JLabel card3;
@@ -485,12 +501,12 @@ public class AdminDashboardUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JButton searchbtn;
     private javax.swing.JLabel welcomeAdminHeader;

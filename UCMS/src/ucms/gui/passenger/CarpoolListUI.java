@@ -9,10 +9,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import ucms.Passenger;
 import ucms.Carpool;
-import ucms.booking;
 import java.util.ArrayList;
 
 /**
@@ -28,38 +31,71 @@ public class CarpoolListUI extends javax.swing.JFrame {
             .getLogger(CarpoolListUI.class.getName());
 
     /**
-     * Creates new form DashboardUI
+     * Creates new form CarpoolListUI
      */
+    public CarpoolListUI(Passenger passenger) {
+        this(passenger, new ArrayList<>());
+    }
+
     public CarpoolListUI(Passenger passenger, ArrayList<Carpool> carpools) {
         initComponents();
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{},
-                new String[]{"Carpool ID", "Driver", "Destination", "Date", "Available Seat", "Luggage Cap", "Pickup Location"}
-        ));
         this.passenger = passenger;
         this.carpools = carpools;
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Carpool ID", "Driver", "Destination", "Date", "Available Seat", "Luggage Cap", "Pickup Location", "Action"}
+        ) {
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        });
 
         NamePassengerLabel.setText(passenger.getStudent_name());
         jLabel2.setText(passenger.getStudent_id());
         welcomeLabel.setText("Welcome, " + passenger.getStudent_name());
 
-        loadCarpoolList();
+        // Set up search button handler
+        jButton3.addActionListener(e -> performSearch());
+
+        loadCarpoolList("");
     }
 
-    private void loadCarpoolList() {
+    private void loadCarpoolList(String keyword) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
+        try {
+            PassengerDB.loadCarpools(model, keyword);
+            
+            // Add "Book" action button text to last column
+            int rowCount = model.getRowCount();
+            for (int i = 0; i < rowCount; i++) {
+                model.setValueAt("Book", i, 7);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading carpool list: " + e.getMessage());
+        }
+    }
 
-        for (Carpool c : carpools) {
-            model.addRow(new Object[]{
-                c.getCarpoolID(),
-                c.getDrive().getStudent_name(),
-                c.getDestination(),
-                c.getDate(),
-                c.getAvailableSeat(),
-                c.getLuggageCapacity(),
-                c.getPickupLocation()
-            });
+    private void performSearch() {
+        String keyword = jTextField1.getText().trim();
+        loadCarpoolList(keyword);
+    }
+
+    private void bookCarpool() {
+        int row = jTable1.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a carpool to book.");
+            return;
+        }
+        
+        String carpoolId = (String) jTable1.getValueAt(row, 0);
+        try {
+            PassengerDB.createBooking(passenger, carpoolId);
+            JOptionPane.showMessageDialog(this, "Booking created successfully!");
+            loadCarpoolList("");  // Reload to show updated seat counts
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error booking carpool: " + e.getMessage());
         }
     }
 
@@ -101,8 +137,6 @@ public class CarpoolListUI extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         ReportLabel = new javax.swing.JPanel();
         pn_line7 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         main_pnl = new javax.swing.JPanel();
         header = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -439,24 +473,6 @@ public class CarpoolListUI extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel13.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("Submit Report");
-        jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel13MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jLabel13MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jLabel13MouseExited(evt);
-            }
-        });
-
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png"))); // NOI18N
-
         javax.swing.GroupLayout ReportLabelLayout = new javax.swing.GroupLayout(ReportLabel);
         ReportLabel.setLayout(ReportLabelLayout);
         ReportLabelLayout.setHorizontalGroup(
@@ -464,21 +480,11 @@ public class CarpoolListUI extends javax.swing.JFrame {
             .addGroup(ReportLabelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(pn_line7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ReportLabelLayout.setVerticalGroup(
             ReportLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pn_line7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReportLabelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(ReportLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addContainerGap())
         );
 
         javax.swing.GroupLayout sidebar_pnlLayout = new javax.swing.GroupLayout(sidebar_pnl);
@@ -537,7 +543,7 @@ public class CarpoolListUI extends javax.swing.JFrame {
                 .addComponent(ReportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(CarpoolListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 347, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 389, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -673,8 +679,8 @@ public class CarpoolListUI extends javax.swing.JFrame {
     }//GEN-LAST:event_DashboardLabelMouseClicked
 
     private void jLabel27MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseClicked
-        // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        // Navigate to Trip History
+        new TripHistoryUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel27MouseClicked
 
@@ -690,14 +696,14 @@ public class CarpoolListUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel27MouseExited
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
-        // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        // Navigate to Trip History
+        new TripHistoryUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        // TODO add your handling code here:
-//        new CarPoolListUI().setVisible(true);
+        // Stay on Carpool List
+        new CarpoolListUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -712,30 +718,14 @@ public class CarpoolListUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel9MouseExited
 
     private void CarpoolListLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabel1MouseClicked
-        // TODO add your handling code here:
-//        new CarPoolListUI().setVisible(true);
+        // Stay on Carpool List
+        new CarpoolListUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabel1MouseClicked
 
-    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-        // TODO add your handling code here:
-//        new SubmitReportUI(curr).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel13MouseClicked
-
-    private void jLabel13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseEntered
-        ReportLabel.setBackground(new Color(56,80,81));
-        pn_line7.setBackground(new Color(245,166,35));
-    }//GEN-LAST:event_jLabel13MouseEntered
-
-    private void jLabel13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseExited
-        ReportLabel.setBackground(new Color(15,61,92));
-        pn_line7.setBackground(new Color(15,61,92));
-    }//GEN-LAST:event_jLabel13MouseExited
-
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
-        // TODO add your handling code here:
-//        new SubmitReportUI().setVisible(true);
+        // Navigate to Feedback
+        new FeedbackUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 
@@ -748,7 +738,7 @@ public class CarpoolListUI extends javax.swing.JFrame {
     }// GEN-LAST:event_jLabel17MouseExited
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        bookCarpool();
     }// GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -796,8 +786,6 @@ public class CarpoolListUI extends javax.swing.JFrame {
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;

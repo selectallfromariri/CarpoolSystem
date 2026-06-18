@@ -10,25 +10,64 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import ucms.Admin;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 /**
  *
  * @author USER
  */
-public class ApproveDriverUI extends javax.swing.JFrame {
+public class ViewReportUI extends javax.swing.JFrame {
 
     /**
      * Creates new form ApproveDriverForm
      */
     private static Admin currentAdmin;
- 
-    public ApproveDriverUI(Admin currAdmin) {
+    private final int noCollIndex =2;
+    private final int noColWidth = 75;
+    public ViewReportUI(Admin currAdmin) {
         initComponents();
         
         this.currentAdmin = currAdmin;
-        welcomeAdminHeader.setText("Hye" + currentAdmin.getAdminName());
-        loadtable();
+        welcomeAdminHeader.setText("Welcome " + currentAdmin.getAdminName());
+        setColumnWidth();
+        loadReport();
+        
+    }
+    
+    private void setColumnWidth(){
+        TableColumnModel colModel = FeedbackTable.getColumnModel();
+        colModel.getColumn(noCollIndex).setPreferredWidth(noColWidth);
+        colModel.getColumn(noCollIndex).setMaxWidth(noColWidth);
+        colModel.getColumn(noCollIndex).setMinWidth(noColWidth);
     }
 
+    private void loadReport() {
+        DefaultTableModel model = (DefaultTableModel) FeedbackTable.getModel();
+        model.setRowCount(0);
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+            String sql = "SELECT r.report_id, r.type, r.details AS description, "
+                    + "sd.student_name AS driver_name "
+                    + "FROM report r "
+                    + "JOIN driver d ON r.driver_id = d.driver_id "
+                    + "JOIN student sd ON d.student_id = sd.student_id";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("report_id"),
+                    rs.getString("type"),
+                    rs.getString("description"),
+                    rs.getString("driver_name")
+                });
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading feedback: " + e.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,12 +80,10 @@ public class ApproveDriverUI extends javax.swing.JFrame {
         approveDriver = new javax.swing.JPanel();
         welcomeAdminHeader = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        reject = new javax.swing.JButton();
         back = new javax.swing.JButton();
-        ApproveDriver = new javax.swing.JButton();
         name = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        TableAprroval1 = new javax.swing.JTable();
+        FeedbackTable = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -61,7 +98,7 @@ public class ApproveDriverUI extends javax.swing.JFrame {
 
         welcomeAdminHeader.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeAdminHeader.setForeground(new java.awt.Color(255, 255, 255));
-        welcomeAdminHeader.setText("APPROVE DRIVER");
+        welcomeAdminHeader.setText("View Report ");
 
         javax.swing.GroupLayout approveDriverLayout = new javax.swing.GroupLayout(approveDriver);
         approveDriver.setLayout(approveDriverLayout);
@@ -82,16 +119,6 @@ public class ApproveDriverUI extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(30, 30, 30));
 
-        reject.setBackground(new java.awt.Color(255, 0, 0));
-        reject.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        reject.setForeground(new java.awt.Color(255, 255, 255));
-        reject.setText("Reject");
-        reject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rejectActionPerformed(evt);
-            }
-        });
-
         back.setText("Back");
         back.setToolTipText("");
         back.addActionListener(new java.awt.event.ActionListener() {
@@ -100,41 +127,31 @@ public class ApproveDriverUI extends javax.swing.JFrame {
             }
         });
 
-        ApproveDriver.setBackground(new java.awt.Color(39, 174, 96));
-        ApproveDriver.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        ApproveDriver.setForeground(new java.awt.Color(255, 255, 255));
-        ApproveDriver.setText("Approve");
-        ApproveDriver.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ApproveDriverMouseClicked(evt);
-            }
-        });
-        ApproveDriver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ApproveDriverActionPerformed(evt);
-            }
-        });
-
         name.setForeground(new java.awt.Color(255, 255, 255));
-        name.setText("Showing PENDING drivers only — select a row then click Approve or Reject");
+        name.setText("View Report from driver");
 
-        TableAprroval1.setModel(new javax.swing.table.DefaultTableModel(
+        FeedbackTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Driver ID", "Student ID", "Name", "Phone", "Licence", "Approval"
+                "ReportID", "Type", "Description", "Driver Name"
             }
         ));
-        TableAprroval1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TableAprroval1MouseClicked(evt);
+        FeedbackTable.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                FeedbackTableMouseMoved(evt);
             }
         });
-        jScrollPane2.setViewportView(TableAprroval1);
+        FeedbackTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                FeedbackTableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(FeedbackTable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -147,15 +164,11 @@ public class ApproveDriverUI extends javax.swing.JFrame {
                         .addComponent(back))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(name)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(reject)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(ApproveDriver))
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 649, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(43, Short.MAX_VALUE))
+                        .addComponent(name))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,11 +177,7 @@ public class ApproveDriverUI extends javax.swing.JFrame {
                 .addComponent(name)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ApproveDriver)
-                    .addComponent(reject))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 200, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
                 .addComponent(back)
                 .addContainerGap())
         );
@@ -264,10 +273,10 @@ public class ApproveDriverUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(approveDriver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -276,173 +285,54 @@ public class ApproveDriverUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(approveDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadtable() {
-        DefaultTableModel model = (DefaultTableModel) TableAprroval1.getModel();
-        model.setRowCount(0);
-
-        try {
-            Connection conn = ucms.database.DBConnection.getConnection();
-
-            String sql
-                    = "SELECT d.driver_id, s.student_id, s.student_name, "
-                    + "s.phone_num, d.driver_license, d.approved "
-                    + "FROM driver d "
-                    + "JOIN student s ON d.student_id = s.student_id "
-                    + "WHERE d.approved = 0";
-
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                Object[] row = {
-                    rs.getString("driver_id"),
-                    rs.getString("student_id"),
-                    rs.getString("student_name"),
-                    rs.getString("phone_num"),
-                    rs.getString("driver_license"),
-                    "Pending"
-                };
-
-                model.addRow(row);
-            }
-
-            conn.close();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error loading drivers: " + e.getMessage());
-        }
-    }
-    private void rejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rejectActionPerformed
-        // TODO add your handling code here:
-
-        int row = TableAprroval1.getSelectedRow();
-
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a driver first.");
-            return;
-        }
-
-        String driverId = TableAprroval1.getValueAt(row, 0).toString();
-        String studentId = TableAprroval1.getValueAt(row, 1).toString();
-        String driverName = TableAprroval1.getValueAt(row, 2).toString();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Reject driver: " + driverName + "?",
-                "Confirm Rejection",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        try {
-            Connection conn = ucms.database.DBConnection.getConnection();
-
-            // Delete from driver table first
-            PreparedStatement ps1 = conn.prepareStatement(
-                    "DELETE FROM driver WHERE driver_id = ?");
-            ps1.setString(1, driverId);
-            ps1.executeUpdate();
-
-            // Delete from student table too
-            PreparedStatement ps2 = conn.prepareStatement(
-                    "DELETE FROM student WHERE student_id = ?");
-            ps2.setString(1, studentId);
-            ps2.executeUpdate();
-
-            JOptionPane.showMessageDialog(this, "Driver application rejected.");
-            loadtable(); // refresh table
-
-            conn.close();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
-    }//GEN-LAST:event_rejectActionPerformed
-
-    private void ApproveDriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveDriverActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Approve button clicked!");
-         int selectedRow = TableAprroval1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a driver first.");
-            return;
-        }
-
-        String driverId = TableAprroval1.getValueAt(selectedRow, 0).toString();
-        String driverName = TableAprroval1.getValueAt(selectedRow, 2).toString();
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Approve driver: " + driverName + "?",
-                "Confirm Approval",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm != JOptionPane.YES_OPTION)
-            return;
-
-        try {
-            Connection conn = ucms.database.DBConnection.getConnection();
-            PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE driver SET approved = 1 WHERE driver_id = ?");
-            ps.setString(1, driverId);
-            int result = ps.executeUpdate();
-
-            if (result > 0) {
-                JOptionPane.showMessageDialog(this, "Driver approved successfully!");
-                loadtable(); // refresh table
-            } else {
-                JOptionPane.showMessageDialog(this, "Update failed. Driver ID: " + driverId);
-            }
-
-            conn.close();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
-    }//GEN-LAST:event_ApproveDriverActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         new AdminDashboardUI(currentAdmin).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backActionPerformed
 
-    private void ApproveDriverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ApproveDriverMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ApproveDriverMouseClicked
-
-    private void TableAprroval1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableAprroval1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TableAprroval1MouseClicked
-
     private void Logout1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Logout1ActionPerformed
         new LoginAdminUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_Logout1ActionPerformed
+
+    private void ApproveDriver4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveDriver4ActionPerformed
+        // TODO add your handling code here:
+        new ApproveDriverUI(currentAdmin).setVisible(true);
+        this.dispose();
+        
+    }//GEN-LAST:event_ApproveDriver4ActionPerformed
+
+    private void FeedbackTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FeedbackTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FeedbackTableMouseClicked
+
+    private void FeedbackTableMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FeedbackTableMouseMoved
+        // TODO add your handling code here:
+        int row = FeedbackTable.rowAtPoint(evt.getPoint());
+        int col = FeedbackTable.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col == 1) { 
+            Object val = FeedbackTable.getValueAt(row, col);
+            FeedbackTable.setToolTipText(val == null ? null : val.toString());
+        }
+    }//GEN-LAST:event_FeedbackTableMouseMoved
 
     private void ViewFeedback1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewFeedback1ActionPerformed
         // TODO add your handling code here:
         new ViewReportUI(currentAdmin).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ViewFeedback1ActionPerformed
-
-    private void ApproveDriver4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveDriver4ActionPerformed
-        // TODO add your handling code here:
-        new ApproveDriverUI(currentAdmin).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_ApproveDriver4ActionPerformed
 
     private void ViewFeedback2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewFeedback2ActionPerformed
         // TODO add your handling code here:
@@ -467,30 +357,35 @@ public class ApproveDriverUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ApproveDriverUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewReportUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ApproveDriverUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewReportUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ApproveDriverUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewReportUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ApproveDriverUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewReportUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ApproveDriverUI(currentAdmin).setVisible(true);
+                new ViewReportUI(currentAdmin).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ApproveDriver;
     private javax.swing.JButton ApproveDriver4;
+    private javax.swing.JTable FeedbackTable;
     private javax.swing.JButton Logout1;
-    private javax.swing.JTable TableAprroval1;
     private javax.swing.JButton ViewFeedback1;
     private javax.swing.JButton ViewFeedback2;
     private javax.swing.JPanel approveDriver;
@@ -501,7 +396,6 @@ public class ApproveDriverUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel name;
-    private javax.swing.JButton reject;
     private javax.swing.JLabel welcomeAdminHeader;
     // End of variables declaration//GEN-END:variables
 }
