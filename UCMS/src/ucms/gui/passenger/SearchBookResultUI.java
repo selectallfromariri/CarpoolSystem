@@ -32,6 +32,11 @@ private ArrayList<ucms.Feedback> feeds;
     /**
      * Creates new form SearchBookResultUI
      */
+    public SearchBookResultUI(Passenger passenger, String searchKeyword) {
+        this(passenger, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        loadSearchResults(searchKeyword);
+    }
+
     public SearchBookResultUI(Passenger passenger, ArrayList<Carpool> carpools, ArrayList<booking> bookings, ArrayList<BookingInterface> bookingconcrete) {
         initComponents();
         this.passenger = passenger;
@@ -41,18 +46,48 @@ private ArrayList<ucms.Feedback> feeds;
 
         jTable1.setModel(new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Carpool ID", "Driver", "Destination", "Date", "Available Seat", "Luggage Cap", "Pickup Location"}
-        ));
+                new String[]{"Carpool ID", "Driver", "Destination", "Date", "Available Seat", "Luggage Cap", "Pickup Location", "Action"}
+        ) {
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        });
 
         NamePassengerLabel.setText(passenger.getStudent_name());
         jLabel2.setText(passenger.getStudent_id());
         welcomeLabel.setText("Welcome, " + passenger.getStudent_name());
-        jLabel27.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                new TripHistoryUI(passenger, new java.util.ArrayList<>()).setVisible(true);
-                dispose();
+    }
+
+    private void loadSearchResults(String searchKeyword) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        try {
+            PassengerDB.loadCarpools(model, searchKeyword);
+            
+            // Add "Book" action button text to last column
+            int rowCount = model.getRowCount();
+            for (int i = 0; i < rowCount; i++) {
+                model.setValueAt("Book", i, 7);
             }
-        });
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error loading search results: " + e.getMessage());
+        }
+    }
+
+    private void bookCarpool() {
+        int row = jTable1.getSelectedRow();
+        if (row == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Select a carpool to book.");
+            return;
+        }
+        
+        String carpoolId = (String) jTable1.getValueAt(row, 0);
+        try {
+            PassengerDB.createBooking(passenger, carpoolId);
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking created successfully!");
+            loadSearchResults("");  // Reload to show updated seat counts
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error booking carpool: " + e.getMessage());
+        }
     }
 
 
@@ -93,8 +128,6 @@ private ArrayList<ucms.Feedback> feeds;
         jLabel10 = new javax.swing.JLabel();
         ReportLabel = new javax.swing.JPanel();
         pn_line7 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
         main_pnl = new javax.swing.JPanel();
         header = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -432,24 +465,6 @@ private ArrayList<ucms.Feedback> feeds;
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jLabel13.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("Submit Report");
-        jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel13MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jLabel13MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jLabel13MouseExited(evt);
-            }
-        });
-
-        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png"))); // NOI18N
-
         javax.swing.GroupLayout ReportLabelLayout = new javax.swing.GroupLayout(ReportLabel);
         ReportLabel.setLayout(ReportLabelLayout);
         ReportLabelLayout.setHorizontalGroup(
@@ -457,21 +472,11 @@ private ArrayList<ucms.Feedback> feeds;
             .addGroup(ReportLabelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(pn_line7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ReportLabelLayout.setVerticalGroup(
             ReportLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pn_line7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReportLabelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(ReportLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addContainerGap())
         );
 
         javax.swing.GroupLayout sidebar_pnlLayout = new javax.swing.GroupLayout(sidebar_pnl);
@@ -493,7 +498,7 @@ private ArrayList<ucms.Feedback> feeds;
                         .addGap(81, 81, 81)
                         .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(NamePassengerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(sidebar_pnlLayout.createSequentialGroup()
                         .addContainerGap()
@@ -528,7 +533,7 @@ private ArrayList<ucms.Feedback> feeds;
                 .addComponent(CarpoolListLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(ReportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 699, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 741, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -548,7 +553,7 @@ private ArrayList<ucms.Feedback> feeds;
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
         welcomeLabel.setText("Welcome User ");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 400, 30));
 
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         datelabel.setForeground(new java.awt.Color(153, 153, 153));
@@ -592,16 +597,18 @@ private ArrayList<ucms.Feedback> feeds;
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 822, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel19))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(910, 910, 910)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel19))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(910, 910, 910)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(154, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1001, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -657,8 +664,8 @@ private ArrayList<ucms.Feedback> feeds;
     }//GEN-LAST:event_jLabel17MouseExited
 
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
-        // TODO add your handling code here:
-//        new DashboardUI().setVisible(true);
+        // Navigate to Dashboard
+        new DashboardPassengerUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel23MouseClicked
 
@@ -676,14 +683,14 @@ private ArrayList<ucms.Feedback> feeds;
     }//GEN-LAST:event_jLabel23MouseExited
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
-        // TODO add your handling code here:
-//        new DashboardUI().setVisible(true);
+        // Navigate to Dashboard
+        new DashboardPassengerUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_DashboardLabelMouseClicked
 
     private void jLabel27MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseClicked
         // TODO add your handling code here:
-        new TripHistoryUI(passenger, bookings).setVisible(true);
+        new TripHistoryUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel27MouseClicked
 
@@ -700,13 +707,13 @@ private ArrayList<ucms.Feedback> feeds;
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
         // TODO add your handling code here:
-        new TripHistoryUI(passenger, bookings).setVisible(true);
+        new TripHistoryUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
-        new CarpoolListUI(passenger, carpools).setVisible(true);
+        new CarpoolListUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel9MouseClicked
 
@@ -722,51 +729,18 @@ private ArrayList<ucms.Feedback> feeds;
 
     private void CarpoolListLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabel1MouseClicked
         // TODO add your handling code here:
-        new CarpoolListUI(passenger, carpools).setVisible(true);
+        new CarpoolListUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_CarpoolListLabel1MouseClicked
 
-    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-        // TODO add your handling code here:
-        new FeedbackUI(passenger, drivers, feeds).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel13MouseClicked
-
-    private void jLabel13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseEntered
-        ReportLabel.setBackground(new Color(56,80,81));
-        pn_line7.setBackground(new Color(245,166,35));
-    }//GEN-LAST:event_jLabel13MouseEntered
-
-    private void jLabel13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseExited
-        ReportLabel.setBackground(new Color(15,61,92));
-        pn_line7.setBackground(new Color(15,61,92));
-    }//GEN-LAST:event_jLabel13MouseExited
-
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
         // TODO add your handling code here:
-        new FeedbackUI(passenger, drivers, feeds).setVisible(true);
+        new FeedbackUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        int selectedRow = jTable1.getSelectedRow();
-
-        if (selectedRow == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please select a carpool from the table first.");
-            return;
-        }
-
-        String carpoolID = (String) jTable1.getValueAt(selectedRow, 0);
-
-        BookingInterface b = BookingFactory.createBooking(passenger, carpools, carpoolID);
-
-        if (b != null) {
-            bookingconcrete.add(b);
-            javax.swing.JOptionPane.showMessageDialog(this, "Booking successful! Waiting for driver approval.");
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Booking failed. Carpool not found.");
-        }
+        bookCarpool();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -811,8 +785,6 @@ private ArrayList<ucms.Feedback> feeds;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;

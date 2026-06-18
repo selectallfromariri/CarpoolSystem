@@ -938,7 +938,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         // TODO add your handling code here:
-        new BookingRequestUI().setVisible(true);
+        new BookingRequestUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel11MouseClicked
 
@@ -954,7 +954,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void BookingReqLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookingReqLabelMouseClicked
         // TODO add your handling code here:
-        new BookingRequestUI().setVisible(true);
+        new BookingRequestUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_BookingReqLabelMouseClicked
 

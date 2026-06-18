@@ -27,8 +27,9 @@ public class BookingRequestUI extends javax.swing.JFrame {
     /**
      * Creates new form CarPoolListUI
      */
-    public BookingRequestUI() {
+    public BookingRequestUI(Driver drive) {
         initComponents();
+        this.currDriver = drive;
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         String profilename = currDriver.getStudent_name().substring(0, 2);
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
@@ -48,6 +49,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
         jScrollPane1.setBackground(new Color(48, 48, 46));
         
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -851,7 +853,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         // TODO add your handling code here:
-        new BookingRequestUI().setVisible(true);
+        new BookingRequestUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel11MouseClicked
 
@@ -867,7 +869,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void BookingReqLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookingReqLabelMouseClicked
         // TODO add your handling code here:
-        new BookingRequestUI().setVisible(true);
+        new BookingRequestUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_BookingReqLabelMouseClicked
 
@@ -947,7 +949,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new BookingRequestUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new BookingRequestUI(currDriver).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -28,17 +28,23 @@ public class FeedbackUI extends javax.swing.JFrame {
     private ArrayList<Feedback> feeds;
 
     /**
-     * Creates new form DashboardUI
+     * Creates new form FeedbackUI
      */
+    public FeedbackUI(Passenger passenger) {
+        this(passenger, new ArrayList<>(), new ArrayList<>());
+    }
+
     public FeedbackUI(Passenger passenger, ArrayList<Driver> drivers, ArrayList<Feedback> feeds) {
         initComponents();
         this.passenger = passenger;
         this.drivers = drivers;
         this.feeds = feeds;
 
-        // populate driver dropdown
-        for (Driver d : drivers) {
-            driverComboBox.addItem(d.getStudent_name() + " (" + d.getStudent_id() + ")");
+        // Populate driver dropdown from database
+        try {
+            PassengerDB.loadDrivers(driverComboBox);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error loading drivers: " + e.getMessage());
         }
     }
 
@@ -483,7 +489,7 @@ public class FeedbackUI extends javax.swing.JFrame {
                         .addGap(81, 81, 81)
                         .addGroup(sidebar_pnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(NamePassengerLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(sidebar_pnlLayout.createSequentialGroup()
                         .addContainerGap()
@@ -541,7 +547,7 @@ public class FeedbackUI extends javax.swing.JFrame {
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
         welcomeLabel.setText("Welcome User ");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 310, 30));
 
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         datelabel.setForeground(new java.awt.Color(153, 153, 153));
@@ -566,6 +572,7 @@ public class FeedbackUI extends javax.swing.JFrame {
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
         driverComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        driverComboBox.addActionListener(this::driverComboBoxActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -573,16 +580,15 @@ public class FeedbackUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(driverComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(driverComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(695, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -645,24 +651,24 @@ public class FeedbackUI extends javax.swing.JFrame {
             return;
         }
 
-        if (drivers.isEmpty()) {
+        if (driverComboBox.getItemCount() == 0) {
             javax.swing.JOptionPane.showMessageDialog(this, "No drivers available.");
             return;
         }
 
-        int selectedIndex = driverComboBox.getSelectedIndex();
-        Driver selectedDriver = drivers.get(selectedIndex);
+        String selectedDriver = (String) driverComboBox.getSelectedItem();
+        if (selectedDriver == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a driver.");
+            return;
+        }
 
-        Feedback f = new Feedback(
-                String.valueOf(feeds.size() + 1),
-                comment,
-                passenger,
-                selectedDriver
-        );
-        feeds.add(f);
-
-        javax.swing.JOptionPane.showMessageDialog(this, "Feedback submitted successfully!");
-        jTextArea1.setText("");
+        try {
+            PassengerDB.submitFeedback(passenger, selectedDriver, comment);
+            javax.swing.JOptionPane.showMessageDialog(this, "Feedback submitted successfully!");
+            jTextArea1.setText("");
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error submitting feedback: " + e.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
@@ -756,6 +762,10 @@ public class FeedbackUI extends javax.swing.JFrame {
         new SubmitReportUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
+
+    private void driverComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driverComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_driverComboBoxActionPerformed
 
     private void jLabel17MouseEntered(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel17MouseEntered
 
