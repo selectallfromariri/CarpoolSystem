@@ -698,7 +698,7 @@ public class FeedbackUI extends javax.swing.JFrame {
 
     private void jLabel27MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new TripHistoryUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel27MouseClicked
 
@@ -715,7 +715,7 @@ public class FeedbackUI extends javax.swing.JFrame {
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new TripHistoryUI(passenger).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 

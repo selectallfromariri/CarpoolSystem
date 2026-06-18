@@ -1155,7 +1155,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
@@ -1172,7 +1172,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 
@@ -1244,7 +1244,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
 
@@ -1260,7 +1260,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void TripLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TripLabelMouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_TripLabelMouseClicked
 
