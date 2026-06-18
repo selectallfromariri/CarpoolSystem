@@ -868,7 +868,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         // TODO add your handling code here:
-        new ProfileUI().setVisible(true);
+        new ProfileUI(currDriver).setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_jLabel5MouseClicked
@@ -887,7 +887,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void ProfileLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProfileLabelMouseClicked
         // TODO add your handling code here:
-        new ProfileUI().setVisible(true);
+        new ProfileUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ProfileLabelMouseClicked
 

@@ -20,6 +20,10 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import ucms.Driver;
 public class ProfileUI extends javax.swing.JFrame {
     
@@ -28,8 +32,9 @@ public class ProfileUI extends javax.swing.JFrame {
     /**
      * Creates new form ProfileUI
      */
-    public ProfileUI() {
+    public ProfileUI(Driver currenDriver) {
         initComponents();
+        this.currDriver = currenDriver;
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
         String profilename = currDriver.getStudent_name().substring(0, 2);
@@ -48,7 +53,63 @@ public class ProfileUI extends javax.swing.JFrame {
         ProfilePnl1.add(c1);
         ProfilePnl1.revalidate();
         ProfilePnl1.repaint();
+        
+         loadProfile();
     }
+    
+    private void loadProfile() {
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+           
+            String sql = "SELECT * FROM student WHERE student_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, currDriver.getStudent_id());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                NameLabel.setText(rs.getString("student_name"));
+                NameDriverLabel.setText(rs.getString("student_name"));
+                MatricLabel.setText(rs.getString("student_id"));
+                jLabel2.setText("Driver | " + rs.getString("student_id"));
+
+                
+                FullNameInput1.setText(rs.getString("student_name"));
+                EmailInput3.setText(rs.getString("phone_num"));
+                MatricInput1.setText(rs.getString("student_id"));
+                MatricInput1.setEditable(false); 
+            }
+
+            
+            String sqlDriver = "SELECT * FROM driver WHERE student_id = ?";
+            PreparedStatement ps2 = conn.prepareStatement(sqlDriver);
+            ps2.setString(1, currDriver.getStudent_id());
+            ResultSet rs2 = ps2.executeQuery();
+
+            if (rs2.next()) {
+                String driverId = rs2.getString("driver_id");
+                LicenceInput.setText(rs2.getString("driver_license"));
+                LicenceInput.setEditable(false); 
+
+                
+                String sqlCar = "SELECT * FROM car WHERE driver_id = ?";
+                PreparedStatement ps3 = conn.prepareStatement(sqlCar);
+                ps3.setString(1, driverId);
+                ResultSet rs3 = ps3.executeQuery();
+
+                if (rs3.next()) {
+                    CarModelInput.setText(rs3.getString("model"));
+                    NumPlateInput.setText(rs3.getString("numplate"));
+                    CarColorInput.setText(rs3.getString("color"));
+                }
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error loading profile: " + e.getMessage());
+        }
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -127,8 +188,6 @@ public class ProfileUI extends javax.swing.JFrame {
         IconUser1 = new javax.swing.JLabel();
         FullNameLabel1 = new javax.swing.JLabel();
         FullNameInput1 = new javax.swing.JTextField();
-        EmailLabel2 = new javax.swing.JLabel();
-        EmailInput2 = new javax.swing.JTextField();
         MatricLabel2 = new javax.swing.JLabel();
         MatricInput1 = new javax.swing.JTextField();
         PhoneNumLabel1 = new javax.swing.JLabel();
@@ -732,6 +791,7 @@ public class ProfileUI extends javax.swing.JFrame {
         btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnposttrip.setForeground(new java.awt.Color(255, 255, 255));
         btnposttrip.setText("Update Profile");
+        btnposttrip.addActionListener(this::btnposttripActionPerformed);
         header.add(btnposttrip, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 150, 40));
 
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -911,12 +971,6 @@ public class ProfileUI extends javax.swing.JFrame {
 
         FullNameInput1.setText("Name");
 
-        EmailLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        EmailLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        EmailLabel2.setText("UMP EMAIL");
-
-        EmailInput2.setText("Email@gmail.com");
-
         MatricLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         MatricLabel2.setForeground(new java.awt.Color(255, 255, 255));
         MatricLabel2.setText("Matric Number");
@@ -936,49 +990,51 @@ public class ProfileUI extends javax.swing.JFrame {
             UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(UserInfoPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(EmailLabel2)
-                    .addComponent(FullNameLabel1)
+                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                        .addComponent(IconUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(personalLabel1))
-                    .addComponent(FullNameInput1)
-                    .addComponent(EmailInput2, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(PhoneNumLabel1)
-                    .addComponent(MatricLabel2)
-                    .addComponent(MatricInput1)
-                    .addComponent(EmailInput3, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
-                .addGap(47, 47, 47))
+                        .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(PhoneNumLabel1)
+                            .addComponent(EmailInput3, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(UserInfoPanel1Layout.createSequentialGroup()
+                        .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(UserInfoPanel1Layout.createSequentialGroup()
+                                .addComponent(IconUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(personalLabel1)
+                                .addGap(0, 409, Short.MAX_VALUE))
+                            .addGroup(UserInfoPanel1Layout.createSequentialGroup()
+                                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(FullNameLabel1)
+                                    .addComponent(FullNameInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(MatricLabel2)
+                                    .addComponent(MatricInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(47, 47, 47))))
         );
         UserInfoPanel1Layout.setVerticalGroup(
             UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(UserInfoPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
+                .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(personalLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(IconUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(UserInfoPanel1Layout.createSequentialGroup()
+                        .addComponent(FullNameLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(FullNameInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(UserInfoPanel1Layout.createSequentialGroup()
                         .addComponent(MatricLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MatricInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PhoneNumLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmailInput3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(UserInfoPanel1Layout.createSequentialGroup()
-                        .addGroup(UserInfoPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(personalLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(IconUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(FullNameLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(FullNameInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmailLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(EmailInput2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                        .addComponent(MatricInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(PhoneNumLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(EmailInput3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
@@ -1072,7 +1128,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         // TODO add your handling code here:
-        new ProfileUI().setVisible(true);
+        new ProfileUI(currDriver).setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_jLabel5MouseClicked
@@ -1091,7 +1147,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void ProfileLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProfileLabelMouseClicked
         // TODO add your handling code here:
-        new ProfileUI().setVisible(true);
+        new ProfileUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ProfileLabelMouseClicked
 
@@ -1215,6 +1271,77 @@ public class ProfileUI extends javax.swing.JFrame {
         LogoutLabel.setBackground(new Color(15,61,92));
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
+
+    private void btnposttripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnposttripActionPerformed
+        // TODO add your handling code here:
+        String newName = FullNameInput1.getText().trim();
+        String newPhone = EmailInput3.getText().trim();
+        String newModel = CarModelInput.getText().trim();
+        String newPlate = NumPlateInput.getText().trim();
+        String newColor = CarColorInput.getText().trim();
+
+       
+        if (newName.isEmpty() || newPhone.isEmpty()
+                || newModel.isEmpty() || newPlate.isEmpty() || newColor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Update your profile?",
+                "Confirm Update",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+
+        
+            String sqlStudent = "UPDATE student SET student_name = ?, phone_num = ? WHERE student_id = ?";
+            PreparedStatement ps1 = conn.prepareStatement(sqlStudent);
+            ps1.setString(1, newName);
+            ps1.setString(2, newPhone);
+            ps1.setString(3, currDriver.getStudent_id());
+            ps1.executeUpdate();
+
+        
+            String sqlGetDriver = "SELECT driver_id FROM driver WHERE student_id = ?";
+            PreparedStatement psGet = conn.prepareStatement(sqlGetDriver);
+            psGet.setString(1, currDriver.getStudent_id());
+            ResultSet rsGet = psGet.executeQuery();
+
+            if (rsGet.next()) {
+                String driverId = rsGet.getString("driver_id");
+
+            
+                String sqlCar = "UPDATE car SET model = ?, numplate = ?, color = ? WHERE driver_id = ?";
+                PreparedStatement ps2 = conn.prepareStatement(sqlCar);
+                ps2.setString(1, newModel);
+                ps2.setString(2, newPlate);
+                ps2.setString(3, newColor);
+                ps2.setString(4, driverId);
+                ps2.executeUpdate();
+            }
+
+            
+            currDriver.setStudent_name(newName);
+            currDriver.setPhone_num(newPhone);
+
+            conn.close();
+
+            JOptionPane.showMessageDialog(this, "Profile updated successfully!");
+
+            
+            NameLabel.setText(newName);
+            NameDriverLabel.setText(newName);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error updating profile: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnposttripActionPerformed
     private void CarModelInputActionPerformed(java.awt.event.ActionEvent evt) {
         // handle car model input action (press Enter in field)
     }
@@ -1248,7 +1375,7 @@ public class ProfileUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ProfileUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ProfileUI(currDriver).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1261,10 +1388,8 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JLabel CarModelLabel2;
     private javax.swing.JPanel CarpoolListLabel;
     private javax.swing.JPanel DashboardLabel;
-    private javax.swing.JTextField EmailInput2;
     private javax.swing.JTextField EmailInput3;
     private javax.swing.JLabel EmailLabel;
-    private javax.swing.JLabel EmailLabel2;
     private javax.swing.JTextField FullNameInput1;
     private javax.swing.JLabel FullNameLabel1;
     private javax.swing.JLabel IconUser1;

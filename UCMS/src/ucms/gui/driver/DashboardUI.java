@@ -14,9 +14,13 @@ import java.awt.GridLayout;
 import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
+import java.time.LocalDate;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import ucms.Driver;
+import ucms.UCMS;
 
 /**
  *
@@ -26,6 +30,7 @@ public class DashboardUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardUI.class.getName());
     private static Driver currDriver;
+    private UCMS app;
     /**
      * Creates new form DashboardUI
      */
@@ -38,6 +43,8 @@ public class DashboardUI extends javax.swing.JFrame {
         NameDriverLabel.setText(currDriver.getStudent_name());
         jLabel2.setText(" Driver ." + currDriver.getStudent_id());
         welcomeLabel.setText("Welcome " + currDriver.getStudent_name());
+        LocalDate today = LocalDate.now(); 
+        datelabel.setText(String.valueOf(today));
         String profilename = currDriver.getStudent_name().substring(0, 2);
         //Profile Pic
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
@@ -744,12 +751,13 @@ public class DashboardUI extends javax.swing.JFrame {
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
         welcomeLabel.setText("Welcome User");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 530, 30));
 
         btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
         btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnposttrip.setForeground(new java.awt.Color(255, 255, 255));
         btnposttrip.setText("+  Post New Trip");
+        btnposttrip.addActionListener(this::btnposttripActionPerformed);
         header.add(btnposttrip, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 150, 40));
 
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -901,7 +909,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void ProfileLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ProfileLabelMouseClicked
         // TODO add your handling code here:
-        new ProfileUI().setVisible(true);
+        new ProfileUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ProfileLabelMouseClicked
 
@@ -943,7 +951,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         // TODO add your handling code here:
-        new ProfileUI().setVisible(true);
+        new ProfileUI(currDriver).setVisible(true);
         this.dispose();
   
     }//GEN-LAST:event_jLabel5MouseClicked
@@ -977,6 +985,17 @@ public class DashboardUI extends javax.swing.JFrame {
        new OngoingTripUI().setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void btnposttripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnposttripActionPerformed
+        // TODO add your handling code here:
+        AddCarpool addCarpool = new AddCarpool(currDriver);
+        java.awt.Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        JDialog diaglog = new JDialog(parentWindow, "Post A New Carpool", java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        diaglog.setContentPane(addCarpool);
+        diaglog.pack();
+        diaglog.setLocationRelativeTo(null);
+        diaglog.setVisible(true);
+    }//GEN-LAST:event_btnposttripActionPerformed
 
     
     /**

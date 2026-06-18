@@ -553,7 +553,7 @@ public class RegisterDriver extends javax.swing.JFrame {
         try {
             Connection conn = ucms.database.DBConnection.getConnection();
 
-            // check driver exists (same pattern as passenger check)
+            
             String checkSql = "SELECT student_id FROM driver WHERE student_id = ?";
 
             PreparedStatement checkPs = conn.prepareStatement(checkSql);
@@ -567,23 +567,22 @@ public class RegisterDriver extends javax.swing.JFrame {
             }
 
             String DriverID = studentId.substring(2) + studentId.substring(0, 2);
-            // generate driver object (same style as Passenger p)
+            
             Driver d = new Driver(DriverID, studentId, fullName, phone, password, licenseNo, carPlate, carModel, carColor);
 
-            // insert into student (same as passenger)
-            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password,role) "
-                    + "VALUES (?, ?, ?, ?,?)";
+            
+            String sqlStudent = "INSERT INTO student(student_id, student_name, phone_num, password,role) "+ "VALUES (?, ?, ?, ?,?)";
 
             PreparedStatement psStudent = conn.prepareStatement(sqlStudent);
             psStudent.setString(1, studentId);
             psStudent.setString(2, fullName);
             psStudent.setString(3, phone);
             psStudent.setString(4, password);
-            psStudent.setString(5, "passenger");
+            psStudent.setString(5, "Driver");
 
             int studentResult = psStudent.executeUpdate();
 
-            // insert into driver table
+            
             String sqlDriver = "INSERT INTO driver(driver_id,driver_license,approved,student_id) "
                     + "VALUES (?, ?, ?, ?)";
 

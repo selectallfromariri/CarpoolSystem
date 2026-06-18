@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package ucms.gui.authentication;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import ucms.Admin;
 /**
  *
@@ -13,11 +17,12 @@ public class AdminDashboardUI extends javax.swing.JFrame {
     /**
      * Creates new form AdminDashboardForm
      */
+    
     private static Admin currentAdmin;
     public AdminDashboardUI(Admin currAdmin) {
         initComponents();
         this.currentAdmin = currAdmin;
-        welcomeAdminHeader.setText("WELCOME" + currentAdmin.getAdminName());
+        welcomeAdminHeader.setText("WELCOME " + currentAdmin.getAdminName());
     }
 
     /**
@@ -47,6 +52,8 @@ public class AdminDashboardUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         card3 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        searchbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(45, 45, 45));
@@ -117,6 +124,11 @@ public class AdminDashboardUI extends javax.swing.JFrame {
 
         ApproveDriver.setBackground(new java.awt.Color(255, 153, 0));
         ApproveDriver.setText("Approve Driver");
+        ApproveDriver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApproveDriverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -166,7 +178,7 @@ public class AdminDashboardUI extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addComponent(card1)
-                .addContainerGap(115, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel6.setBackground(new java.awt.Color(45, 45, 45));
@@ -235,6 +247,20 @@ public class AdminDashboardUI extends javax.swing.JFrame {
                 .addContainerGap(113, Short.MAX_VALUE))
         );
 
+        jTextField1.setText("Search Matric Num");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        searchbtn.setText("Search");
+        searchbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchbtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -249,16 +275,26 @@ public class AdminDashboardUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(searchbtn)
+                .addGap(14, 14, 14))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchbtn))
+                .addGap(37, 37, 37)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(204, Short.MAX_VALUE))
         );
 
@@ -279,7 +315,6 @@ public class AdminDashboardUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -297,6 +332,110 @@ public class AdminDashboardUI extends javax.swing.JFrame {
         new LoginAdminUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_LogoutActionPerformed
+
+    private void ApproveDriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveDriverActionPerformed
+        // TODO add your handling code here:
+        new ApproveDriverUI(currentAdmin).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ApproveDriverActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void searchbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchbtnActionPerformed
+        // TODO add your handling code here:
+        String searchID = jTextField1.getText().trim();
+
+        if (searchID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a Student ID to search.");
+            return;
+        }
+
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+
+            
+            String sql = "SELECT * FROM student WHERE student_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, searchID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String studentId = rs.getString("student_id");
+                String name = rs.getString("student_name");
+                String phone = rs.getString("phone_num");
+                String role = rs.getString("role");
+
+                StringBuilder info = new StringBuilder();
+                info.append("=== STUDENT FOUND ===\n");
+                info.append("Student ID : ").append(studentId).append("\n");
+                info.append("Name       : ").append(name).append("\n");
+                info.append("Phone      : ").append(phone).append("\n");
+                info.append("Role       : ").append(role).append("\n");
+
+                
+                if (role.equalsIgnoreCase("driver")) {
+                    String sqlDriver = "SELECT * FROM driver WHERE student_id = ?";
+                    PreparedStatement ps2 = conn.prepareStatement(sqlDriver);
+                    ps2.setString(1, searchID);
+                    ResultSet rs2 = ps2.executeQuery();
+                    String driverID = "";
+                    
+                    if (rs2.next()) {
+                        driverID = rs2.getString("driver_id");
+                        info.append("\n=== DRIVER INFO ===\n");
+                        info.append("Driver ID  : ").append(rs2.getString("driver_id")).append("\n");
+                        info.append("License    : ").append(rs2.getString("driver_license")).append("\n");
+                        info.append("Approved   : ").append(rs2.getInt("approved") == 1 ? "Yes" : "Pending").append("\n");
+                       
+                    }
+                    String sqlCar = "SELECT * FROM car WHERE driver_id = ?";
+                    PreparedStatement ps3 = conn.prepareStatement(sqlCar);
+                    ps3.setString(1,driverID);
+                    ResultSet rs3 = ps3.executeQuery();
+                    if(rs3.next()){
+                        info.append("\n=== Car INFO ===\n");
+                        info.append("Plate Number  : ").append(rs3.getString("numplate")).append("\n");
+                        info.append("Model         : ").append(rs3.getString("model")).append("\n");
+                        info.append("Color         : ").append(rs3.getString("color")).append("\n");
+            
+                    }
+
+                   
+                } else if (role.equalsIgnoreCase("passenger")) {
+                    String sqlPass = "SELECT * FROM passenger WHERE student_id = ?";
+                    PreparedStatement ps2 = conn.prepareStatement(sqlPass);
+                    ps2.setString(1, searchID);
+                    ResultSet rs2 = ps2.executeQuery();
+
+                    if (rs2.next()) {
+                        info.append("\n=== PASSENGER INFO ===\n");
+                        info.append("Passenger ID : ").append(rs2.getString("passenger_id")).append("\n");
+                    }
+                }
+
+                JOptionPane.showMessageDialog(this,
+                        info.toString(),
+                        "Search Result",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No student found with ID: " + searchID,
+                        "Not Found",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Database error: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_searchbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -352,6 +491,8 @@ public class AdminDashboardUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton searchbtn;
     private javax.swing.JLabel welcomeAdminHeader;
     // End of variables declaration//GEN-END:variables
 }

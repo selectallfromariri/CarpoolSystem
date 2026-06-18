@@ -212,7 +212,7 @@ public class LoginStudentUI extends javax.swing.JFrame {
                 String role = rs.getString("role");
 
                 if (role.equalsIgnoreCase("driver")) {
-                    // Get driver data
+                    
                     PreparedStatement ps1 = conn.prepareStatement(
                             "SELECT * FROM driver WHERE student_id = ?");
                     ps1.setString(1, studentID);
@@ -251,14 +251,14 @@ public class LoginStudentUI extends javax.swing.JFrame {
                     }
 
                 } else if (role.equalsIgnoreCase("passenger")) {
-                    // Get passenger data
+                    
                     PreparedStatement ps1 = conn.prepareStatement(
                             "SELECT * FROM passenger WHERE student_id = ?");
                     ps1.setString(1, studentID);
                     ResultSet rs1 = ps1.executeQuery();
 
                     if (rs1.next()) {
-                        String passengerID = rs1.getString("passenger_id"); // fix: get from db
+                        String passengerID = rs1.getString("passenger_id"); 
 
                         Passenger p = new Passenger(passengerID, studentID, name, phone, password);
 
