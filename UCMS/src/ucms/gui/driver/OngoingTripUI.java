@@ -960,7 +960,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+        new SubmitReportUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
@@ -976,7 +976,7 @@ public class OngoingTripUI extends javax.swing.JFrame {
 
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+        new SubmitReportUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 

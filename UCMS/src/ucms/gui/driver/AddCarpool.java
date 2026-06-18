@@ -212,15 +212,13 @@ public class AddCarpool extends javax.swing.JPanel {
                 rsCount.close();
                 psCount.close();
             } catch (Exception e) {
-                // If something goes wrong, it will default to CP001 or you can handle it
+                
                 System.out.println("Error generating ID, defaulting: " + e.getMessage());
             }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate tarikh = LocalDate.parse(date,formatter);
             
-            PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO carpool (carpool_id, driver_id, destination, date, "
-                    + "available_seat, luggage_capacity, pickup_location) "
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO carpool (carpool_id, driver_id, destination, date, "+ "available_seat, luggage_capacity, pickup_location) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, carpoolID);
             ps.setString(2, driverId);

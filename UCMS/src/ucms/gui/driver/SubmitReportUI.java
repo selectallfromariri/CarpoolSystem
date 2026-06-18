@@ -19,16 +19,24 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import ucms.Driver;
 public class SubmitReportUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SubmitReportUI.class.getName());
-    private Driver currDriver;
+    private static Driver currDriver;
     /**
      * Creates new form SubmitReportUI
      */
-    public SubmitReportUI() {
+    public SubmitReportUI(Driver currDriver) {
         initComponents();
+        this.currDriver = currDriver;
+        NameDriverLabel.setText(currDriver.getStudent_name());
+        jLabel2.setText(" Driver ." + currDriver.getStudent_id());
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         String profilename = currDriver.getStudent_name().substring(0, 2);
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
@@ -61,14 +69,9 @@ public class SubmitReportUI extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel22 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        RDescInput = new javax.swing.JTextArea();
         jLabel24 = new javax.swing.JLabel();
-        clearbtn = new javax.swing.JButton();
         Submitbtn = new javax.swing.JButton();
         sidebar_pnl = new javax.swing.JPanel();
         logo_layout = new javax.swing.JPanel();
@@ -147,33 +150,19 @@ public class SubmitReportUI extends javax.swing.JFrame {
         jLabel21.setForeground(new java.awt.Color(255, 255, 255));
         jLabel21.setText("Report Type");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Passenger Late", "Account no approve", " " }));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
 
-        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel22.setText("Report Title");
-
-        jTextField1.setText("Brief of Report");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
-
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel23.setText("Passengers Involved ( Optional )");
-
-        jTextField2.setText("Name or Matric ID");
-        jTextField2.addActionListener(this::jTextField2ActionPerformed);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        RDescInput.setColumns(20);
+        RDescInput.setRows(5);
+        jScrollPane1.setViewportView(RDescInput);
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(255, 255, 255));
         jLabel24.setText("Description");
 
-        clearbtn.setText("Clear");
-
         Submitbtn.setText("Submit");
+        Submitbtn.addActionListener(this::SubmitbtnActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -181,26 +170,19 @@ public class SubmitReportUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel23)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
-                    .addComponent(jLabel22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel21)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel19))
+                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(Submitbtn)
+                        .addGap(33, 33, 33)))
                 .addContainerGap(41, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(clearbtn)
-                .addGap(18, 18, 18)
-                .addComponent(Submitbtn)
-                .addGap(43, 43, 43))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,22 +196,12 @@ public class SubmitReportUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
                 .addComponent(jLabel24)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(clearbtn)
-                    .addComponent(Submitbtn))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addComponent(Submitbtn)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
@@ -237,16 +209,16 @@ public class SubmitReportUI extends javax.swing.JFrame {
         MainContLayout.setHorizontalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainContLayout.createSequentialGroup()
-                .addContainerGap(218, Short.MAX_VALUE)
+                .addContainerGap(213, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(204, 204, 204))
+                .addGap(209, 209, 209))
         );
         MainContLayout.setVerticalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addGap(143, 143, 143)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(193, Short.MAX_VALUE))
+                .addContainerGap(247, Short.MAX_VALUE))
         );
 
         main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
@@ -838,14 +810,6 @@ public class SubmitReportUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
         new DashboardUI(currDriver).setVisible(true);
@@ -965,7 +929,7 @@ public class SubmitReportUI extends javax.swing.JFrame {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+        new SubmitReportUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
@@ -981,7 +945,7 @@ public class SubmitReportUI extends javax.swing.JFrame {
 
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+        new SubmitReportUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 
@@ -1017,6 +981,84 @@ public class SubmitReportUI extends javax.swing.JFrame {
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void SubmitbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitbtnActionPerformed
+        // TODO add your handling code here:
+        String RType =  String.valueOf(jComboBox1.getSelectedItem());
+        String RDesc = RDescInput.getText().trim();
+        
+        if (RType.isEmpty() || RDesc.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+        }
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+            String ReportID = "RP001"; 
+            PreparedStatement psGet = conn.prepareStatement(
+                    "SELECT driver_id FROM driver WHERE student_id = ?");
+            psGet.setString(1, currDriver.getStudent_id());
+            ResultSet rsGet = psGet.executeQuery();
+
+            if (!rsGet.next()) {
+                JOptionPane.showMessageDialog(this, "Driver not found.");
+                return;
+            }
+
+            String driverId  = rsGet.getString("driver_id");
+
+            try {
+                
+                PreparedStatement psCount = conn.prepareStatement("SELECT COUNT(*) AS total FROM report");
+                ResultSet rsCount = psCount.executeQuery();
+
+                if (rsCount.next()) {
+                    int nextIdNumber = rsCount.getInt("total") + 1;
+
+                    
+                    ReportID = String.format("CP%03d", nextIdNumber);
+                }
+                rsCount.close();
+                psCount.close();
+            } catch (Exception e) {
+                
+                System.out.println("Error generating ID, defaulting: " + e.getMessage());
+            }
+            
+            PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO report (report_id, type, details,driver_id,admin_id) "
+                    + "VALUES (?, ?, ?, ?, ?)");
+            
+            ps.setString(1, ReportID);
+            ps.setString(2, RType);
+            ps.setString(3, RDesc);
+            ps.setString(4, driverId);
+            ps.setString(5, null);
+            
+            int result = ps.executeUpdate();
+
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Report submitted successfully!");
+
+                jComboBox1.setSelectedIndex(0);
+                RDescInput.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Failed to submit report.");
+            }
+            
+            
+            
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+        
+    }//GEN-LAST:event_SubmitbtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1039,7 +1081,7 @@ public class SubmitReportUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new SubmitReportUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new SubmitReportUI(currDriver).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1052,10 +1094,10 @@ public class SubmitReportUI extends javax.swing.JFrame {
     private javax.swing.JLabel NameDriverLabel;
     private javax.swing.JPanel ProfileLabel;
     private javax.swing.JPanel ProfilePnl;
+    private javax.swing.JTextArea RDescInput;
     private javax.swing.JPanel ReportLabel;
     private javax.swing.JButton Submitbtn;
     private javax.swing.JPanel TripLabel;
-    private javax.swing.JButton clearbtn;
     private javax.swing.JLabel datelabel;
     private javax.swing.JPanel header;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -1073,8 +1115,6 @@ public class SubmitReportUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1088,9 +1128,6 @@ public class SubmitReportUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel logo_layout;
     private javax.swing.JPanel main_pnl;
     private javax.swing.JPanel pn_line;

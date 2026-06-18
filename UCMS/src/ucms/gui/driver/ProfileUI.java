@@ -36,6 +36,7 @@ public class ProfileUI extends javax.swing.JFrame {
     public ProfileUI(Driver currenDriver) {
         initComponents();
         this.currDriver = currenDriver;
+        NameDriverLabel.setText(currDriver.getStudent_name());
         jLabel2.setText(" Driver ." + currDriver.getStudent_id());
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
@@ -1222,7 +1223,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+        new SubmitReportUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
@@ -1238,7 +1239,7 @@ public class ProfileUI extends javax.swing.JFrame {
 
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+        new SubmitReportUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 

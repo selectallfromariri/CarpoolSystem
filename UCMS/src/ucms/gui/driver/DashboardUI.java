@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import ucms.Driver;
 import ucms.UCMS;
@@ -751,7 +752,7 @@ public class DashboardUI extends javax.swing.JFrame {
         welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
         welcomeLabel.setText("Welcome User");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 500, 30));
+        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 530, 30));
 
         btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
         btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -933,7 +934,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
         // TODO add your handling code here:
-       new SubmitReportUI().setVisible(true);
+       new SubmitReportUI(currDriver).setVisible(true);
        this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 
@@ -976,7 +977,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
         // TODO add your handling code here:
-       new SubmitReportUI().setVisible(true);
+       new SubmitReportUI(currDriver).setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
@@ -988,6 +989,12 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void btnposttripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnposttripActionPerformed
         // TODO add your handling code here:
+        
+        if(!currDriver.isApproved()){
+            JOptionPane.showMessageDialog(this,"Your driver account has not been approved yet.","Access Denied",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         AddCarpool addCarpool = new AddCarpool(currDriver);
         java.awt.Window parentWindow = SwingUtilities.getWindowAncestor(this);
         JDialog diaglog = new JDialog(parentWindow, "Post A New Carpool", java.awt.Dialog.ModalityType.APPLICATION_MODAL);

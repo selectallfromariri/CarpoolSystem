@@ -737,7 +737,7 @@ public class FeedbackUI extends javax.swing.JFrame {
 
     private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+//        new SubmitReportUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel16MouseClicked
 
@@ -753,7 +753,7 @@ public class FeedbackUI extends javax.swing.JFrame {
 
     private void ReportLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportLabelMouseClicked
         // TODO add your handling code here:
-        new SubmitReportUI().setVisible(true);
+//        new SubmitReportUI().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_ReportLabelMouseClicked
 

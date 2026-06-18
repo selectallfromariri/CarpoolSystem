@@ -295,10 +295,10 @@ public class UCMS {
 
         System.out.println("\n----- SUBMIT REPORT -----");
 
-        System.out.print("Report Subject: ");
+        System.out.println("Report Subject: ");
         String type = sc.nextLine();
 
-        System.out.print("Enter Report Details: ");
+        System.out.println("Enter Report Details: ");
         String details = sc.nextLine();
 
         Report r = new Report(String.valueOf(reports.size() + 1), driver, type, details);
