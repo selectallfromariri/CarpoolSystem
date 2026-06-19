@@ -20,6 +20,13 @@ import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
 import ucms.Driver;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+import ucms.database.DBConnection;
+import ucms.gui.authentication.LoginStudentUI;
 public class MyTripsUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MyTripsUI.class.getName());
@@ -27,8 +34,9 @@ public class MyTripsUI extends javax.swing.JFrame {
     /**
      * Creates new form MyTripsUI
      */
-    public MyTripsUI() {
+    public MyTripsUI(Driver currDriver) {
         initComponents(); 
+        this.currDriver = currDriver;
         ProfilePnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         String profilename = currDriver.getStudent_name().substring(0, 2);
         CircleLabel c = new CircleLabel(new Color(15,61,92), 0);
@@ -39,44 +47,53 @@ public class MyTripsUI extends javax.swing.JFrame {
         ProfilePnl.repaint();
         
         
-        CardMatrix card1 = new CardMatrix();
-        CardMatrix card2 = new CardMatrix();
-        CardMatrix card3 = new CardMatrix();
-      
-        card1.setColor1(new Color(38,38,36));
-        card1.setColor2(new Color(38,38,36));
-
-        card2.setColor1(new Color(38,38,36));
-        card2.setColor2(new Color(38,38,36));
- 
-        card3.setColor1(new Color(38,38,36));
-        card3.setColor2(new Color(38,38,36));
-
-        card1.SetData(new Matrix_Card( new ImageIcon(getClass().getResource("")), "Total Trips", "30", ""));
-
-        card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("")),"Completed Trips", "5", "" ));
-
-        card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("")),"Upcoming Trips", "4", ""));
-
-        card1.setPreferredSize(new Dimension(320, 200));
-        card2.setPreferredSize(new Dimension(320, 200));
-        card3.setPreferredSize(new Dimension(320, 200));
-
-        MatrixData.setLayout(new FlowLayout(FlowLayout.LEFT, 18, 22));
-        MatrixData.add(card1);
-        MatrixData.add(card2);
-        MatrixData.add(card3);
-        MatrixData.revalidate();
-        MatrixData.repaint();
         
-        
-        jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD,14));
+        jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         jTable1.getTableHeader().setOpaque(false);
         jTable1.getTableHeader().setBackground(Color.black);
         jTable1.getTableHeader().setForeground(Color.black);
         jTable1.getTableHeader().setPreferredSize(new Dimension(0, 35));
         jScrollPane1.getViewport().setBackground(new Color(48, 48, 46));
         jScrollPane1.setBackground(new Color(48, 48, 46));
+        
+        javax.swing.SwingUtilities.invokeLater(() -> loadMyTrips());
+    }
+    
+    private void loadMyTrips() {
+        DefaultTableModel model = new DefaultTableModel(
+            new String[]{"Carpool ID", "Pick Up Point", "Destination", "Date", "Seats Available", "Luggage Cap"},
+            0
+        ) {
+            public boolean isCellEditable(int row, int col) { return false; }
+        };
+        jTable1.setModel(model);
+        
+        String query = "SELECT c.carpool_id, c.pickup_location, c.destination, c.date, c.available_seat, c.luggage_capacity " +
+                       "FROM carpool c " +
+                       "JOIN driver d ON c.driver_id = d.driver_id " +
+                       "WHERE d.student_id = ? " +
+                       "ORDER BY c.date DESC";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setString(1, currDriver.getStudent_id());
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("carpool_id"),
+                    rs.getString("pickup_location"),
+                    rs.getString("destination"),
+                    rs.getString("date"),
+                    rs.getString("available_seat"),
+                    rs.getString("luggage_capacity")
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error loading trips: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -135,7 +152,6 @@ public class MyTripsUI extends javax.swing.JFrame {
         btnposttrip = new javax.swing.JButton();
         datelabel = new javax.swing.JLabel();
         MainCont = new javax.swing.JPanel();
-        MatrixData = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -627,6 +643,9 @@ public class MyTripsUI extends javax.swing.JFrame {
         jLabel17.setText("Log Out");
         jLabel17.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel17MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel17MouseEntered(evt);
             }
@@ -714,7 +733,7 @@ public class MyTripsUI extends javax.swing.JFrame {
                 .addComponent(ReportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -750,21 +769,8 @@ public class MyTripsUI extends javax.swing.JFrame {
 
         MainCont.setBackground(new java.awt.Color(48, 48, 46));
 
-        MatrixData.setBackground(new java.awt.Color(48, 48, 46));
-        MatrixData.setOpaque(false);
-
-        javax.swing.GroupLayout MatrixDataLayout = new javax.swing.GroupLayout(MatrixData);
-        MatrixData.setLayout(MatrixDataLayout);
-        MatrixDataLayout.setHorizontalGroup(
-            MatrixDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1034, Short.MAX_VALUE)
-        );
-        MatrixDataLayout.setVerticalGroup(
-            MatrixDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 146, Short.MAX_VALUE)
-        );
-
         jTable1.setBackground(new java.awt.Color(48, 48, 46));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -787,20 +793,16 @@ public class MyTripsUI extends javax.swing.JFrame {
         MainContLayout.setHorizontalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         MainContLayout.setVerticalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(15, 15, 15)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
@@ -862,7 +864,7 @@ public class MyTripsUI extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
@@ -879,7 +881,7 @@ public class MyTripsUI extends javax.swing.JFrame {
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 
@@ -951,7 +953,7 @@ public class MyTripsUI extends javax.swing.JFrame {
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
 
@@ -967,7 +969,7 @@ public class MyTripsUI extends javax.swing.JFrame {
 
     private void TripLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TripLabelMouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_TripLabelMouseClicked
 
@@ -980,6 +982,12 @@ public class MyTripsUI extends javax.swing.JFrame {
         LogoutLabel.setBackground(new Color(15,61,92));
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
+
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+        // TODO add your handling code here:
+        new LoginStudentUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel17MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1003,7 +1011,7 @@ public class MyTripsUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MyTripsUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MyTripsUI(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1012,7 +1020,6 @@ public class MyTripsUI extends javax.swing.JFrame {
     private javax.swing.JPanel DashboardLabel;
     private javax.swing.JPanel LogoutLabel;
     private javax.swing.JPanel MainCont;
-    private javax.swing.JPanel MatrixData;
     private javax.swing.JPanel MyTripsLabel;
     private javax.swing.JLabel NameDriverLabel;
     private javax.swing.JPanel ProfileLabel;

@@ -35,7 +35,9 @@ public class BookingFactory {
 
 
         selected.setAvailableSeat(selected.getAvailableSeat() - 1);
-        String id = "BK-" + System.currentTimeMillis();
-        return new booking(id, pass, selected, "2026-05-13", "PENDING");
+//        String id = "BK" + System.currentTimeMillis();
+        
+        String id = "BK-" + selected.getDestination().substring(0, 3).toUpperCase()+ "-" + pass.getStudent_id().substring(2, 6)+ selected.getDrive().getStudent_id().substring(2, 6) + selected.getDate().replace("/","").substring(2);
+        return new booking(id, pass, selected, selected.getDate(), "PENDING");
     }
 }

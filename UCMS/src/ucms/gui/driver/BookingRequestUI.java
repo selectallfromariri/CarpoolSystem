@@ -19,7 +19,9 @@ import javax.swing.Icon;
 import java.awt.Image;
 import java.awt.Insets;
 import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
 import ucms.Driver;
+import ucms.gui.authentication.LoginStudentUI;
 public class BookingRequestUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookingRequestUI.class.getName());
@@ -40,6 +42,19 @@ public class BookingRequestUI extends javax.swing.JFrame {
         ProfilePnl.revalidate();
         ProfilePnl.repaint();
         
+        NameDriverLabel.setText(currDriver.getStudent_name());
+        jLabel2.setText(currDriver.getStudent_id());
+        
+        // Setup table
+        jTable1.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"#", "Passenger", "Matric", "Date", "Status"}
+        ) {
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        });
+        
         jTable1.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD,14));
         jTable1.getTableHeader().setOpaque(false);
         jTable1.getTableHeader().setBackground(Color.black);
@@ -48,6 +63,14 @@ public class BookingRequestUI extends javax.swing.JFrame {
         jScrollPane1.getViewport().setBackground(new Color(48, 48, 46));
         jScrollPane1.setBackground(new Color(48, 48, 46));
         
+        // Load pending bookings from database
+        loadPendingBookings();
+    }
+    
+    private void loadPendingBookings() {
+        
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DriverDB.loadPendingBookings(currDriver, model);
     }
     
 
@@ -108,8 +131,11 @@ public class BookingRequestUI extends javax.swing.JFrame {
         MainCont = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1368, 743));
 
         sidebar_pnl.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -597,6 +623,9 @@ public class BookingRequestUI extends javax.swing.JFrame {
         jLabel17.setText("Log Out");
         jLabel17.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel17MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel17MouseEntered(evt);
             }
@@ -684,7 +713,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
                 .addComponent(ReportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -715,6 +744,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
         MainCont.setBackground(new java.awt.Color(48, 48, 46));
 
         jTable1.setBackground(new java.awt.Color(48, 48, 46));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -732,6 +762,11 @@ public class BookingRequestUI extends javax.swing.JFrame {
         jTable1.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(jTable1);
 
+        jButton2.setText("Accept");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        jButton3.setText("Reject");
+
         javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
         MainCont.setLayout(MainContLayout);
         MainContLayout.setHorizontalGroup(
@@ -740,13 +775,23 @@ public class BookingRequestUI extends javax.swing.JFrame {
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 910, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(111, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainContLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(176, 176, 176))
         );
         MainContLayout.setVerticalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton2))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
@@ -808,7 +853,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
@@ -825,7 +870,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 
@@ -897,7 +942,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
 
@@ -913,7 +958,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void TripLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TripLabelMouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_TripLabelMouseClicked
 
@@ -926,6 +971,38 @@ public class BookingRequestUI extends javax.swing.JFrame {
         LogoutLabel.setBackground(new Color(15,61,92));
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Accept booking request
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a booking request to accept.");
+            return;
+        }
+        
+        DriverDB.updateBookingStatus(selectedRow, "APPROVED", (DefaultTableModel) jTable1.getModel());
+        javax.swing.JOptionPane.showMessageDialog(this, "Booking approved successfully!");
+        loadPendingBookings();  // Refresh the table
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // Reject booking request
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a booking request to reject.");
+            return;
+        }
+        
+        DriverDB.updateBookingStatus(selectedRow, "REJECTED", (DefaultTableModel) jTable1.getModel());
+        javax.swing.JOptionPane.showMessageDialog(this, "Booking rejected successfully!");
+        loadPendingBookings();  // Refresh the table
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+        // TODO add your handling code here:
+        new LoginStudentUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel17MouseClicked
 
     /**
      * @param args the command line arguments
@@ -966,6 +1043,8 @@ public class BookingRequestUI extends javax.swing.JFrame {
     private javax.swing.JPanel TripLabel;
     private javax.swing.JLabel datelabel;
     private javax.swing.JPanel header;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

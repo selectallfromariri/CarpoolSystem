@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import ucms.Driver;
 import ucms.UCMS;
+import ucms.gui.authentication.LoginStudentUI;
 
 /**
  *
@@ -64,7 +65,7 @@ public class DashboardUI extends javax.swing.JFrame {
         
         //DataMatric
         
-        int[] stats = loadDriverStats(currDriver.getDriver_id());
+//        int[] stats = loadDriverStats(currDriver.getDriver_id());
         CardMatrix card1 = new CardMatrix();
         CardMatrix card2 = new CardMatrix();
         CardMatrix card3 = new CardMatrix();
@@ -78,11 +79,11 @@ public class DashboardUI extends javax.swing.JFrame {
         card3.setColor1(new Color(38,38,36));
         card3.setColor2(new Color(38,38,36));
 
-        card1.SetData(new Matrix_Card( new ImageIcon(getClass().getResource("/ucms/resources/Car.png")), "Total Trips", String.valueOf(stats[0]), "All time trips"));
+        card1.SetData(new Matrix_Card( new ImageIcon(getClass().getResource("/ucms/resources/Car.png")), "Total Trips", "0", "All time trips"));
 
-        card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Bell.png")),"Pending Request", String.valueOf(stats[1]), "Awaiting approval" ));
+        card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Bell.png")),"Pending Request", "0", "Awaiting approval" ));
 
-        card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png")),"Complete Trips", String.valueOf(stats[2]), "All Time complete trips"));
+        card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png")),"Complete Trips", "0", "All Time complete trips"));
 
         card1.setPreferredSize(new Dimension(320, 200));
         card2.setPreferredSize(new Dimension(320, 200));
@@ -105,56 +106,56 @@ public class DashboardUI extends javax.swing.JFrame {
 //        IconTrip.setIcon(new ImageIcon(image));
     }
     
-    private int[] loadDriverStats(String driverId) {
-        int totalTrips = 0, pendingRequests = 0, completedTrips = 0;
-        try {
-            Connection conn = ucms.database.DBConnection.getConnection();
-
-            String sqlTotal = "SELECT COUNT(*) FROM booking b "
-                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
-                    + "WHERE c.driver_id = ?";
-
-            String sqlPending = "SELECT COUNT(*) FROM booking b "
-                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
-                    + "WHERE c.driver_id = ? AND b.booking_status = 'PENDING'";
-
-            String sqlDone = "SELECT COUNT(*) FROM booking b "
-                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
-                    + "WHERE c.driver_id = ? AND b.booking_status = 'COMPLETED'";
-
-            PreparedStatement ps1 = conn.prepareStatement(sqlTotal);
-            ps1.setString(1, driverId);
-            ResultSet rs1 = ps1.executeQuery();
-            if (rs1.next()) {
-                totalTrips = rs1.getInt(1);
-            }
-            rs1.close();
-            ps1.close();
-
-            PreparedStatement ps2 = conn.prepareStatement(sqlPending);
-            ps2.setString(1, driverId);
-            ResultSet rs2 = ps2.executeQuery();
-            if (rs2.next()) {
-                pendingRequests = rs2.getInt(1);
-            }
-            rs2.close();
-            ps2.close();
-
-            PreparedStatement ps3 = conn.prepareStatement(sqlDone);
-            ps3.setString(1, driverId);
-            ResultSet rs3 = ps3.executeQuery();
-            if (rs3.next()) {
-                completedTrips = rs3.getInt(1);
-            }
-            rs3.close();
-            ps3.close();
-
-            conn.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error loading stats: " + e.getMessage());
-        }
-        return new int[]{totalTrips, pendingRequests, completedTrips};
-    }
+//    private int[] loadDriverStats(String driverId) {
+//        int totalTrips = 0, pendingRequests = 0, completedTrips = 0;
+//        try {
+//            Connection conn = ucms.database.DBConnection.getConnection();
+//
+//            String sqlTotal = "SELECT COUNT(*) FROM booking b "
+//                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
+//                    + "WHERE c.driver_id = ?";
+//
+//            String sqlPending = "SELECT COUNT(*) FROM booking b "
+//                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
+//                    + "WHERE c.driver_id = ? AND b.booking_status = 'PENDING'";
+//
+//            String sqlDone = "SELECT COUNT(*) FROM booking b "
+//                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
+//                    + "WHERE c.driver_id = ? AND b.booking_status = 'COMPLETED'";
+//
+//            PreparedStatement ps1 = conn.prepareStatement(sqlTotal);
+//            ps1.setString(1, driverId);
+//            ResultSet rs1 = ps1.executeQuery();
+//            if (rs1.next()) {
+//                totalTrips = rs1.getInt(1);
+//            }
+//            rs1.close();
+//            ps1.close();
+//
+//            PreparedStatement ps2 = conn.prepareStatement(sqlPending);
+//            ps2.setString(1, driverId);
+//            ResultSet rs2 = ps2.executeQuery();
+//            if (rs2.next()) {
+//                pendingRequests = rs2.getInt(1);
+//            }
+//            rs2.close();
+//            ps2.close();
+//
+//            PreparedStatement ps3 = conn.prepareStatement(sqlDone);
+//            ps3.setString(1, driverId);
+//            ResultSet rs3 = ps3.executeQuery();
+//            if (rs3.next()) {
+//                completedTrips = rs3.getInt(1);
+//            }
+//            rs3.close();
+//            ps3.close();
+//
+//            conn.close();
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(this, "Error loading stats: " + e.getMessage());
+//        }
+//        return new int[]{totalTrips, pendingRequests, completedTrips};
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -215,6 +216,7 @@ public class DashboardUI extends javax.swing.JFrame {
         MatrixData = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1368, 743));
 
         sidebar_pnl.setBackground(new java.awt.Color(15, 61, 92));
 
@@ -702,6 +704,9 @@ public class DashboardUI extends javax.swing.JFrame {
         jLabel17.setText("Log Out");
         jLabel17.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel17MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jLabel17MouseEntered(evt);
             }
@@ -789,7 +794,7 @@ public class DashboardUI extends javax.swing.JFrame {
                 .addComponent(ReportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -826,6 +831,7 @@ public class DashboardUI extends javax.swing.JFrame {
         main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
 
         MainCont.setBackground(new java.awt.Color(48, 48, 46));
+        MainCont.setPreferredSize(new java.awt.Dimension(1500, 837));
         MainCont.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 MainContMouseClicked(evt);
@@ -852,14 +858,14 @@ public class DashboardUI extends javax.swing.JFrame {
             .addGroup(MainContLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addContainerGap(618, Short.MAX_VALUE))
         );
         MainContLayout.setVerticalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(MatrixData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(577, Short.MAX_VALUE))
+                .addContainerGap(483, Short.MAX_VALUE))
         );
 
         main_pnl.add(MainCont, java.awt.BorderLayout.LINE_START);
@@ -973,7 +979,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MyTripsLabelMouseClicked
 
@@ -997,7 +1003,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void TripLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TripLabelMouseClicked
         // TODO add your handling code here:
-        new OngoingTripUI().setVisible(true);
+        new OngoingTripUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_TripLabelMouseClicked
 
@@ -1016,7 +1022,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         // TODO add your handling code here:
-        new MyTripsUI().setVisible(true);
+        new MyTripsUI(currDriver).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel7MouseClicked
 
@@ -1040,26 +1046,56 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
         // TODO add your handling code here:
-       new OngoingTripUI().setVisible(true);
+       new OngoingTripUI(currDriver).setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jLabel15MouseClicked
 
     private void btnposttripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnposttripActionPerformed
-        // TODO add your handling code here:
+      
         
-        if(!currDriver.isApproved()){
-            JOptionPane.showMessageDialog(this,"Your driver account has not been approved yet.","Access Denied",JOptionPane.WARNING_MESSAGE);
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+            String sql = "SELECT approved FROM driver WHERE student_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, currDriver.getStudent_id());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int approved = rs.getInt("approved");
+                if (approved == 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "Your driver account has not been approved yet.",
+                            "Access Denied",
+                            JOptionPane.WARNING_MESSAGE);
+                    conn.close();
+                    return;
+                }
+              
+                currDriver.setApproved(true);
+            }
+            conn.close();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
             return;
         }
+
         
         AddCarpool addCarpool = new AddCarpool(currDriver);
         java.awt.Window parentWindow = SwingUtilities.getWindowAncestor(this);
-        JDialog diaglog = new JDialog(parentWindow, "Post A New Carpool", java.awt.Dialog.ModalityType.APPLICATION_MODAL);
-        diaglog.setContentPane(addCarpool);
-        diaglog.pack();
-        diaglog.setLocationRelativeTo(null);
-        diaglog.setVisible(true);
+        JDialog dialog = new JDialog(parentWindow, "Post A New Carpool",
+                java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setContentPane(addCarpool);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnposttripActionPerformed
+
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+        // TODO add your handling code here:
+        new LoginStudentUI().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel17MouseClicked
 
     
     /**

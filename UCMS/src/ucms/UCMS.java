@@ -474,7 +474,7 @@ public class UCMS {
                 BookingInterface b = BookingFactory.createBooking(pass, carpools, id);
 
                 if (b != null) {
-                    bookingconcrete.add(b);
+                    bookings.add((booking) b);
                     
                     System.out.println("Booking successful!");
                 }
@@ -488,7 +488,7 @@ public class UCMS {
             BookingInterface b = BookingFactory.createBooking(pass, carpools, id);
 
             if (b != null) {
-                bookingconcrete.add(b);
+                bookings.add((booking) b);
 
                 System.out.println("Booking successful!");
             }

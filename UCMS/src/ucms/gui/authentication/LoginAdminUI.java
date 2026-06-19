@@ -217,7 +217,8 @@ public class LoginAdminUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void adminBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBackActionPerformed
-      this.dispose();
+      new RegisterMenu().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_adminBackActionPerformed
 
     private void adminLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminLoginActionPerformed
