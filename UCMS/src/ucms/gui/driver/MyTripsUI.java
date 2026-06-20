@@ -72,6 +72,7 @@ public class MyTripsUI extends javax.swing.JFrame {
                        "FROM carpool c " +
                        "JOIN driver d ON c.driver_id = d.driver_id " +
                        "WHERE d.student_id = ? " +
+                       "AND NOT EXISTS (SELECT 1 FROM booking b WHERE b.carpool_id = c.carpool_id AND b.booking_status IN ('COMPLETED', 'ONGOING')) " +
                        "ORDER BY c.date DESC";
         
         try (Connection conn = DBConnection.getConnection();

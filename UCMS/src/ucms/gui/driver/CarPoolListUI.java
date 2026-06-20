@@ -73,7 +73,9 @@ public class CarPoolListUI extends javax.swing.JFrame {
                     + "c.date, c.available_seat "
                     + "FROM carpool c "
                     + "JOIN driver d ON c.driver_id = d.driver_id "
-                    + "JOIN student s ON d.student_id = s.student_id";
+                    + "JOIN student s ON d.student_id = s.student_id "
+                    + "LEFT JOIN booking b ON c.carpool_id = b.carpool_id AND b.booking_status IN ('COMPLETED', 'ONGOING') "
+                    + "WHERE b.carpool_id IS NULL";
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
