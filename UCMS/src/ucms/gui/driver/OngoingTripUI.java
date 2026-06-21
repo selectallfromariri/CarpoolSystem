@@ -192,12 +192,11 @@ public class OngoingTripUI extends javax.swing.JFrame {
         header = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         welcomeLabel = new javax.swing.JLabel();
-        btnposttrip = new javax.swing.JButton();
         datelabel = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         MainCont = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -798,16 +797,13 @@ public class OngoingTripUI extends javax.swing.JFrame {
         welcomeLabel.setText("Ongoing Trip");
         header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
 
-        btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
-        btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnposttrip.setForeground(new java.awt.Color(255, 255, 255));
-        btnposttrip.setText("+  Post New Trip");
-        header.add(btnposttrip, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 150, 40));
-
         datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         datelabel.setForeground(new java.awt.Color(153, 153, 153));
         datelabel.setText("View and manage your active trip");
         header.add(datelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 230, 30));
+
+        jButton3.setText("Start Trip");
+        header.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 40, 150, 40));
 
         main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
 
@@ -832,25 +828,19 @@ public class OngoingTripUI extends javax.swing.JFrame {
         jTable1.setSelectionForeground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton3.setText("Start Trip");
-
         javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
         MainCont.setLayout(MainContLayout);
         MainContLayout.setHorizontalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1021, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         MainContLayout.setVerticalGroup(
             MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(MainContLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton3)
-                .addGap(18, 18, 18)
+                .addGap(47, 47, 47)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(159, Short.MAX_VALUE))
         );
@@ -1076,7 +1066,6 @@ public class OngoingTripUI extends javax.swing.JFrame {
     private javax.swing.JPanel ProfilePnl;
     private javax.swing.JPanel ReportLabel;
     private javax.swing.JPanel TripLabel;
-    private javax.swing.JButton btnposttrip;
     private javax.swing.JLabel datelabel;
     private javax.swing.JPanel header;
     private javax.swing.JButton jButton3;
