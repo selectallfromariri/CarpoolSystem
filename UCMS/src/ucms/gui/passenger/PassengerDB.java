@@ -38,6 +38,7 @@ final class PassengerDB {
                 + "JOIN driver d ON c.driver_id = d.driver_id "
                 + "JOIN student s ON d.student_id = s.student_id "
                 + "WHERE (? = '' OR c.destination LIKE ? OR c.pickup_location LIKE ? OR s.student_name LIKE ?) "
+                + "AND NOT EXISTS (SELECT 1 FROM booking b WHERE b.carpool_id = c.carpool_id AND b.booking_status IN ('COMPLETED', 'ONGOING')) "
                 + "ORDER BY c.date, c.carpool_id";
 
         try (Connection conn = ucms.database.DBConnection.getConnection();
