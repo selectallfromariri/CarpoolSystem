@@ -60,7 +60,7 @@ public class Admin {
             for (Driver d : drivers) {
                 if (d != null) {
                     System.out.println("--------------------------------");
-                    System.out.println("Driver ID      : " + d.getDriver_id());
+                    System.out.println("Driver ID      : DRV" + d.getDriver_id());
                     System.out.println("Driver Name    : " + d.getStudent_name());
                     System.out.println("License Number : " + d.getDriver_license());
                 }

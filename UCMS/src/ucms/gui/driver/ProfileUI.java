@@ -12,25 +12,18 @@ package ucms.gui.driver;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import javax.swing.Icon;
-import java.awt.Image;
-import java.awt.Insets;
-import javax.swing.ImageIcon;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
+import ucms.UCMS;
 import ucms.Driver;
 import ucms.gui.authentication.LoginStudentUI;
 public class ProfileUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProfileUI.class.getName());
     private static Driver currDriver;
+    private static UCMS app;
     /**
      * Creates new form ProfileUI
      */
@@ -49,14 +42,14 @@ public class ProfileUI extends javax.swing.JFrame {
         ProfilePnl.revalidate();
         ProfilePnl.repaint();
         
-        ProfilePnl1.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+        ProfilePnl3.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         CircleLabel c1 = new CircleLabel(new Color(15,61,92), 0);
         c1.setText(profilename);
         c1.setPreferredSize(new Dimension(100, 100));
         c1.setBackground(new Color(245,166,35));
-        ProfilePnl1.add(c1);
-        ProfilePnl1.revalidate();
-        ProfilePnl1.repaint();
+        ProfilePnl3.add(c1);
+        ProfilePnl3.revalidate();
+        ProfilePnl3.repaint();
         
          loadProfile();
     }
@@ -164,15 +157,15 @@ public class ProfileUI extends javax.swing.JFrame {
         pn_line9 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        main_pnl = new javax.swing.JPanel();
-        header = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        welcomeLabel = new javax.swing.JLabel();
-        btnposttrip = new javax.swing.JButton();
-        datelabel = new javax.swing.JLabel();
-        MainCont = new javax.swing.JPanel();
-        infoPanel = new javax.swing.JPanel();
-        ProfilePnl1 = new javax.swing.JPanel();
+        main_pnl2 = new javax.swing.JPanel();
+        header2 = new javax.swing.JPanel();
+        jSeparator5 = new javax.swing.JSeparator();
+        welcomeLabel2 = new javax.swing.JLabel();
+        btnposttrip2 = new javax.swing.JButton();
+        datelabel2 = new javax.swing.JLabel();
+        MainCont2 = new javax.swing.JPanel();
+        infoPanel2 = new javax.swing.JPanel();
+        ProfilePnl3 = new javax.swing.JPanel();
         EmailLabel = new javax.swing.JLabel();
         NameLabel = new javax.swing.JLabel();
         MatricLabel = new javax.swing.JLabel();
@@ -201,6 +194,7 @@ public class ProfileUI extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(1368, 743));
 
         sidebar_pnl.setBackground(new java.awt.Color(15, 61, 92));
+        sidebar_pnl.setPreferredSize(new java.awt.Dimension(275, 727));
 
         logo_layout.setBackground(new java.awt.Color(15, 61, 92));
         logo_layout.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(206, 206, 206)));
@@ -776,54 +770,54 @@ public class ProfileUI extends javax.swing.JFrame {
                 .addComponent(ReportLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TripLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LogoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        main_pnl.setBackground(new java.awt.Color(48, 48, 46));
-        main_pnl.setLayout(new java.awt.BorderLayout());
+        main_pnl2.setBackground(new java.awt.Color(48, 48, 46));
+        main_pnl2.setLayout(new java.awt.BorderLayout());
 
-        header.setBackground(new java.awt.Color(48, 48, 46));
-        header.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        header.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 107, 1066, -1));
+        header2.setBackground(new java.awt.Color(48, 48, 46));
+        header2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        header2.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 107, 1066, -1));
 
-        welcomeLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        welcomeLabel.setForeground(new java.awt.Color(255, 255, 255));
-        welcomeLabel.setText("My Profile");
-        header.add(welcomeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
+        welcomeLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        welcomeLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        welcomeLabel2.setText("My Profile");
+        header2.add(welcomeLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 170, 30));
 
-        btnposttrip.setBackground(new java.awt.Color(26, 58, 92));
-        btnposttrip.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnposttrip.setForeground(new java.awt.Color(255, 255, 255));
-        btnposttrip.setText("Update Profile");
-        btnposttrip.addActionListener(this::btnposttripActionPerformed);
-        header.add(btnposttrip, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 150, 40));
+        btnposttrip2.setBackground(new java.awt.Color(26, 58, 92));
+        btnposttrip2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnposttrip2.setForeground(new java.awt.Color(255, 255, 255));
+        btnposttrip2.setText("Update Profile");
+        btnposttrip2.addActionListener(this::btnposttripActionPerformed);
+        header2.add(btnposttrip2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, 150, 40));
 
-        datelabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        datelabel.setForeground(new java.awt.Color(153, 153, 153));
-        datelabel.setText("View and Update Personal Details");
-        header.add(datelabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 220, 30));
+        datelabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        datelabel2.setForeground(new java.awt.Color(153, 153, 153));
+        datelabel2.setText("View and Update Personal Details");
+        header2.add(datelabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 220, 30));
 
-        main_pnl.add(header, java.awt.BorderLayout.PAGE_START);
+        main_pnl2.add(header2, java.awt.BorderLayout.PAGE_START);
 
-        MainCont.setBackground(new java.awt.Color(48, 48, 46));
+        MainCont2.setBackground(new java.awt.Color(48, 48, 46));
 
-        infoPanel.setBackground(new java.awt.Color(38, 38, 36));
-        infoPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 2, true));
+        infoPanel2.setBackground(new java.awt.Color(38, 38, 36));
+        infoPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 2, true));
 
-        ProfilePnl1.setBackground(new java.awt.Color(38, 38, 36));
+        ProfilePnl3.setBackground(new java.awt.Color(38, 38, 36));
 
-        javax.swing.GroupLayout ProfilePnl1Layout = new javax.swing.GroupLayout(ProfilePnl1);
-        ProfilePnl1.setLayout(ProfilePnl1Layout);
-        ProfilePnl1Layout.setHorizontalGroup(
-            ProfilePnl1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout ProfilePnl3Layout = new javax.swing.GroupLayout(ProfilePnl3);
+        ProfilePnl3.setLayout(ProfilePnl3Layout);
+        ProfilePnl3Layout.setHorizontalGroup(
+            ProfilePnl3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 163, Short.MAX_VALUE)
         );
-        ProfilePnl1Layout.setVerticalGroup(
-            ProfilePnl1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        ProfilePnl3Layout.setVerticalGroup(
+            ProfilePnl3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 170, Short.MAX_VALUE)
         );
 
@@ -839,42 +833,39 @@ public class ProfileUI extends javax.swing.JFrame {
         MatricLabel.setForeground(new java.awt.Color(255, 255, 255));
         MatricLabel.setText("Matric ID");
 
-        javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
-        infoPanel.setLayout(infoPanelLayout);
-        infoPanelLayout.setHorizontalGroup(
-            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(infoPanelLayout.createSequentialGroup()
-                .addGap(223, 223, 223)
-                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout infoPanel2Layout = new javax.swing.GroupLayout(infoPanel2);
+        infoPanel2.setLayout(infoPanel2Layout);
+        infoPanel2Layout.setHorizontalGroup(
+            infoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(ProfilePnl3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addGroup(infoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanel2Layout.createSequentialGroup()
                         .addComponent(NameLabel)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
-                        .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanel2Layout.createSequentialGroup()
+                        .addGroup(infoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(MatricLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
                             .addComponent(EmailLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(398, 398, 398))))
-            .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(infoPanelLayout.createSequentialGroup()
-                    .addGap(43, 43, 43)
-                    .addComponent(ProfilePnl1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(478, Short.MAX_VALUE)))
         );
-        infoPanelLayout.setVerticalGroup(
-            infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(infoPanelLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(NameLabel)
-                .addGap(18, 18, 18)
-                .addComponent(MatricLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EmailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+        infoPanel2Layout.setVerticalGroup(
+            infoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoPanel2Layout.createSequentialGroup()
+                .addGroup(infoPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(infoPanel2Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(NameLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(MatricLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(EmailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(infoPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(ProfilePnl3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoPanelLayout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ProfilePnl1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(26, 26, 26)))
         );
 
         CarInfoPanel2.setBackground(new java.awt.Color(38, 38, 36));
@@ -1045,23 +1036,23 @@ public class ProfileUI extends javax.swing.JFrame {
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout MainContLayout = new javax.swing.GroupLayout(MainCont);
-        MainCont.setLayout(MainContLayout);
-        MainContLayout.setHorizontalGroup(
-            MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainContLayout.createSequentialGroup()
+        javax.swing.GroupLayout MainCont2Layout = new javax.swing.GroupLayout(MainCont2);
+        MainCont2.setLayout(MainCont2Layout);
+        MainCont2Layout.setHorizontalGroup(
+            MainCont2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainCont2Layout.createSequentialGroup()
                 .addGap(190, 190, 190)
-                .addGroup(MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(MainCont2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(CarInfoPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(UserInfoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(infoPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(233, Short.MAX_VALUE))
         );
-        MainContLayout.setVerticalGroup(
-            MainContLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MainContLayout.createSequentialGroup()
+        MainCont2Layout.setVerticalGroup(
+            MainCont2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MainCont2Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(infoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(infoPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(UserInfoPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1069,45 +1060,31 @@ public class ProfileUI extends javax.swing.JFrame {
                 .addContainerGap(74, Short.MAX_VALUE))
         );
 
-        main_pnl.add(MainCont, java.awt.BorderLayout.PAGE_END);
+        main_pnl2.add(MainCont2, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1386, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 275, Short.MAX_VALUE)
-                    .addComponent(main_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, 1111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(1105, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(main_pnl2, javax.swing.GroupLayout.PREFERRED_SIZE, 1111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 849, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(main_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, 837, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sidebar_pnl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(main_pnl2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sidebar_pnl, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void MatricInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MatricInput1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_MatricInput1ActionPerformed
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
@@ -1280,6 +1257,28 @@ public class ProfileUI extends javax.swing.JFrame {
         pn_line9.setBackground(new Color(15,61,92));
     }//GEN-LAST:event_jLabel17MouseExited
 
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+        // TODO add your handling code here:
+        new LoginStudentUI(app).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jLabel17MouseClicked
+
+    private void MatricInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MatricInput1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MatricInput1ActionPerformed
+
+    private void CarColorInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarColorInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CarColorInputActionPerformed
+
+    private void NumPlateInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumPlateInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NumPlateInputActionPerformed
+
+    private void CarModelInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarModelInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CarModelInputActionPerformed
+
     private void btnposttripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnposttripActionPerformed
         // TODO add your handling code here:
         String newName = FullNameInput1.getText().trim();
@@ -1288,17 +1287,16 @@ public class ProfileUI extends javax.swing.JFrame {
         String newPlate = NumPlateInput.getText().trim();
         String newColor = CarColorInput.getText().trim();
 
-       
         if (newName.isEmpty() || newPhone.isEmpty()
-                || newModel.isEmpty() || newPlate.isEmpty() || newColor.isEmpty()) {
+            || newModel.isEmpty() || newPlate.isEmpty() || newColor.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-                "Update your profile?",
-                "Confirm Update",
-                JOptionPane.YES_NO_OPTION);
+            "Update your profile?",
+            "Confirm Update",
+            JOptionPane.YES_NO_OPTION);
 
         if (confirm != JOptionPane.YES_OPTION) {
             return;
@@ -1307,7 +1305,6 @@ public class ProfileUI extends javax.swing.JFrame {
         try {
             Connection conn = ucms.database.DBConnection.getConnection();
 
-        
             String sqlStudent = "UPDATE student SET student_name = ?, phone_num = ? WHERE student_id = ?";
             PreparedStatement ps1 = conn.prepareStatement(sqlStudent);
             ps1.setString(1, newName);
@@ -1315,7 +1312,6 @@ public class ProfileUI extends javax.swing.JFrame {
             ps1.setString(3, currDriver.getStudent_id());
             ps1.executeUpdate();
 
-        
             String sqlGetDriver = "SELECT driver_id FROM driver WHERE student_id = ?";
             PreparedStatement psGet = conn.prepareStatement(sqlGetDriver);
             psGet.setString(1, currDriver.getStudent_id());
@@ -1324,7 +1320,6 @@ public class ProfileUI extends javax.swing.JFrame {
             if (rsGet.next()) {
                 String driverId = rsGet.getString("driver_id");
 
-            
                 String sqlCar = "UPDATE car SET model = ?, numplate = ?, color = ? WHERE driver_id = ?";
                 PreparedStatement ps2 = conn.prepareStatement(sqlCar);
                 ps2.setString(1, newModel);
@@ -1334,7 +1329,6 @@ public class ProfileUI extends javax.swing.JFrame {
                 ps2.executeUpdate();
             }
 
-            
             currDriver.setStudent_name(newName);
             currDriver.setPhone_num(newPhone);
 
@@ -1342,7 +1336,6 @@ public class ProfileUI extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(this, "Profile updated successfully!");
 
-            
             NameLabel.setText(newName);
             NameDriverLabel.setText(newName);
 
@@ -1350,23 +1343,17 @@ public class ProfileUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error updating profile: " + e.getMessage());
         }
     }//GEN-LAST:event_btnposttripActionPerformed
-
-    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
-        // TODO add your handling code here:
-        new LoginStudentUI().setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_jLabel17MouseClicked
-    private void CarModelInputActionPerformed(java.awt.event.ActionEvent evt) {
-        // handle car model input action (press Enter in field)
-    }
-
-    private void NumPlateInputActionPerformed(java.awt.event.ActionEvent evt) {
-        // handle num plate input action
-    }
-
-    private void CarColorInputActionPerformed(java.awt.event.ActionEvent evt) {
-        // handle car color input action
-    }
+//    private void CarModelInputActionPerformed(java.awt.event.ActionEvent evt) {
+//        // handle car model input action (press Enter in field)
+//    }
+//
+//    private void NumPlateInputActionPerformed(java.awt.event.ActionEvent evt) {
+//        // handle num plate input action
+//    }
+//
+//    private void CarColorInputActionPerformed(java.awt.event.ActionEvent evt) {
+//        // handle car color input action
+//    }
     /**
      * @param args the command line arguments
      */
@@ -1411,6 +1398,8 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JTextField LicenceInput;
     private javax.swing.JPanel LogoutLabel;
     private javax.swing.JPanel MainCont;
+    private javax.swing.JPanel MainCont1;
+    private javax.swing.JPanel MainCont2;
     private javax.swing.JTextField MatricInput1;
     private javax.swing.JLabel MatricLabel;
     private javax.swing.JLabel MatricLabel2;
@@ -1424,13 +1413,23 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JPanel ProfileLabel;
     private javax.swing.JPanel ProfilePnl;
     private javax.swing.JPanel ProfilePnl1;
+    private javax.swing.JPanel ProfilePnl2;
+    private javax.swing.JPanel ProfilePnl3;
     private javax.swing.JPanel ReportLabel;
     private javax.swing.JPanel TripLabel;
     private javax.swing.JPanel UserInfoPanel1;
     private javax.swing.JButton btnposttrip;
+    private javax.swing.JButton btnposttrip1;
+    private javax.swing.JButton btnposttrip2;
     private javax.swing.JLabel datelabel;
+    private javax.swing.JLabel datelabel1;
+    private javax.swing.JLabel datelabel2;
     private javax.swing.JPanel header;
+    private javax.swing.JPanel header1;
+    private javax.swing.JPanel header2;
     private javax.swing.JPanel infoPanel;
+    private javax.swing.JPanel infoPanel1;
+    private javax.swing.JPanel infoPanel2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1452,8 +1451,12 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JPanel logo_layout;
     private javax.swing.JPanel main_pnl;
+    private javax.swing.JPanel main_pnl1;
+    private javax.swing.JPanel main_pnl2;
     private javax.swing.JLabel personalLabel1;
     private javax.swing.JPanel pn_line;
     private javax.swing.JPanel pn_line1;
@@ -1465,5 +1468,7 @@ public class ProfileUI extends javax.swing.JFrame {
     private javax.swing.JPanel pn_line9;
     private javax.swing.JPanel sidebar_pnl;
     private javax.swing.JLabel welcomeLabel;
+    private javax.swing.JLabel welcomeLabel1;
+    private javax.swing.JLabel welcomeLabel2;
     // End of variables declaration//GEN-END:variables
 }

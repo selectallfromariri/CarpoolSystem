@@ -12,20 +12,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import javax.swing.Icon;
-import java.awt.Image;
-import java.awt.Insets;
-import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 import ucms.Driver;
 import ucms.gui.authentication.LoginStudentUI;
+import ucms.UCMS;
 public class BookingRequestUI extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookingRequestUI.class.getName());
     private static Driver currDriver;
+    private UCMS app;
     /**
      * Creates new form CarPoolListUI
      */
@@ -1000,7 +995,7 @@ public class BookingRequestUI extends javax.swing.JFrame {
 
     private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
         // TODO add your handling code here:
-        new LoginStudentUI().setVisible(true);
+        new LoginStudentUI(app).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel17MouseClicked
 

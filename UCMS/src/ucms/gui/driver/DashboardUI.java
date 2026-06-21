@@ -7,18 +7,9 @@ package ucms.gui.driver;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import javax.swing.Icon;
-import java.awt.Image;
-import java.awt.Insets;
 import java.time.LocalDate;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
@@ -47,7 +38,7 @@ public class DashboardUI extends javax.swing.JFrame {
         
         //profile name
         NameDriverLabel.setText(currDriver.getStudent_name());
-        jLabel2.setText(" Driver ." + currDriver.getStudent_id());
+        jLabel2.setText(" Driver | " + currDriver.getDriver_id());
         welcomeLabel.setText("Welcome " + currDriver.getStudent_name());
         LocalDate today = LocalDate.now(); 
         datelabel.setText(String.valueOf(today));
@@ -65,7 +56,7 @@ public class DashboardUI extends javax.swing.JFrame {
         
         //DataMatric
         
-//        int[] stats = loadDriverStats(currDriver.getDriver_id());
+        int[] stats = loadDriverStats(currDriver.getDriver_id());
         CardMatrix card1 = new CardMatrix();
         CardMatrix card2 = new CardMatrix();
         CardMatrix card3 = new CardMatrix();
@@ -79,12 +70,10 @@ public class DashboardUI extends javax.swing.JFrame {
         card3.setColor1(new Color(38,38,36));
         card3.setColor2(new Color(38,38,36));
 
-        card1.SetData(new Matrix_Card( new ImageIcon(getClass().getResource("/ucms/resources/Car.png")), "Total Trips", "0", "All time trips"));
-
-        card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Bell.png")),"Pending Request", "0", "Awaiting approval" ));
-
-        card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png")),"Complete Trips", "0", "All Time complete trips"));
-
+        card1.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Car.png")),"Total Trips",String.valueOf(stats[0]),"All time trips"));
+        card2.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/Bell.png")),"Pending Request",String.valueOf(stats[1]),"Awaiting approval"));
+        card3.SetData(new Matrix_Card(new ImageIcon(getClass().getResource("/ucms/resources/GraphReport.png")),"Completed Trips",String.valueOf(stats[2]),"Trips already completed"));
+        
         card1.setPreferredSize(new Dimension(320, 200));
         card2.setPreferredSize(new Dimension(320, 200));
         card3.setPreferredSize(new Dimension(320, 200));
@@ -106,56 +95,50 @@ public class DashboardUI extends javax.swing.JFrame {
 //        IconTrip.setIcon(new ImageIcon(image));
     }
     
-//    private int[] loadDriverStats(String driverId) {
-//        int totalTrips = 0, pendingRequests = 0, completedTrips = 0;
-//        try {
-//            Connection conn = ucms.database.DBConnection.getConnection();
-//
-//            String sqlTotal = "SELECT COUNT(*) FROM booking b "
-//                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
-//                    + "WHERE c.driver_id = ?";
-//
-//            String sqlPending = "SELECT COUNT(*) FROM booking b "
-//                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
-//                    + "WHERE c.driver_id = ? AND b.booking_status = 'PENDING'";
-//
-//            String sqlDone = "SELECT COUNT(*) FROM booking b "
-//                    + "JOIN carpool c ON b.carpool_id = c.carpool_id "
-//                    + "WHERE c.driver_id = ? AND b.booking_status = 'COMPLETED'";
-//
-//            PreparedStatement ps1 = conn.prepareStatement(sqlTotal);
-//            ps1.setString(1, driverId);
-//            ResultSet rs1 = ps1.executeQuery();
-//            if (rs1.next()) {
-//                totalTrips = rs1.getInt(1);
-//            }
-//            rs1.close();
-//            ps1.close();
-//
-//            PreparedStatement ps2 = conn.prepareStatement(sqlPending);
-//            ps2.setString(1, driverId);
-//            ResultSet rs2 = ps2.executeQuery();
-//            if (rs2.next()) {
-//                pendingRequests = rs2.getInt(1);
-//            }
-//            rs2.close();
-//            ps2.close();
-//
-//            PreparedStatement ps3 = conn.prepareStatement(sqlDone);
-//            ps3.setString(1, driverId);
-//            ResultSet rs3 = ps3.executeQuery();
-//            if (rs3.next()) {
-//                completedTrips = rs3.getInt(1);
-//            }
-//            rs3.close();
-//            ps3.close();
-//
-//            conn.close();
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(this, "Error loading stats: " + e.getMessage());
-//        }
-//        return new int[]{totalTrips, pendingRequests, completedTrips};
-//    }
+    private int[] loadDriverStats(String driverId) {
+        int totalTrips = 0, pendingRequests = 0, completedTrips = 0;
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+
+            String sqlTotal = "SELECT COUNT(DISTINCT c.carpool_id) FROM carpool c WHERE c.driver_id = ?";
+
+            String sqlPending = "SELECT COUNT(*) FROM booking b " + "JOIN carpool c ON b.carpool_id = c.carpool_id "+ "WHERE c.driver_id = ? AND b.booking_status = 'PENDING'";
+
+            String sqlDone = "SELECT COUNT(*) FROM booking b " + "JOIN carpool c ON b.carpool_id = c.carpool_id "+ "WHERE c.driver_id = ? AND b.booking_status = 'COMPLETED'";
+
+            PreparedStatement ps1 = conn.prepareStatement(sqlTotal);
+            ps1.setString(1, driverId);
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) {
+                totalTrips = rs1.getInt(1);
+            }
+            rs1.close();
+            ps1.close();
+
+            PreparedStatement ps2 = conn.prepareStatement(sqlPending);
+            ps2.setString(1, driverId);
+            ResultSet rs2 = ps2.executeQuery();
+            if (rs2.next()) {
+                pendingRequests = rs2.getInt(1);
+            }
+            rs2.close();
+            ps2.close();
+
+            PreparedStatement ps3 = conn.prepareStatement(sqlDone);
+            ps3.setString(1, driverId);
+            ResultSet rs3 = ps3.executeQuery();
+            if (rs3.next()) {
+                completedTrips = rs3.getInt(1);
+            }
+            rs3.close();
+            ps3.close();
+
+            conn.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error loading stats: " + e.getMessage());
+        }
+        return new int[]{totalTrips, pendingRequests, completedTrips};
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1093,7 +1076,7 @@ public class DashboardUI extends javax.swing.JFrame {
 
     private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
         // TODO add your handling code here:
-        new LoginStudentUI().setVisible(true);
+        new LoginStudentUI(app).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jLabel17MouseClicked
 

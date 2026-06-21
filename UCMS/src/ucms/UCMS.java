@@ -590,9 +590,9 @@ public class UCMS {
         for (Student s : Pelajar()){
             if(s.getStudent_id().equalsIgnoreCase(id)){
                 s.displayProfile();
-                //
+                
                 if (s instanceof Driver) {
-                    //
+                    
                     Driver d = (Driver) s;
                     System.out.println("Role     : Driver");
                     System.out.println("License  : " + d.getDriver_license());

@@ -12,7 +12,7 @@ import ucms.Driver;
 import ucms.Passenger;
 import ucms.gui.driver.DashboardUI;
 import ucms.gui.passenger.DashboardPassengerUI;
-
+import ucms.UCMS;
 /**
  *
  * @author USER
@@ -22,8 +22,11 @@ public class LoginStudentUI extends javax.swing.JFrame {
     /**
      * Creates new form LoginStudentForm
      */
-    public LoginStudentUI() {
+    
+    private static UCMS app;
+    public LoginStudentUI(UCMS app) {
         initComponents();
+        this.app = app;
     }
 
     /**
@@ -90,6 +93,11 @@ public class LoginStudentUI extends javax.swing.JFrame {
         studentBack.setForeground(new java.awt.Color(255, 255, 255));
         studentBack.setText("Back");
         studentBack.setBorder(null);
+        studentBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentBackActionPerformed(evt);
+            }
+        });
 
         lblStudentLogin.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblStudentLogin.setForeground(new java.awt.Color(255, 255, 255));
@@ -289,6 +297,13 @@ public class LoginStudentUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_studentLoginActionPerformed
 
+    private void studentBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentBackActionPerformed
+        // TODO add your handling code here:
+        MainMenuUI manUI = new MainMenuUI(app);
+        manUI.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_studentBackActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -320,7 +335,7 @@ public class LoginStudentUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginStudentUI().setVisible(true);
+                new LoginStudentUI(app).setVisible(true);
             }
         });
     }
