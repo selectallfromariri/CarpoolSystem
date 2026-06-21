@@ -23,6 +23,49 @@ public class AdminDashboardUI extends javax.swing.JFrame {
         initComponents();
         this.currentAdmin = currAdmin;
         welcomeAdminHeader.setText("WELCOME " + currentAdmin.getAdminName());
+        loadDashboardData();
+    }
+
+    private void loadDashboardData() {
+        try {
+            Connection conn = ucms.database.DBConnection.getConnection();
+            
+            // Total Drivers
+            String sqlTotalDrivers = "SELECT COUNT(*) AS total FROM driver";
+            PreparedStatement ps1 = conn.prepareStatement(sqlTotalDrivers);
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) {
+                card1.setText("<html><center>Total Drivers<br><br><span style='font-size: 16px;'><b>" + rs1.getInt("total") + "</b></span></center></html>");
+            }
+            
+            // Pending Approval
+            String sqlPending = "SELECT COUNT(*) AS total FROM driver WHERE approved = 0";
+            PreparedStatement ps2 = conn.prepareStatement(sqlPending);
+            ResultSet rs2 = ps2.executeQuery();
+            if (rs2.next()) {
+                card2.setText("<html><center>Pending Approval<br><br><span style='font-size: 16px;'><b>" + rs2.getInt("total") + "</b></span></center></html>");
+            }
+            
+            // Approved Drivers
+            String sqlApproved = "SELECT COUNT(*) AS total FROM driver WHERE approved = 1";
+            PreparedStatement ps3 = conn.prepareStatement(sqlApproved);
+            ResultSet rs3 = ps3.executeQuery();
+            if (rs3.next()) {
+                jLabel1.setText("<html><center>Approved Drivers<br><br><span style='font-size: 16px;'><b>" + rs3.getInt("total") + "</b></span></center></html>");
+            }
+            
+            // Feedback Count
+            String sqlFeedback = "SELECT COUNT(*) AS total FROM feedback";
+            PreparedStatement ps4 = conn.prepareStatement(sqlFeedback);
+            ResultSet rs4 = ps4.executeQuery();
+            if (rs4.next()) {
+                card3.setText("<html><center>Feedback Count<br><br><span style='font-size: 16px;'><b>" + rs4.getInt("total") + "</b></span></center></html>");
+            }
+            
+            conn.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error loading dashboard data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
