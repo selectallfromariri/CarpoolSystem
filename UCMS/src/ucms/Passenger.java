@@ -18,9 +18,6 @@ public class Passenger extends Student {
     public Passenger(String passengerID, String student_id, String student_name, String phone_num, String password) {
         super(student_id, student_name, phone_num, password);
         this.passengerID = "PS" + passengerID;
-        // this.bookingStatus = "pending";
-        // this.date = date;
-        // this.carpoolID = carpoolID;
     }
 
     public String getPassengerID() {
@@ -31,45 +28,6 @@ public class Passenger extends Student {
         this.passengerID = passengerID;
     }
 
-    // public String getBookingStatus() {
-    // return bookingStatus;
-    // }
-    //
-    // public void setBookingStatus(String bookingStatus) {
-    // this.bookingStatus = bookingStatus;
-    // }
-    //
-    // public Carpool getDate() {
-    // return date;
-    // }
-    //
-    // public void setDate(Carpool date) {
-    // this.date = date;
-    // }
-    //
-    // public String getStudent_id() {
-    // return student_id;
-    // }
-    //
-    // public void setStudent_id(String student_id) {
-    // this.student_id = student_id;
-    // }
-    //
-    // public String getStudent_name() {
-    // return student_name;
-    // }
-    //
-    // public void setStudent_name(String student_name) {
-    // this.student_name = student_name;
-    // }
-    //
-    // public String getPhone_num() {
-    // return phone_num;
-    // }
-    //
-    // public void setPhone_num(String phone_num) {
-    // this.phone_num = phone_num;
-    // }
     public String getPassword() {
         return password;
     }
@@ -84,71 +42,95 @@ public class Passenger extends Student {
         System.out.println("Passenger ID: " + passengerID);
     }
 
-    // search carpool
-    public boolean searchCarpool(ArrayList<Carpool> carpool) {
+    
+    public boolean searchCarpool(ArrayList<Carpool> carpool, ArrayList<booking> bookings) {
         Scanner input = new Scanner(System.in);
-//        System.out.println("----- SEARCH -----");
-//        System.out.println("Enter pickup location to search: ");
-//        String pickupLocation = input.nextLine();
-//        boolean pickup = false;
-//
-//        for (int i = 0; i < carpool.size(); i++) {
-//            if (carpool.get(i) != null && carpool.get(i).getPickupLocation().equalsIgnoreCase(pickupLocation)) {
-//                pickup = true;
-//                break;
-//            }
-//        }
-//        if (!pickup) {
-//            System.out.println("----- SEARCH RESULT -----");
-//            System.out.println("No carpool available from " + pickupLocation);
-//            return false;
-//        }
-        System.out.println("Enter carpool destination to search: ");
+        System.out.print("Enter carpool destination to search: ");
         String searchDestination = input.nextLine();
-        boolean foundDestination = false;
+
+        ArrayList<Carpool> results = new ArrayList<>();
+        for (Carpool c : carpool) {
+            if (c != null && c.getDestination().equalsIgnoreCase(searchDestination)) {
+                results.add(c);
+            }
+        }
 
         System.out.println("----- SEARCH RESULT -----");
-        for (int i = 0; i < carpool.size(); i++) {
-            if (carpool.get(i) != null && carpool.get(i).getDestination().equalsIgnoreCase(searchDestination)){
-                displaySearchCarpool(carpool.get(i));
-                foundDestination = true;
+
+        if (results.isEmpty()) {
+            System.out.println("No carpool available to " + searchDestination);
+            return false;
+        }
+
+        
+        Carpool.displayAvailableCarpool(results, bookings);
+        return true;
+    }
+
+
+
+    public static void displayAvailableCarpool(ArrayList<Carpool> pool, ArrayList<booking> bookings) {
+        System.out.println("\n------- AVAILABLE CARPOOLS -------");
+        boolean found = false;
+
+        for (Carpool c : pool) {
+            if (c == null || c.getAvailableSeat() <= 0) {
+                continue;
+            }
+
+            boolean isCompleted = false;
+            for (booking b : bookings) {
+                if (b.getCarpool().getCarpoolID().equals(c.getCarpoolID()) && b.getBookingStatus().equalsIgnoreCase("COMPLETED")) {
+                    isCompleted = true;
+                    break;
+                }
+            }
+
+            if (!isCompleted) {
+                System.out.println("Carpool ID      : " + c.getCarpoolID());
+                System.out.println("Driver          : " + c.getDrive().getStudent_name());
+                System.out.println("Destination     : " + c.getDestination());
+                System.out.println("Date            : " + c.getDate());
+                System.out.println("Available Seat  : " + c.getAvailableSeat());
+                System.out.println("Luggage Capacity: " + c.getLuggageCapacity());
+                System.out.println("Pickup Location : " + c.getPickupLocation());
+                System.out.println("-----------------------------------");
+                found = true;
             }
         }
-        if (!foundDestination) {
-            System.out.println("No carpool available Destination"  + " to " + searchDestination);
+
+        if (!found) {
+            System.out.println("  No available carpools at the moment.");
         }
-        return foundDestination;
     }
 
-    // search result
-    private void displaySearchCarpool(Carpool carpool) {
-        System.out.println("\n----- CARPOOL DETAILS -----");
-        System.out.println("Carpool ID       : " + carpool.getCarpoolID());
-        System.out.println("Driver Name      : " + carpool.getDrive().getStudent_name());
-        System.out.println("Destination      : " + carpool.getDestination());
-        System.out.println("Pickup Location  : " + carpool.getPickupLocation());
-        System.out.println("Date             : " + carpool.getDate());
-        System.out.println("Available Seats  : " + carpool.getAvailableSeat());
-        System.out.println("Luggage Capacity : " + carpool.getLuggageCapacity());
-    }
+    public void cancelBooking(ArrayList<booking> bookings, int index) {
 
-    public void cancelBooking(ArrayList<booking> bookings, String bookingID) {
-
+        ArrayList<booking> myBookings = new ArrayList<>();
         for (booking b : bookings) {
-
-            if (b.getBookingID().equalsIgnoreCase(bookingID)) {
-
-                bookings.remove(b);
-
-                System.out.println("Booking cancelled.");
-                return;
+            if (b.getPassenger().getStudent_id().equals(this.student_id) && !b.getBookingStatus().equalsIgnoreCase("CANCELLED")) {
+                myBookings.add(b);
             }
         }
 
-        System.out.println("Invalid booking.");
+        if (index < 1 || index > myBookings.size()) {
+            System.out.println("[!] Invalid selection.");
+            return;
+        }
+
+        booking selected = myBookings.get(index - 1);
+
+        if (!selected.getBookingStatus().equalsIgnoreCase("PENDING")) {
+            System.out.println("Can only cancel PENDING bookings. Current status: " + selected.getBookingStatus());
+            return;
+        }
+
+        selected.setBookingStatus("CANCELLED");
+        selected.getCarpool().setAvailableSeat(
+                selected.getCarpool().getAvailableSeat() + 1);
+        System.out.println("[-] Booking cancelled successfully.");
     }
 
-    // check history trip
     public void checkHistory(ArrayList<booking> bookings) {
         System.out.println("\n----- TRIP HISTORY -----");
         boolean found = false;
@@ -180,9 +162,7 @@ public class Passenger extends Student {
 
                 String status = b.getBookingStatus().toUpperCase();
 
-                if (status.equals("COMPLETED")
-                        || status.equals("CANCELLED")
-                        || status.equals("REJECTED")) {
+                if (status.equals("COMPLETED") || status.equals("CANCELLED") || status.equals("REJECTED")) {
 
                     history.add(b);
                 }
@@ -193,13 +173,6 @@ public class Passenger extends Student {
     }
 
     @Override
-    public String toString() {
-        return "Passenger ID: " + passengerID
-                + "\nStudent ID: " + student_id
-                + "\nName: " + student_name
-                + "\nPhone: " + phone_num;
-    }
-
     public String getRole() {
         String role = "Passengers";
         return role;

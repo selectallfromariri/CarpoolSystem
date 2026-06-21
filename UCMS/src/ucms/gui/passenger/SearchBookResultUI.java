@@ -8,7 +8,6 @@ package ucms.gui.passenger;
  *
  * @author harir
  */
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -18,18 +17,19 @@ import ucms.Passenger;
 import ucms.Carpool;
 import ucms.booking;
 import java.util.ArrayList;
-import ucms.BookingFactory;
-import ucms.BookingInterface;
+
 import ucms.gui.authentication.LoginStudentUI;
+
 public class SearchBookResultUI extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SearchBookResultUI.class.getName());
     private Passenger passenger;
     private ArrayList<Carpool> carpools;
     private ArrayList<booking> bookings;
-    private ArrayList<BookingInterface> bookingconcrete;
+
     private ArrayList<ucms.Driver> drivers;
-private ArrayList<ucms.Feedback> feeds;
+    private ArrayList<ucms.Feedback> feeds;
+
     /**
      * Creates new form SearchBookResultUI
      */
@@ -38,12 +38,16 @@ private ArrayList<ucms.Feedback> feeds;
         loadSearchResults(searchKeyword);
     }
 
-    public SearchBookResultUI(Passenger passenger, ArrayList<Carpool> carpools, ArrayList<booking> bookings, ArrayList<BookingInterface> bookingconcrete) {
+    public SearchBookResultUI(Passenger passenger, ArrayList<Carpool> carpools, ArrayList<booking> bookings, ArrayList<ucms.Driver> drivers) {
+        this(passenger, carpools, bookings);
+        this.drivers = drivers;
+    }
+
+    public SearchBookResultUI(Passenger passenger, ArrayList<Carpool> carpools, ArrayList<booking> bookings) {
         initComponents();
         this.passenger = passenger;
         this.carpools = carpools;
         this.bookings = bookings;
-        this.bookingconcrete = bookingconcrete;
 
         jTable1.setModel(new DefaultTableModel(
                 new Object[][]{},
@@ -63,7 +67,7 @@ private ArrayList<ucms.Feedback> feeds;
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         try {
             PassengerDB.loadCarpools(model, searchKeyword);
-            
+
             // Add "Book" action button text to last column
             int rowCount = model.getRowCount();
             for (int i = 0; i < rowCount; i++) {
@@ -80,7 +84,7 @@ private ArrayList<ucms.Feedback> feeds;
             javax.swing.JOptionPane.showMessageDialog(this, "Select a carpool to book.");
             return;
         }
-        
+
         String carpoolId = (String) jTable1.getValueAt(row, 0);
         try {
             PassengerDB.createBooking(passenger, carpoolId);
@@ -90,7 +94,6 @@ private ArrayList<ucms.Feedback> feeds;
             javax.swing.JOptionPane.showMessageDialog(this, "Error booking carpool: " + e.getMessage());
         }
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -676,14 +679,14 @@ private ArrayList<ucms.Feedback> feeds;
     private void jLabel23MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseEntered
         // TODO add your handling code here:
 
-        DashboardLabel.setBackground(new Color(15,61,92));
-        pn_line.setBackground(new Color(15,61,92));
+        DashboardLabel.setBackground(new Color(15, 61, 92));
+        pn_line.setBackground(new Color(15, 61, 92));
     }//GEN-LAST:event_jLabel23MouseEntered
 
     private void jLabel23MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseExited
         // TODO add your handling code here:
-        DashboardLabel.setBackground(new Color(56,80,81));
-        pn_line.setBackground(new Color(245,166,35));
+        DashboardLabel.setBackground(new Color(56, 80, 81));
+        pn_line.setBackground(new Color(245, 166, 35));
     }//GEN-LAST:event_jLabel23MouseExited
 
     private void DashboardLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DashboardLabelMouseClicked
@@ -699,14 +702,14 @@ private ArrayList<ucms.Feedback> feeds;
     }//GEN-LAST:event_jLabel27MouseClicked
 
     private void jLabel27MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseEntered
-        MyTripsLabel.setBackground(new Color(56,80,81));
-        pn_line4.setBackground(new Color(245,166,35));
+        MyTripsLabel.setBackground(new Color(56, 80, 81));
+        pn_line4.setBackground(new Color(245, 166, 35));
     }//GEN-LAST:event_jLabel27MouseEntered
 
     private void jLabel27MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel27MouseExited
         // TODO add your handling code here:
-        MyTripsLabel.setBackground(new Color(15,61,92));
-        pn_line4.setBackground(new Color(15,61,92));
+        MyTripsLabel.setBackground(new Color(15, 61, 92));
+        pn_line4.setBackground(new Color(15, 61, 92));
     }//GEN-LAST:event_jLabel27MouseExited
 
     private void MyTripsLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MyTripsLabelMouseClicked
@@ -722,13 +725,13 @@ private ArrayList<ucms.Feedback> feeds;
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jLabel9MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseEntered
-        CarpoolListLabel.setBackground(new Color(56,80,81));
-        pn_line5.setBackground(new Color(245,166,35));
+        CarpoolListLabel.setBackground(new Color(56, 80, 81));
+        pn_line5.setBackground(new Color(245, 166, 35));
     }//GEN-LAST:event_jLabel9MouseEntered
 
     private void jLabel9MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseExited
-        CarpoolListLabel.setBackground(new Color(15,61,92));
-        pn_line5.setBackground(new Color(15,61,92));
+        CarpoolListLabel.setBackground(new Color(15, 61, 92));
+        pn_line5.setBackground(new Color(15, 61, 92));
     }//GEN-LAST:event_jLabel9MouseExited
 
     private void CarpoolListLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CarpoolListLabel1MouseClicked

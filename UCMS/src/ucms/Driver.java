@@ -23,7 +23,7 @@ public class Driver extends Student {
         this.driver_license = driver_license;
         this.approved = false;
         this.kereta = new Car(numplate, model, color);
-        this.myCarpools     = new ArrayList<>();
+        this.myCarpools = new ArrayList<>();
     }
 
     public boolean isApproved() {

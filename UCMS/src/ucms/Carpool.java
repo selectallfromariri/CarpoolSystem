@@ -115,7 +115,7 @@ public class Carpool {
 
         System.out.println("Enter luggage capacity : ");
         int lugCap = sc.nextInt();
-        sc.nextLine(); // buang enter
+        sc.nextLine(); 
 
         System.out.println("Pickup location : ");
         String loc = sc.nextLine();
@@ -129,10 +129,14 @@ public class Carpool {
         System.out.println("Carpool added successfully!");
     }
 
-    public static String generateID(Driver driver){
-        String carpool_id  = driver.getStudent_name().substring(0, 3) + (int)(Math.random()*900+100) ;
-        return carpool_id;
-    } 
+    public static String generateID(Driver driver) {
+        String name = driver.getStudent_name();
+        int length = Math.min(3, name.length());
+        String nama = name.substring(0, length).toUpperCase();
+
+        int randomNo = (int) (Math.random() * 900 + 100);
+        return "CP-" + nama + "-" + randomNo;
+    }
 
 
     public static void displayCarpool(ArrayList<Carpool> pool) {
@@ -154,6 +158,43 @@ public class Carpool {
                 System.out.println("Pickup Location: " + pool.get(i).getPickupLocation());
                 System.out.println("-----------------------------------");
             }
+        }
+    }
+    
+    public static void displayAvailableCarpool(ArrayList<Carpool> pool,ArrayList<booking> bookings) {
+        System.out.println("\n------- AVAILABLE CARPOOLS -------");
+        boolean found = false;
+
+        for (Carpool c : pool) {
+            if (c == null || c.getAvailableSeat() <= 0) {
+                continue;
+            }
+
+         
+            boolean isCompleted = false;
+            for (booking b : bookings) {
+                if (b.getCarpool().getCarpoolID().equals(c.getCarpoolID()) && b.getBookingStatus().equalsIgnoreCase("COMPLETED")&& b.getBookingStatus().equalsIgnoreCase("ONGOING")) {
+                    isCompleted = true;
+                    break;
+                }
+            }
+
+            if (!isCompleted) {
+                System.out.println("Carpool ID      : " + c.getCarpoolID());
+                System.out.println("Driver          : " + c.getDrive().getStudent_name());
+                System.out.println("Destination     : " + c.getDestination());
+                System.out.println("Date            : " + c.getDate());
+                System.out.println("Available Seat  : " + c.getAvailableSeat());
+                System.out.println("Luggage Capacity: " + c.getLuggageCapacity());
+                System.out.println("Pickup Location : " + c.getPickupLocation());
+                System.out.println("-----------------------------------");
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("  No available carpools at the moment.");
+            
         }
     }
 }

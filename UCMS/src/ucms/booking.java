@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author harir
  */
-public class booking implements BookingInterface {
+public class booking {
 
     private String bookingID;
     private Passenger passenger;
@@ -26,31 +26,75 @@ public class booking implements BookingInterface {
         this.bookingStatus = bookingStatus;
     }
 
-    @Override
     public Passenger getPassenger() {
         return passenger;
     }
 
-    @Override
+
     public Carpool getCarpool() {
         return carpool;
     }
 
-    @Override
+
     public String getBookingID() {
         return bookingID;
     }
 
-    @Override
+
     public String getBookingDate() {
         return bookingDate;
     }
 
-    @Override
     public String getBookingStatus() {
         return bookingStatus;
     }
 
+    public void setBookingID(String bookingID) {
+        this.bookingID = bookingID;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    public void setCarpool(Carpool carpool) {
+        this.carpool = carpool;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+    
+
+    public static booking createBooking(Passenger pass, ArrayList<Carpool> pool, String carpoolID) {
+        Carpool selected = null;
+        for (Carpool c : pool) {
+            if (c.getCarpoolID().equalsIgnoreCase(carpoolID)) {
+                selected = c;
+                break;
+            }
+        }
+
+        if (selected == null) {
+            System.out.println("Carpool not found.");
+            return null;
+        }
+
+        if (selected.getAvailableSeat() <= 0) {
+            System.out.println("No seats available.");
+            return null;
+        }
+
+        selected.setAvailableSeat(selected.getAvailableSeat() - 1);
+//        String id = "BK" + System.currentTimeMillis();
+
+        String id = "BK-" + selected.getDestination().substring(0, 3).toUpperCase() + "-" + pass.getStudent_id().substring(2, 6) + selected.getDrive().getStudent_id().substring(2, 6) + selected.getDate().replace("/", "").substring(2);
+        return new booking(id, pass, selected, selected.getDate(), "PENDING");
+    }
     public boolean cancelBooking(booking b) {
 
         if (b != null) {
@@ -77,7 +121,7 @@ public class booking implements BookingInterface {
         }
     }
 
-    @Override
+
     public void displayBooking() {
         System.out.println("Booking ID  : " + bookingID);
         System.out.println("Passenger   : " + passenger.getStudent_name());
@@ -91,8 +135,7 @@ public class booking implements BookingInterface {
         System.out.println("\n--- Pending Booking Requests ---");
         ArrayList<booking> pending = new ArrayList<>();
         for (booking b : bookings) {
-            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())
-                    && b.getBookingStatus().equalsIgnoreCase("PENDING")) {
+            if (b.getCarpool().getDrive().getStudent_id().equals(driver.getStudent_id())&& b.getBookingStatus().equalsIgnoreCase("PENDING")) {
                 pending.add(b);
             }
         }
@@ -147,18 +190,28 @@ public class booking implements BookingInterface {
         return ongoing;
     }
 
-    public static void displayMyBookings(ArrayList<booking> bookings, Passenger pass) {
+    public static ArrayList<booking> displayMyBookings(ArrayList<booking> bookings, Passenger pass) {
         System.out.println("\n--- Your Bookings ---");
-        boolean found = false;
+        ArrayList<booking> myBookings = new ArrayList<>();
+        
         for (booking b : bookings) {
-            if (b.getPassenger().getStudent_id().equals(pass.getStudent_id())) {
-                b.displayBooking();  
-                found = true;
+            if (b.getPassenger().getStudent_id().equals(pass.getStudent_id()) && !b.getBookingStatus().equalsIgnoreCase("CANCELLED")) {
+                myBookings.add(b);
             }
+            
         }
-        if (!found) {
-            System.out.println("No booking found.");
+        if (myBookings.isEmpty()){
+            System.out.println(" No bookings found.");
+            return myBookings;
         }
+        
+        for(int i = 0; i< myBookings.size();i++){
+            System.out.println((i+1)+")");
+            myBookings.get(i).displayBooking();
+        }
+        
+        return myBookings;
+        
     }
 
 }

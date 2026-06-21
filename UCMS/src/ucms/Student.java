@@ -8,7 +8,7 @@ package ucms;
  *
  * @author User
  */
-public abstract class Student {
+public abstract class Student implements RegisterInterface{
     protected String student_id;
     protected String student_name;
     protected String phone_num;
@@ -21,6 +21,7 @@ public abstract class Student {
         this.password = password;
     }
     
+    @Override
     public boolean loginStudent(String id, String pass){
         if (student_id.equalsIgnoreCase(id) && password.equals(pass)){
             return true;
@@ -55,6 +56,7 @@ public abstract class Student {
         this.phone_num = phone_num;
     }
     
+    @Override
     public void displayProfile() {
         System.out.println("=== Profile ===");
         System.out.println("ID    : " + student_id);
@@ -72,6 +74,7 @@ public abstract class Student {
         System.out.println("Phone updated to: " + phone_num);
     }
     
+    @Override
     abstract public String getRole();
     
     

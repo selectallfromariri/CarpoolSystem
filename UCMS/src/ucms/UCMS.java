@@ -28,7 +28,6 @@ public class UCMS {
     private ArrayList<Report> reports = new ArrayList<>();
     private ArrayList<Feedback> feeds = new ArrayList<>();
     private ArrayList<String> PemanduApproved = new ArrayList<>();
-    private ArrayList<BookingInterface> bookingconcrete = new ArrayList<>();
     /**
      * @param args the command line arguments
      */
@@ -152,12 +151,13 @@ public class UCMS {
         String color = sc.nextLine();
 
         String driverID = String.format("%02d", Pemandu.size() + 1);
-        Driver pemandubaru = new Driver(driverID, lic, id, name, notel, pass, plate, model, color);
-        Pemandu.add(pemandubaru);
-
-        System.out.println("\nDriver Registered Successfully!");
-
-        pemandubaru.displayProfile();
+        Student pemandubaru = StudentFactory.createStudent("DRIVER",id, name, notel, pass,driverID, lic, plate, model, color);
+        if (pemandubaru instanceof Driver) {
+            Driver pemandudowncast= (Driver) pemandubaru;
+            Pemandu.add(pemandudowncast);
+            System.out.println("\nDriver Registered Successfully!");
+            pemandubaru.displayProfile();
+        }
 
     }
 
@@ -185,10 +185,13 @@ public class UCMS {
             return;
         }
         String passengerID = String.format("%02d", penumpang.size() + 1);
-        Passenger p = new Passenger(passengerID, id, name, notel, pass);
-        penumpang.add(p);
-        p.displayProfile();
-
+        Student penumpangbaru = StudentFactory.createStudent("PASSENGER",id, name, notel, pass,passengerID, null, null, null, null);
+        if (penumpangbaru instanceof Passenger) {
+            Passenger p = (Passenger) penumpangbaru;
+            penumpang.add(p);
+            System.out.println("[+] Passenger Registered!");
+            p.displayProfile();
+        }
     }
 
     // student login
@@ -379,7 +382,7 @@ public class UCMS {
             DashboardDriver(driver);
         } else if (choice == 2) {
 
-            Carpool.displayCarpool(carpools);
+            Carpool.displayAvailableCarpool(carpools,bookings);
             DashboardDriver(driver);
 
         } else if (choice == 3) {
@@ -464,17 +467,23 @@ public class UCMS {
             DashboardPass(pass);
         } else if (choice == 2) {
 
-            boolean found = pass.searchCarpool(carpools);
+            boolean found = pass.searchCarpool(carpools,bookings);
 
             if (found) {
-
-                System.out.print("Enter Carpool ID: ");
-                String id = sc.nextLine();
                 
-                BookingInterface b = BookingFactory.createBooking(pass, carpools, id);
-
-                if (b != null) {
-                    bookings.add((booking) b);
+                System.out.print("Enter Carpool ID [0 to cancel]:");
+                String id = sc.nextLine();
+                if (id.equals("0")){
+                    DashboardPass(pass);
+                    return;
+                }
+                
+                booking book = booking.createBooking(pass, carpools, id);
+                
+                
+                
+                if (book != null) {
+                    bookings.add(book);
                     
                     System.out.println("Booking successful!");
                 }
@@ -482,29 +491,52 @@ public class UCMS {
 
             DashboardPass(pass);
         } else if (choice == 3) {
-            Carpool.displayCarpool(carpools);
-            System.out.print("Enter Carpool ID: ");
+            Carpool.displayAvailableCarpool(carpools, bookings);
+            System.out.print("Enter Carpool ID [0 to cancel]:");
             String id = sc.nextLine();
-            BookingInterface b = BookingFactory.createBooking(pass, carpools, id);
-
-            if (b != null) {
-                bookings.add((booking) b);
-
-                System.out.println("Booking successful!");
+            if (id.equals("0")) {
+                return;
             }
+                
+                booking book = booking.createBooking(pass, carpools, id);
+                
+                
+                
+                if (book != null) {
+                    bookings.add(book);
+                    
+                    System.out.println("Booking successful!");
+                }
             DashboardPass(pass);
         }
 
         else if (choice == 4) {
             booking.displayMyBookings(bookings, pass);
             DashboardPass(pass);
-        } else if (choice == 5) {
-            booking.displayMyBookings(bookings, pass);
-            System.out.println("Enter Booking ID: ");
-            String bid = sc.nextLine();
-            pass.cancelBooking(bookings, bid);
+        } 
+        else if (choice == 5) {
+            ArrayList<booking> myBookings = booking.displayMyBookings(bookings, pass);
+            
+            if (!myBookings.isEmpty()) {
+                System.out.print("Select booking to cancel (0 to cancel): ");
+                int cancelChoice = sc.nextInt();
+                sc.skip("\\R?");
+                
+                if(cancelChoice> 0 && cancelChoice<= myBookings.size()){
+                    booking selected = myBookings.get(cancelChoice-1);
+                    if(!selected.getBookingStatus().equalsIgnoreCase("Pending")){
+                        System.out.println("Can Only Cancel pending bookings. Status: " + selected.getBookingStatus());
+                    }
+                    else{
+                        selected.Approvebooking("CANCELLED");
+                        selected.getCarpool().setAvailableSeat(selected.getCarpool().getAvailableSeat()+1);
+                        System.out.println("Booking Cancelled");
+                    }
+                }
+            }
             DashboardPass(pass);
-        } else if (choice == 6) {
+        } 
+        else if (choice == 6) {
 
             System.out.println("\n=== ONGOING TRIP ===");
 
@@ -545,7 +577,9 @@ public class UCMS {
             return;
         }
         for (Report r : reports) {
-            System.out.println(r);
+            System.out.println("Report ID: "+r.getReportID());
+            System.out.println("Report Subject: "+r.getType());
+            System.out.println("Report Description"+r.getDetails());
         }
     }
 

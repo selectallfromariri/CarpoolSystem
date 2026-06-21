@@ -8,11 +8,9 @@ package ucms;
  *
  * @author User
  */
-public interface BookingInterface {
-    String getBookingID();
-    String getBookingStatus();
-    Passenger getPassenger();
-    Carpool getCarpool();
-    String getBookingDate();
-    void displayBooking();
+public interface RegisterInterface {
+    void displayProfile();
+    boolean loginStudent(String id, String pass);
+    String getRole();
+    
 }
